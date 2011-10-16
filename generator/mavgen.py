@@ -15,6 +15,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..
 import mavparse
 import mavgen_python
 import mavgen_c
+import mavgen_csharp
 
 parser = OptionParser("mavgen.py [options] <XML files>")
 parser.add_option("-o", "--output", dest="output", default="mavlink", help="output base name")
@@ -45,7 +46,7 @@ for x in xml[:]:
                 x.message_lengths[idx] = xml[-1].message_lengths[idx]
                 x.message_crcs[idx] = xml[-1].message_crcs[idx]
                 x.message_names[idx] = xml[-1].message_names[idx]
-        
+
 
 if mavparse.check_duplicates(xml):
     sys.exit(1)
@@ -57,6 +58,8 @@ if opts.language == 'python':
     mavgen_python.generate(opts.output, xml)
 elif opts.language == 'C':
     mavgen_c.generate(opts.output, xml)
+elif opts.language == 'csharp':
+    mavgen_csharp.generate(opts.output, xml)
 else:
     print("Unsupported language %s" % opts.language)
     

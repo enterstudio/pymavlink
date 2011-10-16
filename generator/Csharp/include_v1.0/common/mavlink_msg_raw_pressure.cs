@@ -1,0 +1,230 @@
+// MESSAGE RAW_PRESSURE PACKING
+using System;
+using System.Runtime.InteropServices;
+
+public partial class Mavlink
+{
+
+    public const byte MAVLINK_MSG_ID_RAW_PRESSURE = 29;
+
+    [StructLayout(LayoutKind.Sequential,Pack=1)]
+    public struct mavlink_raw_pressure_t
+    {
+         public  UInt64 usec; /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+     public  Int16 press_abs; /// Absolute pressure (raw)
+     public  Int16 press_diff1; /// Differential pressure 1 (raw)
+     public  Int16 press_diff2; /// Differential pressure 2 (raw)
+     public  Int16 temperature; /// Raw Temperature measurement (raw)
+    
+    };
+
+/**
+ * @brief Pack a raw_pressure message
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ *
+ * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param press_abs Absolute pressure (raw)
+ * @param press_diff1 Differential pressure 1 (raw)
+ * @param press_diff2 Differential pressure 2 (raw)
+ * @param temperature Raw Temperature measurement (raw)
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+ /*
+static uint16 mavlink_msg_raw_pressure_pack(byte system_id, byte component_id, ref byte[] msg,
+                               UInt64 public usec, Int16 public press_abs, Int16 public press_diff1, Int16 public press_diff2, Int16 public temperature)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    byte buf[16];
+	_mav_put_UInt64(buf, 0, usec);
+	_mav_put_Int16(buf, 8, press_abs);
+	_mav_put_Int16(buf, 10, press_diff1);
+	_mav_put_Int16(buf, 12, press_diff2);
+	_mav_put_Int16(buf, 14, temperature);
+
+        memcpy(_MAV_PAYLOAD(msg), buf, 16);
+#else
+    mavlink_raw_pressure_t packet;
+	packet.usec = usec;
+	packet.press_abs = press_abs;
+	packet.press_diff1 = press_diff1;
+	packet.press_diff2 = press_diff2;
+	packet.temperature = temperature;
+
+        memcpy(_MAV_PAYLOAD(msg), &packet, 16);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_RAW_PRESSURE;
+    return mavlink_finalize_message(msg, system_id, component_id, 16, 136);
+}
+*/
+/**
+ * @brief Pack a raw_pressure message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message was sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param press_abs Absolute pressure (raw)
+ * @param press_diff1 Differential pressure 1 (raw)
+ * @param press_diff2 Differential pressure 2 (raw)
+ * @param temperature Raw Temperature measurement (raw)
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+ /*
+static inline uint16_t mavlink_msg_raw_pressure_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   UInt64 public usec,Int16 public press_abs,Int16 public press_diff1,Int16 public press_diff2,Int16 public temperature)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[16];
+	_mav_put_UInt64(buf, 0, usec);
+	_mav_put_Int16(buf, 8, press_abs);
+	_mav_put_Int16(buf, 10, press_diff1);
+	_mav_put_Int16(buf, 12, press_diff2);
+	_mav_put_Int16(buf, 14, temperature);
+
+        memcpy(_MAV_PAYLOAD(msg), buf, 16);
+#else
+    mavlink_raw_pressure_t packet;
+	packet.usec = usec;
+	packet.press_abs = press_abs;
+	packet.press_diff1 = press_diff1;
+	packet.press_diff2 = press_diff2;
+	packet.temperature = temperature;
+
+        memcpy(_MAV_PAYLOAD(msg), &packet, 16);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_RAW_PRESSURE;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 16, 136);
+}
+*/
+/**
+ * @brief Encode a raw_pressure struct into a message
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param raw_pressure C-struct to read the message contents from
+ *//*
+static inline uint16_t mavlink_msg_raw_pressure_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_raw_pressure_t* raw_pressure)
+{
+    return mavlink_msg_raw_pressure_pack(system_id, component_id, msg, raw_pressure->usec, raw_pressure->press_abs, raw_pressure->press_diff1, raw_pressure->press_diff2, raw_pressure->temperature);
+}
+*/
+/**
+ * @brief Send a raw_pressure message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param press_abs Absolute pressure (raw)
+ * @param press_diff1 Differential pressure 1 (raw)
+ * @param press_diff2 Differential pressure 2 (raw)
+ * @param temperature Raw Temperature measurement (raw)
+ *//*
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_raw_pressure_send(mavlink_channel_t chan, UInt64 public usec, Int16 public press_abs, Int16 public press_diff1, Int16 public press_diff2, Int16 public temperature)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[16];
+	_mav_put_UInt64(buf, 0, usec);
+	_mav_put_Int16(buf, 8, press_abs);
+	_mav_put_Int16(buf, 10, press_diff1);
+	_mav_put_Int16(buf, 12, press_diff2);
+	_mav_put_Int16(buf, 14, temperature);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_RAW_PRESSURE, buf, 16, 136);
+#else
+    mavlink_raw_pressure_t packet;
+	packet.usec = usec;
+	packet.press_abs = press_abs;
+	packet.press_diff1 = press_diff1;
+	packet.press_diff2 = press_diff2;
+	packet.temperature = temperature;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_RAW_PRESSURE, (const char *)&packet, 16, 136);
+#endif
+}
+
+#endif
+*/
+// MESSAGE RAW_PRESSURE UNPACKING
+
+
+/**
+ * @brief Get field usec from raw_pressure message
+ *
+ * @return Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ */
+public static UInt64 mavlink_msg_raw_pressure_get_usec(byte[] msg)
+{
+    return BitConverter.ToUInt64(msg,  0);
+}
+
+/**
+ * @brief Get field press_abs from raw_pressure message
+ *
+ * @return Absolute pressure (raw)
+ */
+public static Int16 mavlink_msg_raw_pressure_get_press_abs(byte[] msg)
+{
+    return BitConverter.ToInt16(msg,  8);
+}
+
+/**
+ * @brief Get field press_diff1 from raw_pressure message
+ *
+ * @return Differential pressure 1 (raw)
+ */
+public static Int16 mavlink_msg_raw_pressure_get_press_diff1(byte[] msg)
+{
+    return BitConverter.ToInt16(msg,  10);
+}
+
+/**
+ * @brief Get field press_diff2 from raw_pressure message
+ *
+ * @return Differential pressure 2 (raw)
+ */
+public static Int16 mavlink_msg_raw_pressure_get_press_diff2(byte[] msg)
+{
+    return BitConverter.ToInt16(msg,  12);
+}
+
+/**
+ * @brief Get field temperature from raw_pressure message
+ *
+ * @return Raw Temperature measurement (raw)
+ */
+public static Int16 mavlink_msg_raw_pressure_get_temperature(byte[] msg)
+{
+    return BitConverter.ToInt16(msg,  14);
+}
+
+/**
+ * @brief Decode a raw_pressure message into a struct
+ *
+ * @param msg The message to decode
+ * @param raw_pressure C-struct to decode the message contents into
+ */
+public static void mavlink_msg_raw_pressure_decode(byte[] msg, ref mavlink_raw_pressure_t raw_pressure)
+{
+if (MAVLINK_NEED_BYTE_SWAP) {
+	raw_pressure.usec = mavlink_msg_raw_pressure_get_usec(msg);
+	raw_pressure.press_abs = mavlink_msg_raw_pressure_get_press_abs(msg);
+	raw_pressure.press_diff1 = mavlink_msg_raw_pressure_get_press_diff1(msg);
+	raw_pressure.press_diff2 = mavlink_msg_raw_pressure_get_press_diff2(msg);
+	raw_pressure.temperature = mavlink_msg_raw_pressure_get_temperature(msg);
+} else {
+    int len = 16; //Marshal.SizeOf(raw_pressure);
+    IntPtr i = Marshal.AllocHGlobal(len);
+    Marshal.Copy(msg, 0, i, len);
+    raw_pressure = (mavlink_raw_pressure_t)Marshal.PtrToStructure(i, ((object)raw_pressure).GetType());
+    Marshal.FreeHGlobal(i);
+}
+}
+
+}
