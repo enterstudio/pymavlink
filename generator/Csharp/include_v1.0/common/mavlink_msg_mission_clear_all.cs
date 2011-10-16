@@ -25,28 +25,33 @@ public partial class Mavlink
  * @param target_component Component ID
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_mission_clear_all_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target_system, byte public target_component)
+ 
+public static UInt16 mavlink_msg_mission_clear_all_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system, byte target_component)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[2];
-	_mav_put_byte(buf, 0, target_system);
-	_mav_put_byte(buf, 1, target_component);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(target_component),0,msg,1,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 2);
-#else
-    mavlink_mission_clear_all_t packet;
+} else {
+    mavlink_mission_clear_all_t packet = new mavlink_mission_clear_all_t();
 	packet.target_system = target_system;
 	packet.target_component = target_component;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 2);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_MISSION_CLEAR_ALL;
-    return mavlink_finalize_message(msg, system_id, component_id, 2, 232);
+        
+        int len = 2;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_MISSION_CLEAR_ALL;
+    //return mavlink_finalize_message(msg, system_id, component_id, 2, 232);
+    return 0;
+}
+
 /**
  * @brief Pack a mission_clear_all message on a channel
  * @param system_id ID of this system

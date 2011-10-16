@@ -45,28 +45,26 @@ public partial class Mavlink
  * @param ground_z Ground truth Z
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_image_triggered_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt64 public timestamp, UInt32 public seq, Single public roll, Single public pitch, Single public yaw, Single public local_z, Single public lat, Single public lon, Single public alt, Single public ground_x, Single public ground_y, Single public ground_z)
+ 
+public static UInt16 mavlink_msg_image_triggered_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt64 timestamp, UInt32 seq, Single roll, Single pitch, Single yaw, Single local_z, Single lat, Single lon, Single alt, Single ground_x, Single ground_y, Single ground_z)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[52];
-	_mav_put_UInt64(buf, 0, timestamp);
-	_mav_put_UInt32(buf, 8, seq);
-	_mav_put_Single(buf, 12, roll);
-	_mav_put_Single(buf, 16, pitch);
-	_mav_put_Single(buf, 20, yaw);
-	_mav_put_Single(buf, 24, local_z);
-	_mav_put_Single(buf, 28, lat);
-	_mav_put_Single(buf, 32, lon);
-	_mav_put_Single(buf, 36, alt);
-	_mav_put_Single(buf, 40, ground_x);
-	_mav_put_Single(buf, 44, ground_y);
-	_mav_put_Single(buf, 48, ground_z);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(timestamp),0,msg,0,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(seq),0,msg,8,sizeof(UInt32));
+	Array.Copy(BitConverter.GetBytes(roll),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(pitch),0,msg,16,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yaw),0,msg,20,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(local_z),0,msg,24,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(lat),0,msg,28,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(lon),0,msg,32,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(alt),0,msg,36,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(ground_x),0,msg,40,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(ground_y),0,msg,44,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(ground_z),0,msg,48,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 52);
-#else
-    mavlink_image_triggered_t packet;
+} else {
+    mavlink_image_triggered_t packet = new mavlink_image_triggered_t();
 	packet.timestamp = timestamp;
 	packet.seq = seq;
 	packet.roll = roll;
@@ -80,13 +78,20 @@ static uint16 mavlink_msg_image_triggered_pack(byte system_id, byte component_id
 	packet.ground_y = ground_y;
 	packet.ground_z = ground_z;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 52);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_IMAGE_TRIGGERED;
-    return mavlink_finalize_message(msg, system_id, component_id, 52, 86);
+        
+        int len = 52;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_IMAGE_TRIGGERED;
+    //return mavlink_finalize_message(msg, system_id, component_id, 52, 86);
+    return 0;
+}
+
 /**
  * @brief Pack a image_triggered message on a channel
  * @param system_id ID of this system
@@ -352,26 +357,27 @@ public static Single mavlink_msg_image_triggered_get_ground_z(byte[] msg)
  */
 public static void mavlink_msg_image_triggered_decode(byte[] msg, ref mavlink_image_triggered_t image_triggered)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	image_triggered.timestamp = mavlink_msg_image_triggered_get_timestamp(msg);
-	image_triggered.seq = mavlink_msg_image_triggered_get_seq(msg);
-	image_triggered.roll = mavlink_msg_image_triggered_get_roll(msg);
-	image_triggered.pitch = mavlink_msg_image_triggered_get_pitch(msg);
-	image_triggered.yaw = mavlink_msg_image_triggered_get_yaw(msg);
-	image_triggered.local_z = mavlink_msg_image_triggered_get_local_z(msg);
-	image_triggered.lat = mavlink_msg_image_triggered_get_lat(msg);
-	image_triggered.lon = mavlink_msg_image_triggered_get_lon(msg);
-	image_triggered.alt = mavlink_msg_image_triggered_get_alt(msg);
-	image_triggered.ground_x = mavlink_msg_image_triggered_get_ground_x(msg);
-	image_triggered.ground_y = mavlink_msg_image_triggered_get_ground_y(msg);
-	image_triggered.ground_z = mavlink_msg_image_triggered_get_ground_z(msg);
-} else {
-    int len = 52; //Marshal.SizeOf(image_triggered);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    image_triggered = (mavlink_image_triggered_t)Marshal.PtrToStructure(i, ((object)image_triggered).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	image_triggered.timestamp = mavlink_msg_image_triggered_get_timestamp(msg);
+    	image_triggered.seq = mavlink_msg_image_triggered_get_seq(msg);
+    	image_triggered.roll = mavlink_msg_image_triggered_get_roll(msg);
+    	image_triggered.pitch = mavlink_msg_image_triggered_get_pitch(msg);
+    	image_triggered.yaw = mavlink_msg_image_triggered_get_yaw(msg);
+    	image_triggered.local_z = mavlink_msg_image_triggered_get_local_z(msg);
+    	image_triggered.lat = mavlink_msg_image_triggered_get_lat(msg);
+    	image_triggered.lon = mavlink_msg_image_triggered_get_lon(msg);
+    	image_triggered.alt = mavlink_msg_image_triggered_get_alt(msg);
+    	image_triggered.ground_x = mavlink_msg_image_triggered_get_ground_x(msg);
+    	image_triggered.ground_y = mavlink_msg_image_triggered_get_ground_y(msg);
+    	image_triggered.ground_z = mavlink_msg_image_triggered_get_ground_z(msg);
+    
+    } else {
+        int len = 52; //Marshal.SizeOf(image_triggered);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        image_triggered = (mavlink_image_triggered_t)Marshal.PtrToStructure(i, ((object)image_triggered).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

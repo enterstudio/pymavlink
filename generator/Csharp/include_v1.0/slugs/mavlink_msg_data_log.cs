@@ -33,22 +33,20 @@ public partial class Mavlink
  * @param fl_6 Log value 6 
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_data_log_pack(byte system_id, byte component_id, ref byte[] msg,
-                               Single public fl_1, Single public fl_2, Single public fl_3, Single public fl_4, Single public fl_5, Single public fl_6)
+ 
+public static UInt16 mavlink_msg_data_log_pack(byte system_id, byte component_id, byte[] msg,
+                               Single fl_1, Single fl_2, Single fl_3, Single fl_4, Single fl_5, Single fl_6)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[24];
-	_mav_put_Single(buf, 0, fl_1);
-	_mav_put_Single(buf, 4, fl_2);
-	_mav_put_Single(buf, 8, fl_3);
-	_mav_put_Single(buf, 12, fl_4);
-	_mav_put_Single(buf, 16, fl_5);
-	_mav_put_Single(buf, 20, fl_6);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(fl_1),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(fl_2),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(fl_3),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(fl_4),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(fl_5),0,msg,16,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(fl_6),0,msg,20,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 24);
-#else
-    mavlink_data_log_t packet;
+} else {
+    mavlink_data_log_t packet = new mavlink_data_log_t();
 	packet.fl_1 = fl_1;
 	packet.fl_2 = fl_2;
 	packet.fl_3 = fl_3;
@@ -56,13 +54,20 @@ static uint16 mavlink_msg_data_log_pack(byte system_id, byte component_id, ref b
 	packet.fl_5 = fl_5;
 	packet.fl_6 = fl_6;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 24);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_DATA_LOG;
-    return mavlink_finalize_message(msg, system_id, component_id, 24, 167);
+        
+        int len = 24;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_DATA_LOG;
+    //return mavlink_finalize_message(msg, system_id, component_id, 24, 167);
+    return 0;
+}
+
 /**
  * @brief Pack a data_log message on a channel
  * @param system_id ID of this system
@@ -232,20 +237,21 @@ public static Single mavlink_msg_data_log_get_fl_6(byte[] msg)
  */
 public static void mavlink_msg_data_log_decode(byte[] msg, ref mavlink_data_log_t data_log)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	data_log.fl_1 = mavlink_msg_data_log_get_fl_1(msg);
-	data_log.fl_2 = mavlink_msg_data_log_get_fl_2(msg);
-	data_log.fl_3 = mavlink_msg_data_log_get_fl_3(msg);
-	data_log.fl_4 = mavlink_msg_data_log_get_fl_4(msg);
-	data_log.fl_5 = mavlink_msg_data_log_get_fl_5(msg);
-	data_log.fl_6 = mavlink_msg_data_log_get_fl_6(msg);
-} else {
-    int len = 24; //Marshal.SizeOf(data_log);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    data_log = (mavlink_data_log_t)Marshal.PtrToStructure(i, ((object)data_log).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	data_log.fl_1 = mavlink_msg_data_log_get_fl_1(msg);
+    	data_log.fl_2 = mavlink_msg_data_log_get_fl_2(msg);
+    	data_log.fl_3 = mavlink_msg_data_log_get_fl_3(msg);
+    	data_log.fl_4 = mavlink_msg_data_log_get_fl_4(msg);
+    	data_log.fl_5 = mavlink_msg_data_log_get_fl_5(msg);
+    	data_log.fl_6 = mavlink_msg_data_log_get_fl_6(msg);
+    
+    } else {
+        int len = 24; //Marshal.SizeOf(data_log);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        data_log = (mavlink_data_log_t)Marshal.PtrToStructure(i, ((object)data_log).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

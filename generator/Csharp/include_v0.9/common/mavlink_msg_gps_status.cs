@@ -38,39 +38,39 @@ public partial class Mavlink
  * @param satellite_snr Signal to noise ratio of satellite
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_gps_status_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public satellites_visible, const byte[] [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
- publicsatellite_prn, const byte[] [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
- publicsatellite_used, const byte[] [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
- publicsatellite_elevation, const byte[] [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
- publicsatellite_azimuth, const byte[] [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
- publicsatellite_snr)
+ 
+public static UInt16 mavlink_msg_gps_status_pack(byte system_id, byte component_id, byte[] msg,
+                               byte satellites_visible, byte[] satellite_prn, byte[] satellite_used, byte[] satellite_elevation, byte[] satellite_azimuth, byte[] satellite_snr)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[101];
-	_mav_put_byte(buf, 0, satellites_visible);
-	_mav_put_byte[]_array(buf, 1, satellite_prn, 20);
-	_mav_put_byte[]_array(buf, 21, satellite_used, 20);
-	_mav_put_byte[]_array(buf, 41, satellite_elevation, 20);
-	_mav_put_byte[]_array(buf, 61, satellite_azimuth, 20);
-	_mav_put_byte[]_array(buf, 81, satellite_snr, 20);
-        memcpy(_MAV_PAYLOAD(msg), buf, 101);
-#else
-    mavlink_gps_status_t packet;
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(satellites_visible),0,msg,0,sizeof(byte));
+	//Array.Copy(satellite_prn,0,msg,1,20);
+	//Array.Copy(satellite_used,0,msg,21,20);
+	//Array.Copy(satellite_elevation,0,msg,41,20);
+	//Array.Copy(satellite_azimuth,0,msg,61,20);
+	//Array.Copy(satellite_snr,0,msg,81,20);
+} else {
+    mavlink_gps_status_t packet = new mavlink_gps_status_t();
 	packet.satellites_visible = satellites_visible;
-	memcpy(packet.satellite_prn, satellite_prn, sizeof(byte[])*20);
-	memcpy(packet.satellite_used, satellite_used, sizeof(byte[])*20);
-	memcpy(packet.satellite_elevation, satellite_elevation, sizeof(byte[])*20);
-	memcpy(packet.satellite_azimuth, satellite_azimuth, sizeof(byte[])*20);
-	memcpy(packet.satellite_snr, satellite_snr, sizeof(byte[])*20);
-        memcpy(_MAV_PAYLOAD(msg), &packet, 101);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_GPS_STATUS;
-    return mavlink_finalize_message(msg, system_id, component_id, 101);
+	packet.satellite_prn = satellite_prn;
+	packet.satellite_used = satellite_used;
+	packet.satellite_elevation = satellite_elevation;
+	packet.satellite_azimuth = satellite_azimuth;
+	packet.satellite_snr = satellite_snr;
+        
+        int len = 101;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_GPS_STATUS;
+    //return mavlink_finalize_message(msg, system_id, component_id, 101);
+    return 0;
+}
+
 /**
  * @brief Pack a gps_status message on a channel
  * @param system_id ID of this system
@@ -246,20 +246,21 @@ public static byte[] mavlink_msg_gps_status_get_satellite_snr(byte[] msg)
  */
 public static void mavlink_msg_gps_status_decode(byte[] msg, ref mavlink_gps_status_t gps_status)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	gps_status.satellites_visible = mavlink_msg_gps_status_get_satellites_visible(msg);
-	gps_status.satellite_prn = mavlink_msg_gps_status_get_satellite_prn(msg);
-	gps_status.satellite_used = mavlink_msg_gps_status_get_satellite_used(msg);
-	gps_status.satellite_elevation = mavlink_msg_gps_status_get_satellite_elevation(msg);
-	gps_status.satellite_azimuth = mavlink_msg_gps_status_get_satellite_azimuth(msg);
-	gps_status.satellite_snr = mavlink_msg_gps_status_get_satellite_snr(msg);
-} else {
-    int len = 101; //Marshal.SizeOf(gps_status);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    gps_status = (mavlink_gps_status_t)Marshal.PtrToStructure(i, ((object)gps_status).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	gps_status.satellites_visible = mavlink_msg_gps_status_get_satellites_visible(msg);
+    	gps_status.satellite_prn = mavlink_msg_gps_status_get_satellite_prn(msg);
+    	gps_status.satellite_used = mavlink_msg_gps_status_get_satellite_used(msg);
+    	gps_status.satellite_elevation = mavlink_msg_gps_status_get_satellite_elevation(msg);
+    	gps_status.satellite_azimuth = mavlink_msg_gps_status_get_satellite_azimuth(msg);
+    	gps_status.satellite_snr = mavlink_msg_gps_status_get_satellite_snr(msg);
+    
+    } else {
+        int len = 101; //Marshal.SizeOf(gps_status);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        gps_status = (mavlink_gps_status_t)Marshal.PtrToStructure(i, ((object)gps_status).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

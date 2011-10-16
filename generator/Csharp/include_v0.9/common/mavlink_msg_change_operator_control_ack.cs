@@ -27,30 +27,35 @@ public partial class Mavlink
  * @param ack 0: ACK, 1: NACK: Wrong passkey, 2: NACK: Unsupported passkey encryption method, 3: NACK: Already under control
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_change_operator_control_ack_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public gcs_system_id, byte public control_request, byte public ack)
+ 
+public static UInt16 mavlink_msg_change_operator_control_ack_pack(byte system_id, byte component_id, byte[] msg,
+                               byte gcs_system_id, byte control_request, byte ack)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[3];
-	_mav_put_byte(buf, 0, gcs_system_id);
-	_mav_put_byte(buf, 1, control_request);
-	_mav_put_byte(buf, 2, ack);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(gcs_system_id),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(control_request),0,msg,1,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(ack),0,msg,2,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 3);
-#else
-    mavlink_change_operator_control_ack_t packet;
+} else {
+    mavlink_change_operator_control_ack_t packet = new mavlink_change_operator_control_ack_t();
 	packet.gcs_system_id = gcs_system_id;
 	packet.control_request = control_request;
 	packet.ack = ack;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 3);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL_ACK;
-    return mavlink_finalize_message(msg, system_id, component_id, 3);
+        
+        int len = 3;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL_ACK;
+    //return mavlink_finalize_message(msg, system_id, component_id, 3);
+    return 0;
+}
+
 /**
  * @brief Pack a change_operator_control_ack message on a channel
  * @param system_id ID of this system
@@ -172,17 +177,18 @@ public static byte mavlink_msg_change_operator_control_ack_get_ack(byte[] msg)
  */
 public static void mavlink_msg_change_operator_control_ack_decode(byte[] msg, ref mavlink_change_operator_control_ack_t change_operator_control_ack)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	change_operator_control_ack.gcs_system_id = mavlink_msg_change_operator_control_ack_get_gcs_system_id(msg);
-	change_operator_control_ack.control_request = mavlink_msg_change_operator_control_ack_get_control_request(msg);
-	change_operator_control_ack.ack = mavlink_msg_change_operator_control_ack_get_ack(msg);
-} else {
-    int len = 3; //Marshal.SizeOf(change_operator_control_ack);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    change_operator_control_ack = (mavlink_change_operator_control_ack_t)Marshal.PtrToStructure(i, ((object)change_operator_control_ack).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	change_operator_control_ack.gcs_system_id = mavlink_msg_change_operator_control_ack_get_gcs_system_id(msg);
+    	change_operator_control_ack.control_request = mavlink_msg_change_operator_control_ack_get_control_request(msg);
+    	change_operator_control_ack.ack = mavlink_msg_change_operator_control_ack_get_ack(msg);
+    
+    } else {
+        int len = 3; //Marshal.SizeOf(change_operator_control_ack);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        change_operator_control_ack = (mavlink_change_operator_control_ack_t)Marshal.PtrToStructure(i, ((object)change_operator_control_ack).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

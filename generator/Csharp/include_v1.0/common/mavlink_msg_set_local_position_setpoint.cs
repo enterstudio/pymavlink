@@ -35,23 +35,21 @@ public partial class Mavlink
  * @param yaw Desired yaw angle
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_set_local_position_setpoint_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target_system, byte public target_component, byte public coordinate_frame, Single public x, Single public y, Single public z, Single public yaw)
+ 
+public static UInt16 mavlink_msg_set_local_position_setpoint_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system, byte target_component, byte coordinate_frame, Single x, Single y, Single z, Single yaw)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[19];
-	_mav_put_Single(buf, 0, x);
-	_mav_put_Single(buf, 4, y);
-	_mav_put_Single(buf, 8, z);
-	_mav_put_Single(buf, 12, yaw);
-	_mav_put_byte(buf, 16, target_system);
-	_mav_put_byte(buf, 17, target_component);
-	_mav_put_byte(buf, 18, coordinate_frame);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(x),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(y),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(z),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yaw),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,16,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(target_component),0,msg,17,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(coordinate_frame),0,msg,18,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 19);
-#else
-    mavlink_set_local_position_setpoint_t packet;
+} else {
+    mavlink_set_local_position_setpoint_t packet = new mavlink_set_local_position_setpoint_t();
 	packet.x = x;
 	packet.y = y;
 	packet.z = z;
@@ -60,13 +58,20 @@ static uint16 mavlink_msg_set_local_position_setpoint_pack(byte system_id, byte 
 	packet.target_component = target_component;
 	packet.coordinate_frame = coordinate_frame;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 19);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SET_LOCAL_POSITION_SETPOINT;
-    return mavlink_finalize_message(msg, system_id, component_id, 19, 214);
+        
+        int len = 19;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SET_LOCAL_POSITION_SETPOINT;
+    //return mavlink_finalize_message(msg, system_id, component_id, 19, 214);
+    return 0;
+}
+
 /**
  * @brief Pack a set_local_position_setpoint message on a channel
  * @param system_id ID of this system

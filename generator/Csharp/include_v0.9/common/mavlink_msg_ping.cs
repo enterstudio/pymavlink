@@ -29,32 +29,37 @@ public partial class Mavlink
  * @param time Unix timestamp in microseconds
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_ping_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt32 public seq, byte public target_system, byte public target_component, UInt64 public time)
+ 
+public static UInt16 mavlink_msg_ping_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt32 seq, byte target_system, byte target_component, UInt64 time)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[14];
-	_mav_put_UInt32(buf, 0, seq);
-	_mav_put_byte(buf, 4, target_system);
-	_mav_put_byte(buf, 5, target_component);
-	_mav_put_UInt64(buf, 6, time);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(seq),0,msg,0,sizeof(UInt32));
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,4,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(target_component),0,msg,5,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(time),0,msg,6,sizeof(UInt64));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 14);
-#else
-    mavlink_ping_t packet;
+} else {
+    mavlink_ping_t packet = new mavlink_ping_t();
 	packet.seq = seq;
 	packet.target_system = target_system;
 	packet.target_component = target_component;
 	packet.time = time;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 14);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_PING;
-    return mavlink_finalize_message(msg, system_id, component_id, 14);
+        
+        int len = 14;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_PING;
+    //return mavlink_finalize_message(msg, system_id, component_id, 14);
+    return 0;
+}
+
 /**
  * @brief Pack a ping message on a channel
  * @param system_id ID of this system
@@ -192,18 +197,19 @@ public static UInt64 mavlink_msg_ping_get_time(byte[] msg)
  */
 public static void mavlink_msg_ping_decode(byte[] msg, ref mavlink_ping_t ping)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	ping.seq = mavlink_msg_ping_get_seq(msg);
-	ping.target_system = mavlink_msg_ping_get_target_system(msg);
-	ping.target_component = mavlink_msg_ping_get_target_component(msg);
-	ping.time = mavlink_msg_ping_get_time(msg);
-} else {
-    int len = 14; //Marshal.SizeOf(ping);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    ping = (mavlink_ping_t)Marshal.PtrToStructure(i, ((object)ping).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	ping.seq = mavlink_msg_ping_get_seq(msg);
+    	ping.target_system = mavlink_msg_ping_get_target_system(msg);
+    	ping.target_component = mavlink_msg_ping_get_target_component(msg);
+    	ping.time = mavlink_msg_ping_get_time(msg);
+    
+    } else {
+        int len = 14; //Marshal.SizeOf(ping);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        ping = (mavlink_ping_t)Marshal.PtrToStructure(i, ((object)ping).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

@@ -12,7 +12,7 @@ public partial class Mavlink
 
     const byte MAVLINK_ENDIAN = MAVLINK_BIG_ENDIAN;
 
-    const byte MAVLINK_ALIGNED_FIELDS = 0;
+    const bool MAVLINK_ALIGNED_FIELDS = (0 == 1);
 
     const byte MAVLINK_CRC_EXTRA = 0;
     

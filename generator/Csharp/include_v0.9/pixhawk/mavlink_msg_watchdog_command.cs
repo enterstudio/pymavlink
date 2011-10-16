@@ -29,32 +29,37 @@ public partial class Mavlink
  * @param command_id Command ID
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_watchdog_command_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target_system_id, UInt16 public watchdog_id, UInt16 public process_id, byte public command_id)
+ 
+public static UInt16 mavlink_msg_watchdog_command_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system_id, UInt16 watchdog_id, UInt16 process_id, byte command_id)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[6];
-	_mav_put_byte(buf, 0, target_system_id);
-	_mav_put_UInt16(buf, 1, watchdog_id);
-	_mav_put_UInt16(buf, 3, process_id);
-	_mav_put_byte(buf, 5, command_id);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(target_system_id),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(watchdog_id),0,msg,1,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(process_id),0,msg,3,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(command_id),0,msg,5,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 6);
-#else
-    mavlink_watchdog_command_t packet;
+} else {
+    mavlink_watchdog_command_t packet = new mavlink_watchdog_command_t();
 	packet.target_system_id = target_system_id;
 	packet.watchdog_id = watchdog_id;
 	packet.process_id = process_id;
 	packet.command_id = command_id;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 6);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_WATCHDOG_COMMAND;
-    return mavlink_finalize_message(msg, system_id, component_id, 6);
+        
+        int len = 6;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_WATCHDOG_COMMAND;
+    //return mavlink_finalize_message(msg, system_id, component_id, 6);
+    return 0;
+}
+
 /**
  * @brief Pack a watchdog_command message on a channel
  * @param system_id ID of this system
@@ -192,18 +197,19 @@ public static byte mavlink_msg_watchdog_command_get_command_id(byte[] msg)
  */
 public static void mavlink_msg_watchdog_command_decode(byte[] msg, ref mavlink_watchdog_command_t watchdog_command)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	watchdog_command.target_system_id = mavlink_msg_watchdog_command_get_target_system_id(msg);
-	watchdog_command.watchdog_id = mavlink_msg_watchdog_command_get_watchdog_id(msg);
-	watchdog_command.process_id = mavlink_msg_watchdog_command_get_process_id(msg);
-	watchdog_command.command_id = mavlink_msg_watchdog_command_get_command_id(msg);
-} else {
-    int len = 6; //Marshal.SizeOf(watchdog_command);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    watchdog_command = (mavlink_watchdog_command_t)Marshal.PtrToStructure(i, ((object)watchdog_command).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	watchdog_command.target_system_id = mavlink_msg_watchdog_command_get_target_system_id(msg);
+    	watchdog_command.watchdog_id = mavlink_msg_watchdog_command_get_watchdog_id(msg);
+    	watchdog_command.process_id = mavlink_msg_watchdog_command_get_process_id(msg);
+    	watchdog_command.command_id = mavlink_msg_watchdog_command_get_command_id(msg);
+    
+    } else {
+        int len = 6; //Marshal.SizeOf(watchdog_command);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        watchdog_command = (mavlink_watchdog_command_t)Marshal.PtrToStructure(i, ((object)watchdog_command).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

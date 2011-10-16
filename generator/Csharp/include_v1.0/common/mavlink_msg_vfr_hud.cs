@@ -33,22 +33,20 @@ public partial class Mavlink
  * @param climb Current climb rate in meters/second
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_vfr_hud_pack(byte system_id, byte component_id, ref byte[] msg,
-                               Single public airspeed, Single public groundspeed, Int16 public heading, UInt16 public throttle, Single public alt, Single public climb)
+ 
+public static UInt16 mavlink_msg_vfr_hud_pack(byte system_id, byte component_id, byte[] msg,
+                               Single airspeed, Single groundspeed, Int16 heading, UInt16 throttle, Single alt, Single climb)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[20];
-	_mav_put_Single(buf, 0, airspeed);
-	_mav_put_Single(buf, 4, groundspeed);
-	_mav_put_Single(buf, 8, alt);
-	_mav_put_Single(buf, 12, climb);
-	_mav_put_Int16(buf, 16, heading);
-	_mav_put_UInt16(buf, 18, throttle);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(airspeed),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(groundspeed),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(alt),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(climb),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(heading),0,msg,16,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(throttle),0,msg,18,sizeof(UInt16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 20);
-#else
-    mavlink_vfr_hud_t packet;
+} else {
+    mavlink_vfr_hud_t packet = new mavlink_vfr_hud_t();
 	packet.airspeed = airspeed;
 	packet.groundspeed = groundspeed;
 	packet.alt = alt;
@@ -56,13 +54,20 @@ static uint16 mavlink_msg_vfr_hud_pack(byte system_id, byte component_id, ref by
 	packet.heading = heading;
 	packet.throttle = throttle;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 20);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_VFR_HUD;
-    return mavlink_finalize_message(msg, system_id, component_id, 20, 20);
+        
+        int len = 20;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_VFR_HUD;
+    //return mavlink_finalize_message(msg, system_id, component_id, 20, 20);
+    return 0;
+}
+
 /**
  * @brief Pack a vfr_hud message on a channel
  * @param system_id ID of this system
@@ -232,20 +237,21 @@ public static Single mavlink_msg_vfr_hud_get_climb(byte[] msg)
  */
 public static void mavlink_msg_vfr_hud_decode(byte[] msg, ref mavlink_vfr_hud_t vfr_hud)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	vfr_hud.airspeed = mavlink_msg_vfr_hud_get_airspeed(msg);
-	vfr_hud.groundspeed = mavlink_msg_vfr_hud_get_groundspeed(msg);
-	vfr_hud.alt = mavlink_msg_vfr_hud_get_alt(msg);
-	vfr_hud.climb = mavlink_msg_vfr_hud_get_climb(msg);
-	vfr_hud.heading = mavlink_msg_vfr_hud_get_heading(msg);
-	vfr_hud.throttle = mavlink_msg_vfr_hud_get_throttle(msg);
-} else {
-    int len = 20; //Marshal.SizeOf(vfr_hud);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    vfr_hud = (mavlink_vfr_hud_t)Marshal.PtrToStructure(i, ((object)vfr_hud).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	vfr_hud.airspeed = mavlink_msg_vfr_hud_get_airspeed(msg);
+    	vfr_hud.groundspeed = mavlink_msg_vfr_hud_get_groundspeed(msg);
+    	vfr_hud.alt = mavlink_msg_vfr_hud_get_alt(msg);
+    	vfr_hud.climb = mavlink_msg_vfr_hud_get_climb(msg);
+    	vfr_hud.heading = mavlink_msg_vfr_hud_get_heading(msg);
+    	vfr_hud.throttle = mavlink_msg_vfr_hud_get_throttle(msg);
+    
+    } else {
+        int len = 20; //Marshal.SizeOf(vfr_hud);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        vfr_hud = (mavlink_vfr_hud_t)Marshal.PtrToStructure(i, ((object)vfr_hud).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

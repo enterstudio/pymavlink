@@ -33,22 +33,20 @@ public partial class Mavlink
  * @param crashes Number of crashes
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_watchdog_process_status_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt16 public watchdog_id, UInt16 public process_id, byte public state, byte public muted, Int32 public pid, UInt16 public crashes)
+ 
+public static UInt16 mavlink_msg_watchdog_process_status_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt16 watchdog_id, UInt16 process_id, byte state, byte muted, Int32 pid, UInt16 crashes)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[12];
-	_mav_put_UInt16(buf, 0, watchdog_id);
-	_mav_put_UInt16(buf, 2, process_id);
-	_mav_put_byte(buf, 4, state);
-	_mav_put_byte(buf, 5, muted);
-	_mav_put_Int32(buf, 6, pid);
-	_mav_put_UInt16(buf, 10, crashes);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(watchdog_id),0,msg,0,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(process_id),0,msg,2,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(state),0,msg,4,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(muted),0,msg,5,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(pid),0,msg,6,sizeof(Int32));
+	Array.Copy(BitConverter.GetBytes(crashes),0,msg,10,sizeof(UInt16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 12);
-#else
-    mavlink_watchdog_process_status_t packet;
+} else {
+    mavlink_watchdog_process_status_t packet = new mavlink_watchdog_process_status_t();
 	packet.watchdog_id = watchdog_id;
 	packet.process_id = process_id;
 	packet.state = state;
@@ -56,13 +54,20 @@ static uint16 mavlink_msg_watchdog_process_status_pack(byte system_id, byte comp
 	packet.pid = pid;
 	packet.crashes = crashes;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 12);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_WATCHDOG_PROCESS_STATUS;
-    return mavlink_finalize_message(msg, system_id, component_id, 12);
+        
+        int len = 12;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_WATCHDOG_PROCESS_STATUS;
+    //return mavlink_finalize_message(msg, system_id, component_id, 12);
+    return 0;
+}
+
 /**
  * @brief Pack a watchdog_process_status message on a channel
  * @param system_id ID of this system
@@ -232,20 +237,21 @@ public static UInt16 mavlink_msg_watchdog_process_status_get_crashes(byte[] msg)
  */
 public static void mavlink_msg_watchdog_process_status_decode(byte[] msg, ref mavlink_watchdog_process_status_t watchdog_process_status)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	watchdog_process_status.watchdog_id = mavlink_msg_watchdog_process_status_get_watchdog_id(msg);
-	watchdog_process_status.process_id = mavlink_msg_watchdog_process_status_get_process_id(msg);
-	watchdog_process_status.state = mavlink_msg_watchdog_process_status_get_state(msg);
-	watchdog_process_status.muted = mavlink_msg_watchdog_process_status_get_muted(msg);
-	watchdog_process_status.pid = mavlink_msg_watchdog_process_status_get_pid(msg);
-	watchdog_process_status.crashes = mavlink_msg_watchdog_process_status_get_crashes(msg);
-} else {
-    int len = 12; //Marshal.SizeOf(watchdog_process_status);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    watchdog_process_status = (mavlink_watchdog_process_status_t)Marshal.PtrToStructure(i, ((object)watchdog_process_status).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	watchdog_process_status.watchdog_id = mavlink_msg_watchdog_process_status_get_watchdog_id(msg);
+    	watchdog_process_status.process_id = mavlink_msg_watchdog_process_status_get_process_id(msg);
+    	watchdog_process_status.state = mavlink_msg_watchdog_process_status_get_state(msg);
+    	watchdog_process_status.muted = mavlink_msg_watchdog_process_status_get_muted(msg);
+    	watchdog_process_status.pid = mavlink_msg_watchdog_process_status_get_pid(msg);
+    	watchdog_process_status.crashes = mavlink_msg_watchdog_process_status_get_crashes(msg);
+    
+    } else {
+        int len = 12; //Marshal.SizeOf(watchdog_process_status);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        watchdog_process_status = (mavlink_watchdog_process_status_t)Marshal.PtrToStructure(i, ((object)watchdog_process_status).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

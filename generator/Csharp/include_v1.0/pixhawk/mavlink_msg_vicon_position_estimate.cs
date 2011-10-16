@@ -35,23 +35,21 @@ public partial class Mavlink
  * @param yaw Yaw angle in rad
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_vicon_position_estimate_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt64 public usec, Single public x, Single public y, Single public z, Single public roll, Single public pitch, Single public yaw)
+ 
+public static UInt16 mavlink_msg_vicon_position_estimate_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt64 usec, Single x, Single y, Single z, Single roll, Single pitch, Single yaw)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[32];
-	_mav_put_UInt64(buf, 0, usec);
-	_mav_put_Single(buf, 8, x);
-	_mav_put_Single(buf, 12, y);
-	_mav_put_Single(buf, 16, z);
-	_mav_put_Single(buf, 20, roll);
-	_mav_put_Single(buf, 24, pitch);
-	_mav_put_Single(buf, 28, yaw);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(usec),0,msg,0,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(x),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(y),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(z),0,msg,16,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(roll),0,msg,20,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(pitch),0,msg,24,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yaw),0,msg,28,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 32);
-#else
-    mavlink_vicon_position_estimate_t packet;
+} else {
+    mavlink_vicon_position_estimate_t packet = new mavlink_vicon_position_estimate_t();
 	packet.usec = usec;
 	packet.x = x;
 	packet.y = y;
@@ -60,13 +58,20 @@ static uint16 mavlink_msg_vicon_position_estimate_pack(byte system_id, byte comp
 	packet.pitch = pitch;
 	packet.yaw = yaw;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 32);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE;
-    return mavlink_finalize_message(msg, system_id, component_id, 32, 56);
+        
+        int len = 32;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE;
+    //return mavlink_finalize_message(msg, system_id, component_id, 32, 56);
+    return 0;
+}
+
 /**
  * @brief Pack a vicon_position_estimate message on a channel
  * @param system_id ID of this system
@@ -252,21 +257,22 @@ public static Single mavlink_msg_vicon_position_estimate_get_yaw(byte[] msg)
  */
 public static void mavlink_msg_vicon_position_estimate_decode(byte[] msg, ref mavlink_vicon_position_estimate_t vicon_position_estimate)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	vicon_position_estimate.usec = mavlink_msg_vicon_position_estimate_get_usec(msg);
-	vicon_position_estimate.x = mavlink_msg_vicon_position_estimate_get_x(msg);
-	vicon_position_estimate.y = mavlink_msg_vicon_position_estimate_get_y(msg);
-	vicon_position_estimate.z = mavlink_msg_vicon_position_estimate_get_z(msg);
-	vicon_position_estimate.roll = mavlink_msg_vicon_position_estimate_get_roll(msg);
-	vicon_position_estimate.pitch = mavlink_msg_vicon_position_estimate_get_pitch(msg);
-	vicon_position_estimate.yaw = mavlink_msg_vicon_position_estimate_get_yaw(msg);
-} else {
-    int len = 32; //Marshal.SizeOf(vicon_position_estimate);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    vicon_position_estimate = (mavlink_vicon_position_estimate_t)Marshal.PtrToStructure(i, ((object)vicon_position_estimate).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	vicon_position_estimate.usec = mavlink_msg_vicon_position_estimate_get_usec(msg);
+    	vicon_position_estimate.x = mavlink_msg_vicon_position_estimate_get_x(msg);
+    	vicon_position_estimate.y = mavlink_msg_vicon_position_estimate_get_y(msg);
+    	vicon_position_estimate.z = mavlink_msg_vicon_position_estimate_get_z(msg);
+    	vicon_position_estimate.roll = mavlink_msg_vicon_position_estimate_get_roll(msg);
+    	vicon_position_estimate.pitch = mavlink_msg_vicon_position_estimate_get_pitch(msg);
+    	vicon_position_estimate.yaw = mavlink_msg_vicon_position_estimate_get_yaw(msg);
+    
+    } else {
+        int len = 32; //Marshal.SizeOf(vicon_position_estimate);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        vicon_position_estimate = (mavlink_vicon_position_estimate_t)Marshal.PtrToStructure(i, ((object)vicon_position_estimate).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

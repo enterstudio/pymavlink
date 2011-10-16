@@ -39,25 +39,23 @@ public partial class Mavlink
  * @param vzErr z velocity
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_state_correction_pack(byte system_id, byte component_id, ref byte[] msg,
-                               Single public xErr, Single public yErr, Single public zErr, Single public rollErr, Single public pitchErr, Single public yawErr, Single public vxErr, Single public vyErr, Single public vzErr)
+ 
+public static UInt16 mavlink_msg_state_correction_pack(byte system_id, byte component_id, byte[] msg,
+                               Single xErr, Single yErr, Single zErr, Single rollErr, Single pitchErr, Single yawErr, Single vxErr, Single vyErr, Single vzErr)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[36];
-	_mav_put_Single(buf, 0, xErr);
-	_mav_put_Single(buf, 4, yErr);
-	_mav_put_Single(buf, 8, zErr);
-	_mav_put_Single(buf, 12, rollErr);
-	_mav_put_Single(buf, 16, pitchErr);
-	_mav_put_Single(buf, 20, yawErr);
-	_mav_put_Single(buf, 24, vxErr);
-	_mav_put_Single(buf, 28, vyErr);
-	_mav_put_Single(buf, 32, vzErr);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(xErr),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yErr),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(zErr),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(rollErr),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(pitchErr),0,msg,16,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yawErr),0,msg,20,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(vxErr),0,msg,24,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(vyErr),0,msg,28,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(vzErr),0,msg,32,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 36);
-#else
-    mavlink_state_correction_t packet;
+} else {
+    mavlink_state_correction_t packet = new mavlink_state_correction_t();
 	packet.xErr = xErr;
 	packet.yErr = yErr;
 	packet.zErr = zErr;
@@ -68,13 +66,20 @@ static uint16 mavlink_msg_state_correction_pack(byte system_id, byte component_i
 	packet.vyErr = vyErr;
 	packet.vzErr = vzErr;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 36);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_STATE_CORRECTION;
-    return mavlink_finalize_message(msg, system_id, component_id, 36);
+        
+        int len = 36;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_STATE_CORRECTION;
+    //return mavlink_finalize_message(msg, system_id, component_id, 36);
+    return 0;
+}
+
 /**
  * @brief Pack a state_correction message on a channel
  * @param system_id ID of this system
@@ -292,23 +297,24 @@ public static Single mavlink_msg_state_correction_get_vzErr(byte[] msg)
  */
 public static void mavlink_msg_state_correction_decode(byte[] msg, ref mavlink_state_correction_t state_correction)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	state_correction.xErr = mavlink_msg_state_correction_get_xErr(msg);
-	state_correction.yErr = mavlink_msg_state_correction_get_yErr(msg);
-	state_correction.zErr = mavlink_msg_state_correction_get_zErr(msg);
-	state_correction.rollErr = mavlink_msg_state_correction_get_rollErr(msg);
-	state_correction.pitchErr = mavlink_msg_state_correction_get_pitchErr(msg);
-	state_correction.yawErr = mavlink_msg_state_correction_get_yawErr(msg);
-	state_correction.vxErr = mavlink_msg_state_correction_get_vxErr(msg);
-	state_correction.vyErr = mavlink_msg_state_correction_get_vyErr(msg);
-	state_correction.vzErr = mavlink_msg_state_correction_get_vzErr(msg);
-} else {
-    int len = 36; //Marshal.SizeOf(state_correction);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    state_correction = (mavlink_state_correction_t)Marshal.PtrToStructure(i, ((object)state_correction).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	state_correction.xErr = mavlink_msg_state_correction_get_xErr(msg);
+    	state_correction.yErr = mavlink_msg_state_correction_get_yErr(msg);
+    	state_correction.zErr = mavlink_msg_state_correction_get_zErr(msg);
+    	state_correction.rollErr = mavlink_msg_state_correction_get_rollErr(msg);
+    	state_correction.pitchErr = mavlink_msg_state_correction_get_pitchErr(msg);
+    	state_correction.yawErr = mavlink_msg_state_correction_get_yawErr(msg);
+    	state_correction.vxErr = mavlink_msg_state_correction_get_vxErr(msg);
+    	state_correction.vyErr = mavlink_msg_state_correction_get_vyErr(msg);
+    	state_correction.vzErr = mavlink_msg_state_correction_get_vzErr(msg);
+    
+    } else {
+        int len = 36; //Marshal.SizeOf(state_correction);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        state_correction = (mavlink_state_correction_t)Marshal.PtrToStructure(i, ((object)state_correction).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

@@ -31,34 +31,39 @@ public partial class Mavlink
  * @param yaw yaw orientation in radians, 0 = NORTH
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_position_control_setpoint_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt16 public id, Single public x, Single public y, Single public z, Single public yaw)
+ 
+public static UInt16 mavlink_msg_position_control_setpoint_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt16 id, Single x, Single y, Single z, Single yaw)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[18];
-	_mav_put_UInt16(buf, 0, id);
-	_mav_put_Single(buf, 2, x);
-	_mav_put_Single(buf, 6, y);
-	_mav_put_Single(buf, 10, z);
-	_mav_put_Single(buf, 14, yaw);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(id),0,msg,0,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(x),0,msg,2,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(y),0,msg,6,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(z),0,msg,10,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yaw),0,msg,14,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 18);
-#else
-    mavlink_position_control_setpoint_t packet;
+} else {
+    mavlink_position_control_setpoint_t packet = new mavlink_position_control_setpoint_t();
 	packet.id = id;
 	packet.x = x;
 	packet.y = y;
 	packet.z = z;
 	packet.yaw = yaw;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 18);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_POSITION_CONTROL_SETPOINT;
-    return mavlink_finalize_message(msg, system_id, component_id, 18);
+        
+        int len = 18;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_POSITION_CONTROL_SETPOINT;
+    //return mavlink_finalize_message(msg, system_id, component_id, 18);
+    return 0;
+}
+
 /**
  * @brief Pack a position_control_setpoint message on a channel
  * @param system_id ID of this system
@@ -212,19 +217,20 @@ public static Single mavlink_msg_position_control_setpoint_get_yaw(byte[] msg)
  */
 public static void mavlink_msg_position_control_setpoint_decode(byte[] msg, ref mavlink_position_control_setpoint_t position_control_setpoint)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	position_control_setpoint.id = mavlink_msg_position_control_setpoint_get_id(msg);
-	position_control_setpoint.x = mavlink_msg_position_control_setpoint_get_x(msg);
-	position_control_setpoint.y = mavlink_msg_position_control_setpoint_get_y(msg);
-	position_control_setpoint.z = mavlink_msg_position_control_setpoint_get_z(msg);
-	position_control_setpoint.yaw = mavlink_msg_position_control_setpoint_get_yaw(msg);
-} else {
-    int len = 18; //Marshal.SizeOf(position_control_setpoint);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    position_control_setpoint = (mavlink_position_control_setpoint_t)Marshal.PtrToStructure(i, ((object)position_control_setpoint).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	position_control_setpoint.id = mavlink_msg_position_control_setpoint_get_id(msg);
+    	position_control_setpoint.x = mavlink_msg_position_control_setpoint_get_x(msg);
+    	position_control_setpoint.y = mavlink_msg_position_control_setpoint_get_y(msg);
+    	position_control_setpoint.z = mavlink_msg_position_control_setpoint_get_z(msg);
+    	position_control_setpoint.yaw = mavlink_msg_position_control_setpoint_get_yaw(msg);
+    
+    } else {
+        int len = 18; //Marshal.SizeOf(position_control_setpoint);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        position_control_setpoint = (mavlink_position_control_setpoint_t)Marshal.PtrToStructure(i, ((object)position_control_setpoint).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

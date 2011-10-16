@@ -25,28 +25,33 @@ public partial class Mavlink
  * @param mode The new altitude in meters
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_set_altitude_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target, UInt32 public mode)
+ 
+public static UInt16 mavlink_msg_set_altitude_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target, UInt32 mode)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[5];
-	_mav_put_byte(buf, 0, target);
-	_mav_put_UInt32(buf, 1, mode);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(target),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(mode),0,msg,1,sizeof(UInt32));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 5);
-#else
-    mavlink_set_altitude_t packet;
+} else {
+    mavlink_set_altitude_t packet = new mavlink_set_altitude_t();
 	packet.target = target;
 	packet.mode = mode;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 5);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SET_ALTITUDE;
-    return mavlink_finalize_message(msg, system_id, component_id, 5);
+        
+        int len = 5;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SET_ALTITUDE;
+    //return mavlink_finalize_message(msg, system_id, component_id, 5);
+    return 0;
+}
+
 /**
  * @brief Pack a set_altitude message on a channel
  * @param system_id ID of this system
@@ -152,16 +157,17 @@ public static UInt32 mavlink_msg_set_altitude_get_mode(byte[] msg)
  */
 public static void mavlink_msg_set_altitude_decode(byte[] msg, ref mavlink_set_altitude_t set_altitude)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	set_altitude.target = mavlink_msg_set_altitude_get_target(msg);
-	set_altitude.mode = mavlink_msg_set_altitude_get_mode(msg);
-} else {
-    int len = 5; //Marshal.SizeOf(set_altitude);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    set_altitude = (mavlink_set_altitude_t)Marshal.PtrToStructure(i, ((object)set_altitude).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	set_altitude.target = mavlink_msg_set_altitude_get_target(msg);
+    	set_altitude.mode = mavlink_msg_set_altitude_get_mode(msg);
+    
+    } else {
+        int len = 5; //Marshal.SizeOf(set_altitude);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        set_altitude = (mavlink_set_altitude_t)Marshal.PtrToStructure(i, ((object)set_altitude).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

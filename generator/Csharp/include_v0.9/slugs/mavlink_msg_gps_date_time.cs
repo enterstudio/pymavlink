@@ -35,23 +35,21 @@ public partial class Mavlink
  * @param visSat Visible sattelites reported by Gps  
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_gps_date_time_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public year, byte public month, byte public day, byte public hour, byte public min, byte public sec, byte public visSat)
+ 
+public static UInt16 mavlink_msg_gps_date_time_pack(byte system_id, byte component_id, byte[] msg,
+                               byte year, byte month, byte day, byte hour, byte min, byte sec, byte visSat)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[7];
-	_mav_put_byte(buf, 0, year);
-	_mav_put_byte(buf, 1, month);
-	_mav_put_byte(buf, 2, day);
-	_mav_put_byte(buf, 3, hour);
-	_mav_put_byte(buf, 4, min);
-	_mav_put_byte(buf, 5, sec);
-	_mav_put_byte(buf, 6, visSat);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(year),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(month),0,msg,1,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(day),0,msg,2,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(hour),0,msg,3,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(min),0,msg,4,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(sec),0,msg,5,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(visSat),0,msg,6,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 7);
-#else
-    mavlink_gps_date_time_t packet;
+} else {
+    mavlink_gps_date_time_t packet = new mavlink_gps_date_time_t();
 	packet.year = year;
 	packet.month = month;
 	packet.day = day;
@@ -60,13 +58,20 @@ static uint16 mavlink_msg_gps_date_time_pack(byte system_id, byte component_id, 
 	packet.sec = sec;
 	packet.visSat = visSat;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 7);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_GPS_DATE_TIME;
-    return mavlink_finalize_message(msg, system_id, component_id, 7);
+        
+        int len = 7;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_GPS_DATE_TIME;
+    //return mavlink_finalize_message(msg, system_id, component_id, 7);
+    return 0;
+}
+
 /**
  * @brief Pack a gps_date_time message on a channel
  * @param system_id ID of this system
@@ -252,21 +257,22 @@ public static byte mavlink_msg_gps_date_time_get_visSat(byte[] msg)
  */
 public static void mavlink_msg_gps_date_time_decode(byte[] msg, ref mavlink_gps_date_time_t gps_date_time)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	gps_date_time.year = mavlink_msg_gps_date_time_get_year(msg);
-	gps_date_time.month = mavlink_msg_gps_date_time_get_month(msg);
-	gps_date_time.day = mavlink_msg_gps_date_time_get_day(msg);
-	gps_date_time.hour = mavlink_msg_gps_date_time_get_hour(msg);
-	gps_date_time.min = mavlink_msg_gps_date_time_get_min(msg);
-	gps_date_time.sec = mavlink_msg_gps_date_time_get_sec(msg);
-	gps_date_time.visSat = mavlink_msg_gps_date_time_get_visSat(msg);
-} else {
-    int len = 7; //Marshal.SizeOf(gps_date_time);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    gps_date_time = (mavlink_gps_date_time_t)Marshal.PtrToStructure(i, ((object)gps_date_time).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	gps_date_time.year = mavlink_msg_gps_date_time_get_year(msg);
+    	gps_date_time.month = mavlink_msg_gps_date_time_get_month(msg);
+    	gps_date_time.day = mavlink_msg_gps_date_time_get_day(msg);
+    	gps_date_time.hour = mavlink_msg_gps_date_time_get_hour(msg);
+    	gps_date_time.min = mavlink_msg_gps_date_time_get_min(msg);
+    	gps_date_time.sec = mavlink_msg_gps_date_time_get_sec(msg);
+    	gps_date_time.visSat = mavlink_msg_gps_date_time_get_visSat(msg);
+    
+    } else {
+        int len = 7; //Marshal.SizeOf(gps_date_time);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        gps_date_time = (mavlink_gps_date_time_t)Marshal.PtrToStructure(i, ((object)gps_date_time).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

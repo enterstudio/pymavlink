@@ -35,23 +35,21 @@ public partial class Mavlink
  * @param packet_drop Dropped packets (packets that were corrupted on reception on the MAV)
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_sys_status_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public mode, byte public nav_mode, byte public status, UInt16 public load, UInt16 public vbat, UInt16 public battery_remaining, UInt16 public packet_drop)
+ 
+public static UInt16 mavlink_msg_sys_status_pack(byte system_id, byte component_id, byte[] msg,
+                               byte mode, byte nav_mode, byte status, UInt16 load, UInt16 vbat, UInt16 battery_remaining, UInt16 packet_drop)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[11];
-	_mav_put_byte(buf, 0, mode);
-	_mav_put_byte(buf, 1, nav_mode);
-	_mav_put_byte(buf, 2, status);
-	_mav_put_UInt16(buf, 3, load);
-	_mav_put_UInt16(buf, 5, vbat);
-	_mav_put_UInt16(buf, 7, battery_remaining);
-	_mav_put_UInt16(buf, 9, packet_drop);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(mode),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(nav_mode),0,msg,1,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(status),0,msg,2,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(load),0,msg,3,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(vbat),0,msg,5,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(battery_remaining),0,msg,7,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(packet_drop),0,msg,9,sizeof(UInt16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 11);
-#else
-    mavlink_sys_status_t packet;
+} else {
+    mavlink_sys_status_t packet = new mavlink_sys_status_t();
 	packet.mode = mode;
 	packet.nav_mode = nav_mode;
 	packet.status = status;
@@ -60,13 +58,20 @@ static uint16 mavlink_msg_sys_status_pack(byte system_id, byte component_id, ref
 	packet.battery_remaining = battery_remaining;
 	packet.packet_drop = packet_drop;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 11);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SYS_STATUS;
-    return mavlink_finalize_message(msg, system_id, component_id, 11);
+        
+        int len = 11;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SYS_STATUS;
+    //return mavlink_finalize_message(msg, system_id, component_id, 11);
+    return 0;
+}
+
 /**
  * @brief Pack a sys_status message on a channel
  * @param system_id ID of this system
@@ -252,21 +257,22 @@ public static UInt16 mavlink_msg_sys_status_get_packet_drop(byte[] msg)
  */
 public static void mavlink_msg_sys_status_decode(byte[] msg, ref mavlink_sys_status_t sys_status)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	sys_status.mode = mavlink_msg_sys_status_get_mode(msg);
-	sys_status.nav_mode = mavlink_msg_sys_status_get_nav_mode(msg);
-	sys_status.status = mavlink_msg_sys_status_get_status(msg);
-	sys_status.load = mavlink_msg_sys_status_get_load(msg);
-	sys_status.vbat = mavlink_msg_sys_status_get_vbat(msg);
-	sys_status.battery_remaining = mavlink_msg_sys_status_get_battery_remaining(msg);
-	sys_status.packet_drop = mavlink_msg_sys_status_get_packet_drop(msg);
-} else {
-    int len = 11; //Marshal.SizeOf(sys_status);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    sys_status = (mavlink_sys_status_t)Marshal.PtrToStructure(i, ((object)sys_status).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	sys_status.mode = mavlink_msg_sys_status_get_mode(msg);
+    	sys_status.nav_mode = mavlink_msg_sys_status_get_nav_mode(msg);
+    	sys_status.status = mavlink_msg_sys_status_get_status(msg);
+    	sys_status.load = mavlink_msg_sys_status_get_load(msg);
+    	sys_status.vbat = mavlink_msg_sys_status_get_vbat(msg);
+    	sys_status.battery_remaining = mavlink_msg_sys_status_get_battery_remaining(msg);
+    	sys_status.packet_drop = mavlink_msg_sys_status_get_packet_drop(msg);
+    
+    } else {
+        int len = 11; //Marshal.SizeOf(sys_status);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        sys_status = (mavlink_sys_status_t)Marshal.PtrToStructure(i, ((object)sys_status).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

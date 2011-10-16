@@ -35,23 +35,21 @@ public partial class Mavlink
  * @param gyro_2 b_f[2]
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_nav_filter_bias_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt64 public usec, Single public accel_0, Single public accel_1, Single public accel_2, Single public gyro_0, Single public gyro_1, Single public gyro_2)
+ 
+public static UInt16 mavlink_msg_nav_filter_bias_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt64 usec, Single accel_0, Single accel_1, Single accel_2, Single gyro_0, Single gyro_1, Single gyro_2)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[32];
-	_mav_put_UInt64(buf, 0, usec);
-	_mav_put_Single(buf, 8, accel_0);
-	_mav_put_Single(buf, 12, accel_1);
-	_mav_put_Single(buf, 16, accel_2);
-	_mav_put_Single(buf, 20, gyro_0);
-	_mav_put_Single(buf, 24, gyro_1);
-	_mav_put_Single(buf, 28, gyro_2);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(usec),0,msg,0,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(accel_0),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(accel_1),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(accel_2),0,msg,16,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(gyro_0),0,msg,20,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(gyro_1),0,msg,24,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(gyro_2),0,msg,28,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 32);
-#else
-    mavlink_nav_filter_bias_t packet;
+} else {
+    mavlink_nav_filter_bias_t packet = new mavlink_nav_filter_bias_t();
 	packet.usec = usec;
 	packet.accel_0 = accel_0;
 	packet.accel_1 = accel_1;
@@ -60,13 +58,20 @@ static uint16 mavlink_msg_nav_filter_bias_pack(byte system_id, byte component_id
 	packet.gyro_1 = gyro_1;
 	packet.gyro_2 = gyro_2;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 32);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_NAV_FILTER_BIAS;
-    return mavlink_finalize_message(msg, system_id, component_id, 32, 34);
+        
+        int len = 32;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_NAV_FILTER_BIAS;
+    //return mavlink_finalize_message(msg, system_id, component_id, 32, 34);
+    return 0;
+}
+
 /**
  * @brief Pack a nav_filter_bias message on a channel
  * @param system_id ID of this system
@@ -252,21 +257,22 @@ public static Single mavlink_msg_nav_filter_bias_get_gyro_2(byte[] msg)
  */
 public static void mavlink_msg_nav_filter_bias_decode(byte[] msg, ref mavlink_nav_filter_bias_t nav_filter_bias)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	nav_filter_bias.usec = mavlink_msg_nav_filter_bias_get_usec(msg);
-	nav_filter_bias.accel_0 = mavlink_msg_nav_filter_bias_get_accel_0(msg);
-	nav_filter_bias.accel_1 = mavlink_msg_nav_filter_bias_get_accel_1(msg);
-	nav_filter_bias.accel_2 = mavlink_msg_nav_filter_bias_get_accel_2(msg);
-	nav_filter_bias.gyro_0 = mavlink_msg_nav_filter_bias_get_gyro_0(msg);
-	nav_filter_bias.gyro_1 = mavlink_msg_nav_filter_bias_get_gyro_1(msg);
-	nav_filter_bias.gyro_2 = mavlink_msg_nav_filter_bias_get_gyro_2(msg);
-} else {
-    int len = 32; //Marshal.SizeOf(nav_filter_bias);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    nav_filter_bias = (mavlink_nav_filter_bias_t)Marshal.PtrToStructure(i, ((object)nav_filter_bias).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	nav_filter_bias.usec = mavlink_msg_nav_filter_bias_get_usec(msg);
+    	nav_filter_bias.accel_0 = mavlink_msg_nav_filter_bias_get_accel_0(msg);
+    	nav_filter_bias.accel_1 = mavlink_msg_nav_filter_bias_get_accel_1(msg);
+    	nav_filter_bias.accel_2 = mavlink_msg_nav_filter_bias_get_accel_2(msg);
+    	nav_filter_bias.gyro_0 = mavlink_msg_nav_filter_bias_get_gyro_0(msg);
+    	nav_filter_bias.gyro_1 = mavlink_msg_nav_filter_bias_get_gyro_1(msg);
+    	nav_filter_bias.gyro_2 = mavlink_msg_nav_filter_bias_get_gyro_2(msg);
+    
+    } else {
+        int len = 32; //Marshal.SizeOf(nav_filter_bias);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        nav_filter_bias = (mavlink_nav_filter_bias_t)Marshal.PtrToStructure(i, ((object)nav_filter_bias).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

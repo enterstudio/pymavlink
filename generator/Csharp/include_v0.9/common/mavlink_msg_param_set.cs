@@ -30,31 +30,35 @@ public partial class Mavlink
  * @param param_value Onboard parameter value
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_param_set_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target_system, byte public target_component, const byte[] [MarshalAs(UnmanagedType.ByValArray,SizeConst=15)]
- publicparam_id, Single public param_value)
+ 
+public static UInt16 mavlink_msg_param_set_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system, byte target_component, byte[] param_id, Single param_value)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[21];
-	_mav_put_byte(buf, 0, target_system);
-	_mav_put_byte(buf, 1, target_component);
-	_mav_put_Single(buf, 17, param_value);
-	_mav_put_byte[]_array(buf, 2, param_id, 15);
-        memcpy(_MAV_PAYLOAD(msg), buf, 21);
-#else
-    mavlink_param_set_t packet;
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(target_component),0,msg,1,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(param_value),0,msg,17,sizeof(Single));
+	//Array.Copy(param_id,0,msg,2,15);
+} else {
+    mavlink_param_set_t packet = new mavlink_param_set_t();
 	packet.target_system = target_system;
 	packet.target_component = target_component;
 	packet.param_value = param_value;
-	memcpy(packet.param_id, param_id, sizeof(byte[])*15);
-        memcpy(_MAV_PAYLOAD(msg), &packet, 21);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_PARAM_SET;
-    return mavlink_finalize_message(msg, system_id, component_id, 21);
+	packet.param_id = param_id;
+        
+        int len = 21;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_PARAM_SET;
+    //return mavlink_finalize_message(msg, system_id, component_id, 21);
+    return 0;
+}
+
 /**
  * @brief Pack a param_set message on a channel
  * @param system_id ID of this system
@@ -190,18 +194,19 @@ public static Single mavlink_msg_param_set_get_param_value(byte[] msg)
  */
 public static void mavlink_msg_param_set_decode(byte[] msg, ref mavlink_param_set_t param_set)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	param_set.target_system = mavlink_msg_param_set_get_target_system(msg);
-	param_set.target_component = mavlink_msg_param_set_get_target_component(msg);
-	param_set.param_id = mavlink_msg_param_set_get_param_id(msg);
-	param_set.param_value = mavlink_msg_param_set_get_param_value(msg);
-} else {
-    int len = 21; //Marshal.SizeOf(param_set);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    param_set = (mavlink_param_set_t)Marshal.PtrToStructure(i, ((object)param_set).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	param_set.target_system = mavlink_msg_param_set_get_target_system(msg);
+    	param_set.target_component = mavlink_msg_param_set_get_target_component(msg);
+    	param_set.param_id = mavlink_msg_param_set_get_param_id(msg);
+    	param_set.param_value = mavlink_msg_param_set_get_param_value(msg);
+    
+    } else {
+        int len = 21; //Marshal.SizeOf(param_set);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        param_set = (mavlink_param_set_t)Marshal.PtrToStructure(i, ((object)param_set).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

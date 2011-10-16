@@ -27,30 +27,35 @@ public partial class Mavlink
  * @param actionVal Value associated with the action
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_slugs_action_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target, byte public actionId, UInt16 public actionVal)
+ 
+public static UInt16 mavlink_msg_slugs_action_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target, byte actionId, UInt16 actionVal)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[4];
-	_mav_put_UInt16(buf, 0, actionVal);
-	_mav_put_byte(buf, 2, target);
-	_mav_put_byte(buf, 3, actionId);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(actionVal),0,msg,0,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(target),0,msg,2,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(actionId),0,msg,3,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 4);
-#else
-    mavlink_slugs_action_t packet;
+} else {
+    mavlink_slugs_action_t packet = new mavlink_slugs_action_t();
 	packet.actionVal = actionVal;
 	packet.target = target;
 	packet.actionId = actionId;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 4);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SLUGS_ACTION;
-    return mavlink_finalize_message(msg, system_id, component_id, 4, 65);
+        
+        int len = 4;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SLUGS_ACTION;
+    //return mavlink_finalize_message(msg, system_id, component_id, 4, 65);
+    return 0;
+}
+
 /**
  * @brief Pack a slugs_action message on a channel
  * @param system_id ID of this system
@@ -172,17 +177,18 @@ public static UInt16 mavlink_msg_slugs_action_get_actionVal(byte[] msg)
  */
 public static void mavlink_msg_slugs_action_decode(byte[] msg, ref mavlink_slugs_action_t slugs_action)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	slugs_action.actionVal = mavlink_msg_slugs_action_get_actionVal(msg);
-	slugs_action.target = mavlink_msg_slugs_action_get_target(msg);
-	slugs_action.actionId = mavlink_msg_slugs_action_get_actionId(msg);
-} else {
-    int len = 4; //Marshal.SizeOf(slugs_action);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    slugs_action = (mavlink_slugs_action_t)Marshal.PtrToStructure(i, ((object)slugs_action).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	slugs_action.actionVal = mavlink_msg_slugs_action_get_actionVal(msg);
+    	slugs_action.target = mavlink_msg_slugs_action_get_target(msg);
+    	slugs_action.actionId = mavlink_msg_slugs_action_get_actionId(msg);
+    
+    } else {
+        int len = 4; //Marshal.SizeOf(slugs_action);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        slugs_action = (mavlink_slugs_action_t)Marshal.PtrToStructure(i, ((object)slugs_action).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

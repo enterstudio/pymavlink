@@ -27,30 +27,35 @@ public partial class Mavlink
  * @param temperature Board temperature
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_air_data_pack(byte system_id, byte component_id, ref byte[] msg,
-                               Single public dynamicPressure, Single public staticPressure, UInt16 public temperature)
+ 
+public static UInt16 mavlink_msg_air_data_pack(byte system_id, byte component_id, byte[] msg,
+                               Single dynamicPressure, Single staticPressure, UInt16 temperature)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[10];
-	_mav_put_Single(buf, 0, dynamicPressure);
-	_mav_put_Single(buf, 4, staticPressure);
-	_mav_put_UInt16(buf, 8, temperature);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(dynamicPressure),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(staticPressure),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(temperature),0,msg,8,sizeof(UInt16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 10);
-#else
-    mavlink_air_data_t packet;
+} else {
+    mavlink_air_data_t packet = new mavlink_air_data_t();
 	packet.dynamicPressure = dynamicPressure;
 	packet.staticPressure = staticPressure;
 	packet.temperature = temperature;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 10);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_AIR_DATA;
-    return mavlink_finalize_message(msg, system_id, component_id, 10, 232);
+        
+        int len = 10;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_AIR_DATA;
+    //return mavlink_finalize_message(msg, system_id, component_id, 10, 232);
+    return 0;
+}
+
 /**
  * @brief Pack a air_data message on a channel
  * @param system_id ID of this system
@@ -172,17 +177,18 @@ public static UInt16 mavlink_msg_air_data_get_temperature(byte[] msg)
  */
 public static void mavlink_msg_air_data_decode(byte[] msg, ref mavlink_air_data_t air_data)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	air_data.dynamicPressure = mavlink_msg_air_data_get_dynamicPressure(msg);
-	air_data.staticPressure = mavlink_msg_air_data_get_staticPressure(msg);
-	air_data.temperature = mavlink_msg_air_data_get_temperature(msg);
-} else {
-    int len = 10; //Marshal.SizeOf(air_data);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    air_data = (mavlink_air_data_t)Marshal.PtrToStructure(i, ((object)air_data).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	air_data.dynamicPressure = mavlink_msg_air_data_get_dynamicPressure(msg);
+    	air_data.staticPressure = mavlink_msg_air_data_get_staticPressure(msg);
+    	air_data.temperature = mavlink_msg_air_data_get_temperature(msg);
+    
+    } else {
+        int len = 10; //Marshal.SizeOf(air_data);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        air_data = (mavlink_air_data_t)Marshal.PtrToStructure(i, ((object)air_data).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

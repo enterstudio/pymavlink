@@ -27,30 +27,35 @@ public partial class Mavlink
  * @param pilot Pilot mode, see UALBERTA_PILOT_MODE
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_ualberta_sys_status_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public mode, byte public nav_mode, byte public pilot)
+ 
+public static UInt16 mavlink_msg_ualberta_sys_status_pack(byte system_id, byte component_id, byte[] msg,
+                               byte mode, byte nav_mode, byte pilot)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[3];
-	_mav_put_byte(buf, 0, mode);
-	_mav_put_byte(buf, 1, nav_mode);
-	_mav_put_byte(buf, 2, pilot);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(mode),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(nav_mode),0,msg,1,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(pilot),0,msg,2,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 3);
-#else
-    mavlink_ualberta_sys_status_t packet;
+} else {
+    mavlink_ualberta_sys_status_t packet = new mavlink_ualberta_sys_status_t();
 	packet.mode = mode;
 	packet.nav_mode = nav_mode;
 	packet.pilot = pilot;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 3);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_UALBERTA_SYS_STATUS;
-    return mavlink_finalize_message(msg, system_id, component_id, 3, 15);
+        
+        int len = 3;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_UALBERTA_SYS_STATUS;
+    //return mavlink_finalize_message(msg, system_id, component_id, 3, 15);
+    return 0;
+}
+
 /**
  * @brief Pack a ualberta_sys_status message on a channel
  * @param system_id ID of this system
@@ -172,17 +177,18 @@ public static byte mavlink_msg_ualberta_sys_status_get_pilot(byte[] msg)
  */
 public static void mavlink_msg_ualberta_sys_status_decode(byte[] msg, ref mavlink_ualberta_sys_status_t ualberta_sys_status)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	ualberta_sys_status.mode = mavlink_msg_ualberta_sys_status_get_mode(msg);
-	ualberta_sys_status.nav_mode = mavlink_msg_ualberta_sys_status_get_nav_mode(msg);
-	ualberta_sys_status.pilot = mavlink_msg_ualberta_sys_status_get_pilot(msg);
-} else {
-    int len = 3; //Marshal.SizeOf(ualberta_sys_status);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    ualberta_sys_status = (mavlink_ualberta_sys_status_t)Marshal.PtrToStructure(i, ((object)ualberta_sys_status).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	ualberta_sys_status.mode = mavlink_msg_ualberta_sys_status_get_mode(msg);
+    	ualberta_sys_status.nav_mode = mavlink_msg_ualberta_sys_status_get_nav_mode(msg);
+    	ualberta_sys_status.pilot = mavlink_msg_ualberta_sys_status_get_pilot(msg);
+    
+    } else {
+        int len = 3; //Marshal.SizeOf(ualberta_sys_status);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        ualberta_sys_status = (mavlink_ualberta_sys_status_t)Marshal.PtrToStructure(i, ((object)ualberta_sys_status).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

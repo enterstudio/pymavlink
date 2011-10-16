@@ -36,37 +36,41 @@ public partial class Mavlink
  * @param distance Ground distance in meters
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_object_detection_event_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt32 public time, UInt16 public object_id, byte public type, const string [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
- publicname, byte public quality, Single public bearing, Single public distance)
+ 
+public static UInt16 mavlink_msg_object_detection_event_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt32 time, UInt16 object_id, byte type, string name, byte quality, Single bearing, Single distance)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[36];
-	_mav_put_UInt32(buf, 0, time);
-	_mav_put_UInt16(buf, 4, object_id);
-	_mav_put_byte(buf, 6, type);
-	_mav_put_byte(buf, 27, quality);
-	_mav_put_Single(buf, 28, bearing);
-	_mav_put_Single(buf, 32, distance);
-	_mav_put_string_array(buf, 7, name, 20);
-        memcpy(_MAV_PAYLOAD(msg), buf, 36);
-#else
-    mavlink_object_detection_event_t packet;
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(time),0,msg,0,sizeof(UInt32));
+	Array.Copy(BitConverter.GetBytes(object_id),0,msg,4,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(type),0,msg,6,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(quality),0,msg,27,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(bearing),0,msg,28,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(distance),0,msg,32,sizeof(Single));
+	//Array.Copy(name,0,msg,7,20);
+} else {
+    mavlink_object_detection_event_t packet = new mavlink_object_detection_event_t();
 	packet.time = time;
 	packet.object_id = object_id;
 	packet.type = type;
 	packet.quality = quality;
 	packet.bearing = bearing;
 	packet.distance = distance;
-	memcpy(packet.name, name, sizeof(string)*20);
-        memcpy(_MAV_PAYLOAD(msg), &packet, 36);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_OBJECT_DETECTION_EVENT;
-    return mavlink_finalize_message(msg, system_id, component_id, 36);
+	packet.name = name;
+        
+        int len = 36;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_OBJECT_DETECTION_EVENT;
+    //return mavlink_finalize_message(msg, system_id, component_id, 36);
+    return 0;
+}
+
 /**
  * @brief Pack a object_detection_event message on a channel
  * @param system_id ID of this system
@@ -250,21 +254,22 @@ public static Single mavlink_msg_object_detection_event_get_distance(byte[] msg)
  */
 public static void mavlink_msg_object_detection_event_decode(byte[] msg, ref mavlink_object_detection_event_t object_detection_event)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	object_detection_event.time = mavlink_msg_object_detection_event_get_time(msg);
-	object_detection_event.object_id = mavlink_msg_object_detection_event_get_object_id(msg);
-	object_detection_event.type = mavlink_msg_object_detection_event_get_type(msg);
-	object_detection_event.name = mavlink_msg_object_detection_event_get_name(msg);
-	object_detection_event.quality = mavlink_msg_object_detection_event_get_quality(msg);
-	object_detection_event.bearing = mavlink_msg_object_detection_event_get_bearing(msg);
-	object_detection_event.distance = mavlink_msg_object_detection_event_get_distance(msg);
-} else {
-    int len = 36; //Marshal.SizeOf(object_detection_event);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    object_detection_event = (mavlink_object_detection_event_t)Marshal.PtrToStructure(i, ((object)object_detection_event).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	object_detection_event.time = mavlink_msg_object_detection_event_get_time(msg);
+    	object_detection_event.object_id = mavlink_msg_object_detection_event_get_object_id(msg);
+    	object_detection_event.type = mavlink_msg_object_detection_event_get_type(msg);
+    	object_detection_event.name = mavlink_msg_object_detection_event_get_name(msg);
+    	object_detection_event.quality = mavlink_msg_object_detection_event_get_quality(msg);
+    	object_detection_event.bearing = mavlink_msg_object_detection_event_get_bearing(msg);
+    	object_detection_event.distance = mavlink_msg_object_detection_event_get_distance(msg);
+    
+    } else {
+        int len = 36; //Marshal.SizeOf(object_detection_event);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        object_detection_event = (mavlink_object_detection_event_t)Marshal.PtrToStructure(i, ((object)object_detection_event).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

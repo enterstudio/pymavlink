@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 public partial class Mavlink
 {
 
-    public const byte MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA = 54;
+    public const byte MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA = 55;
 
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_safety_allowed_area_t
@@ -35,23 +35,21 @@ public partial class Mavlink
  * @param p2z z position 2 / Altitude 2
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_safety_allowed_area_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public frame, Single public p1x, Single public p1y, Single public p1z, Single public p2x, Single public p2y, Single public p2z)
+ 
+public static UInt16 mavlink_msg_safety_allowed_area_pack(byte system_id, byte component_id, byte[] msg,
+                               byte frame, Single p1x, Single p1y, Single p1z, Single p2x, Single p2y, Single p2z)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[25];
-	_mav_put_Single(buf, 0, p1x);
-	_mav_put_Single(buf, 4, p1y);
-	_mav_put_Single(buf, 8, p1z);
-	_mav_put_Single(buf, 12, p2x);
-	_mav_put_Single(buf, 16, p2y);
-	_mav_put_Single(buf, 20, p2z);
-	_mav_put_byte(buf, 24, frame);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(p1x),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(p1y),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(p1z),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(p2x),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(p2y),0,msg,16,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(p2z),0,msg,20,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(frame),0,msg,24,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 25);
-#else
-    mavlink_safety_allowed_area_t packet;
+} else {
+    mavlink_safety_allowed_area_t packet = new mavlink_safety_allowed_area_t();
 	packet.p1x = p1x;
 	packet.p1y = p1y;
 	packet.p1z = p1z;
@@ -60,13 +58,20 @@ static uint16 mavlink_msg_safety_allowed_area_pack(byte system_id, byte componen
 	packet.p2z = p2z;
 	packet.frame = frame;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 25);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA;
-    return mavlink_finalize_message(msg, system_id, component_id, 25, 3);
+        
+        int len = 25;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA;
+    //return mavlink_finalize_message(msg, system_id, component_id, 25, 3);
+    return 0;
+}
+
 /**
  * @brief Pack a safety_allowed_area message on a channel
  * @param system_id ID of this system
@@ -252,21 +257,22 @@ public static Single mavlink_msg_safety_allowed_area_get_p2z(byte[] msg)
  */
 public static void mavlink_msg_safety_allowed_area_decode(byte[] msg, ref mavlink_safety_allowed_area_t safety_allowed_area)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	safety_allowed_area.p1x = mavlink_msg_safety_allowed_area_get_p1x(msg);
-	safety_allowed_area.p1y = mavlink_msg_safety_allowed_area_get_p1y(msg);
-	safety_allowed_area.p1z = mavlink_msg_safety_allowed_area_get_p1z(msg);
-	safety_allowed_area.p2x = mavlink_msg_safety_allowed_area_get_p2x(msg);
-	safety_allowed_area.p2y = mavlink_msg_safety_allowed_area_get_p2y(msg);
-	safety_allowed_area.p2z = mavlink_msg_safety_allowed_area_get_p2z(msg);
-	safety_allowed_area.frame = mavlink_msg_safety_allowed_area_get_frame(msg);
-} else {
-    int len = 25; //Marshal.SizeOf(safety_allowed_area);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    safety_allowed_area = (mavlink_safety_allowed_area_t)Marshal.PtrToStructure(i, ((object)safety_allowed_area).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	safety_allowed_area.p1x = mavlink_msg_safety_allowed_area_get_p1x(msg);
+    	safety_allowed_area.p1y = mavlink_msg_safety_allowed_area_get_p1y(msg);
+    	safety_allowed_area.p1z = mavlink_msg_safety_allowed_area_get_p1z(msg);
+    	safety_allowed_area.p2x = mavlink_msg_safety_allowed_area_get_p2x(msg);
+    	safety_allowed_area.p2y = mavlink_msg_safety_allowed_area_get_p2y(msg);
+    	safety_allowed_area.p2z = mavlink_msg_safety_allowed_area_get_p2z(msg);
+    	safety_allowed_area.frame = mavlink_msg_safety_allowed_area_get_frame(msg);
+    
+    } else {
+        int len = 25; //Marshal.SizeOf(safety_allowed_area);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        safety_allowed_area = (mavlink_safety_allowed_area_t)Marshal.PtrToStructure(i, ((object)safety_allowed_area).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

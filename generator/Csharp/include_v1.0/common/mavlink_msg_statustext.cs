@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 public partial class Mavlink
 {
 
-    public const byte MAVLINK_MSG_ID_STATUSTEXT = 254;
+    public const byte MAVLINK_MSG_ID_STATUSTEXT = 253;
 
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_statustext_t
@@ -26,27 +26,31 @@ public partial class Mavlink
  * @param text Status text message, without null termination character
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_statustext_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public severity, const string [MarshalAs(UnmanagedType.ByValArray,SizeConst=50)]
- publictext)
+ 
+public static UInt16 mavlink_msg_statustext_pack(byte system_id, byte component_id, byte[] msg,
+                               byte severity, string text)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[51];
-	_mav_put_byte(buf, 0, severity);
-	_mav_put_string_array(buf, 1, text, 50);
-        memcpy(_MAV_PAYLOAD(msg), buf, 51);
-#else
-    mavlink_statustext_t packet;
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(severity),0,msg,0,sizeof(byte));
+	//Array.Copy(text,0,msg,1,50);
+} else {
+    mavlink_statustext_t packet = new mavlink_statustext_t();
 	packet.severity = severity;
-	memcpy(packet.text, text, sizeof(string)*50);
-        memcpy(_MAV_PAYLOAD(msg), &packet, 51);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_STATUSTEXT;
-    return mavlink_finalize_message(msg, system_id, component_id, 51, 83);
+	packet.text = text;
+        
+        int len = 51;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_STATUSTEXT;
+    //return mavlink_finalize_message(msg, system_id, component_id, 51, 83);
+    return 0;
+}
+
 /**
  * @brief Pack a statustext message on a channel
  * @param system_id ID of this system
@@ -150,16 +154,17 @@ public static string mavlink_msg_statustext_get_text(byte[] msg)
  */
 public static void mavlink_msg_statustext_decode(byte[] msg, ref mavlink_statustext_t statustext)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	statustext.severity = mavlink_msg_statustext_get_severity(msg);
-	statustext.text = mavlink_msg_statustext_get_text(msg);
-} else {
-    int len = 51; //Marshal.SizeOf(statustext);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    statustext = (mavlink_statustext_t)Marshal.PtrToStructure(i, ((object)statustext).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	statustext.severity = mavlink_msg_statustext_get_severity(msg);
+    	statustext.text = mavlink_msg_statustext_get_text(msg);
+    
+    } else {
+        int len = 51; //Marshal.SizeOf(statustext);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        statustext = (mavlink_statustext_t)Marshal.PtrToStructure(i, ((object)statustext).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

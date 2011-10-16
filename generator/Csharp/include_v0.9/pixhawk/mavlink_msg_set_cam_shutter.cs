@@ -33,22 +33,20 @@ public partial class Mavlink
  * @param gain Camera gain
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_set_cam_shutter_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public cam_no, byte public cam_mode, byte public trigger_pin, UInt16 public interval, UInt16 public exposure, Single public gain)
+ 
+public static UInt16 mavlink_msg_set_cam_shutter_pack(byte system_id, byte component_id, byte[] msg,
+                               byte cam_no, byte cam_mode, byte trigger_pin, UInt16 interval, UInt16 exposure, Single gain)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[11];
-	_mav_put_byte(buf, 0, cam_no);
-	_mav_put_byte(buf, 1, cam_mode);
-	_mav_put_byte(buf, 2, trigger_pin);
-	_mav_put_UInt16(buf, 3, interval);
-	_mav_put_UInt16(buf, 5, exposure);
-	_mav_put_Single(buf, 7, gain);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(cam_no),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(cam_mode),0,msg,1,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(trigger_pin),0,msg,2,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(interval),0,msg,3,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(exposure),0,msg,5,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(gain),0,msg,7,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 11);
-#else
-    mavlink_set_cam_shutter_t packet;
+} else {
+    mavlink_set_cam_shutter_t packet = new mavlink_set_cam_shutter_t();
 	packet.cam_no = cam_no;
 	packet.cam_mode = cam_mode;
 	packet.trigger_pin = trigger_pin;
@@ -56,13 +54,20 @@ static uint16 mavlink_msg_set_cam_shutter_pack(byte system_id, byte component_id
 	packet.exposure = exposure;
 	packet.gain = gain;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 11);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SET_CAM_SHUTTER;
-    return mavlink_finalize_message(msg, system_id, component_id, 11);
+        
+        int len = 11;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SET_CAM_SHUTTER;
+    //return mavlink_finalize_message(msg, system_id, component_id, 11);
+    return 0;
+}
+
 /**
  * @brief Pack a set_cam_shutter message on a channel
  * @param system_id ID of this system
@@ -232,20 +237,21 @@ public static Single mavlink_msg_set_cam_shutter_get_gain(byte[] msg)
  */
 public static void mavlink_msg_set_cam_shutter_decode(byte[] msg, ref mavlink_set_cam_shutter_t set_cam_shutter)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	set_cam_shutter.cam_no = mavlink_msg_set_cam_shutter_get_cam_no(msg);
-	set_cam_shutter.cam_mode = mavlink_msg_set_cam_shutter_get_cam_mode(msg);
-	set_cam_shutter.trigger_pin = mavlink_msg_set_cam_shutter_get_trigger_pin(msg);
-	set_cam_shutter.interval = mavlink_msg_set_cam_shutter_get_interval(msg);
-	set_cam_shutter.exposure = mavlink_msg_set_cam_shutter_get_exposure(msg);
-	set_cam_shutter.gain = mavlink_msg_set_cam_shutter_get_gain(msg);
-} else {
-    int len = 11; //Marshal.SizeOf(set_cam_shutter);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    set_cam_shutter = (mavlink_set_cam_shutter_t)Marshal.PtrToStructure(i, ((object)set_cam_shutter).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	set_cam_shutter.cam_no = mavlink_msg_set_cam_shutter_get_cam_no(msg);
+    	set_cam_shutter.cam_mode = mavlink_msg_set_cam_shutter_get_cam_mode(msg);
+    	set_cam_shutter.trigger_pin = mavlink_msg_set_cam_shutter_get_trigger_pin(msg);
+    	set_cam_shutter.interval = mavlink_msg_set_cam_shutter_get_interval(msg);
+    	set_cam_shutter.exposure = mavlink_msg_set_cam_shutter_get_exposure(msg);
+    	set_cam_shutter.gain = mavlink_msg_set_cam_shutter_get_gain(msg);
+    
+    } else {
+        int len = 11; //Marshal.SizeOf(set_cam_shutter);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        set_cam_shutter = (mavlink_set_cam_shutter_t)Marshal.PtrToStructure(i, ((object)set_cam_shutter).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

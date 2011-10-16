@@ -25,28 +25,33 @@ public partial class Mavlink
  * @param utc_time GPS UTC time hhmmss
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_system_time_utc_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt32 public utc_date, UInt32 public utc_time)
+ 
+public static UInt16 mavlink_msg_system_time_utc_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt32 utc_date, UInt32 utc_time)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[8];
-	_mav_put_UInt32(buf, 0, utc_date);
-	_mav_put_UInt32(buf, 4, utc_time);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(utc_date),0,msg,0,sizeof(UInt32));
+	Array.Copy(BitConverter.GetBytes(utc_time),0,msg,4,sizeof(UInt32));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 8);
-#else
-    mavlink_system_time_utc_t packet;
+} else {
+    mavlink_system_time_utc_t packet = new mavlink_system_time_utc_t();
 	packet.utc_date = utc_date;
 	packet.utc_time = utc_time;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 8);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SYSTEM_TIME_UTC;
-    return mavlink_finalize_message(msg, system_id, component_id, 8);
+        
+        int len = 8;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SYSTEM_TIME_UTC;
+    //return mavlink_finalize_message(msg, system_id, component_id, 8);
+    return 0;
+}
+
 /**
  * @brief Pack a system_time_utc message on a channel
  * @param system_id ID of this system
@@ -152,16 +157,17 @@ public static UInt32 mavlink_msg_system_time_utc_get_utc_time(byte[] msg)
  */
 public static void mavlink_msg_system_time_utc_decode(byte[] msg, ref mavlink_system_time_utc_t system_time_utc)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	system_time_utc.utc_date = mavlink_msg_system_time_utc_get_utc_date(msg);
-	system_time_utc.utc_time = mavlink_msg_system_time_utc_get_utc_time(msg);
-} else {
-    int len = 8; //Marshal.SizeOf(system_time_utc);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    system_time_utc = (mavlink_system_time_utc_t)Marshal.PtrToStructure(i, ((object)system_time_utc).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	system_time_utc.utc_date = mavlink_msg_system_time_utc_get_utc_date(msg);
+    	system_time_utc.utc_time = mavlink_msg_system_time_utc_get_utc_time(msg);
+    
+    } else {
+        int len = 8; //Marshal.SizeOf(system_time_utc);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        system_time_utc = (mavlink_system_time_utc_t)Marshal.PtrToStructure(i, ((object)system_time_utc).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

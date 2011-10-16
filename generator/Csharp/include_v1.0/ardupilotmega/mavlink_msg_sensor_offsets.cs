@@ -45,28 +45,26 @@ public partial class Mavlink
  * @param accel_cal_z accel Z calibration
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_sensor_offsets_pack(byte system_id, byte component_id, ref byte[] msg,
-                               Int16 public mag_ofs_x, Int16 public mag_ofs_y, Int16 public mag_ofs_z, Single public mag_declination, Int32 public raw_press, Int32 public raw_temp, Single public gyro_cal_x, Single public gyro_cal_y, Single public gyro_cal_z, Single public accel_cal_x, Single public accel_cal_y, Single public accel_cal_z)
+ 
+public static UInt16 mavlink_msg_sensor_offsets_pack(byte system_id, byte component_id, byte[] msg,
+                               Int16 mag_ofs_x, Int16 mag_ofs_y, Int16 mag_ofs_z, Single mag_declination, Int32 raw_press, Int32 raw_temp, Single gyro_cal_x, Single gyro_cal_y, Single gyro_cal_z, Single accel_cal_x, Single accel_cal_y, Single accel_cal_z)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[42];
-	_mav_put_Single(buf, 0, mag_declination);
-	_mav_put_Int32(buf, 4, raw_press);
-	_mav_put_Int32(buf, 8, raw_temp);
-	_mav_put_Single(buf, 12, gyro_cal_x);
-	_mav_put_Single(buf, 16, gyro_cal_y);
-	_mav_put_Single(buf, 20, gyro_cal_z);
-	_mav_put_Single(buf, 24, accel_cal_x);
-	_mav_put_Single(buf, 28, accel_cal_y);
-	_mav_put_Single(buf, 32, accel_cal_z);
-	_mav_put_Int16(buf, 36, mag_ofs_x);
-	_mav_put_Int16(buf, 38, mag_ofs_y);
-	_mav_put_Int16(buf, 40, mag_ofs_z);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(mag_declination),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(raw_press),0,msg,4,sizeof(Int32));
+	Array.Copy(BitConverter.GetBytes(raw_temp),0,msg,8,sizeof(Int32));
+	Array.Copy(BitConverter.GetBytes(gyro_cal_x),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(gyro_cal_y),0,msg,16,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(gyro_cal_z),0,msg,20,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(accel_cal_x),0,msg,24,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(accel_cal_y),0,msg,28,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(accel_cal_z),0,msg,32,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(mag_ofs_x),0,msg,36,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(mag_ofs_y),0,msg,38,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(mag_ofs_z),0,msg,40,sizeof(Int16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 42);
-#else
-    mavlink_sensor_offsets_t packet;
+} else {
+    mavlink_sensor_offsets_t packet = new mavlink_sensor_offsets_t();
 	packet.mag_declination = mag_declination;
 	packet.raw_press = raw_press;
 	packet.raw_temp = raw_temp;
@@ -80,13 +78,20 @@ static uint16 mavlink_msg_sensor_offsets_pack(byte system_id, byte component_id,
 	packet.mag_ofs_y = mag_ofs_y;
 	packet.mag_ofs_z = mag_ofs_z;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 42);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SENSOR_OFFSETS;
-    return mavlink_finalize_message(msg, system_id, component_id, 42, 134);
+        
+        int len = 42;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SENSOR_OFFSETS;
+    //return mavlink_finalize_message(msg, system_id, component_id, 42, 134);
+    return 0;
+}
+
 /**
  * @brief Pack a sensor_offsets message on a channel
  * @param system_id ID of this system
@@ -352,26 +357,27 @@ public static Single mavlink_msg_sensor_offsets_get_accel_cal_z(byte[] msg)
  */
 public static void mavlink_msg_sensor_offsets_decode(byte[] msg, ref mavlink_sensor_offsets_t sensor_offsets)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	sensor_offsets.mag_declination = mavlink_msg_sensor_offsets_get_mag_declination(msg);
-	sensor_offsets.raw_press = mavlink_msg_sensor_offsets_get_raw_press(msg);
-	sensor_offsets.raw_temp = mavlink_msg_sensor_offsets_get_raw_temp(msg);
-	sensor_offsets.gyro_cal_x = mavlink_msg_sensor_offsets_get_gyro_cal_x(msg);
-	sensor_offsets.gyro_cal_y = mavlink_msg_sensor_offsets_get_gyro_cal_y(msg);
-	sensor_offsets.gyro_cal_z = mavlink_msg_sensor_offsets_get_gyro_cal_z(msg);
-	sensor_offsets.accel_cal_x = mavlink_msg_sensor_offsets_get_accel_cal_x(msg);
-	sensor_offsets.accel_cal_y = mavlink_msg_sensor_offsets_get_accel_cal_y(msg);
-	sensor_offsets.accel_cal_z = mavlink_msg_sensor_offsets_get_accel_cal_z(msg);
-	sensor_offsets.mag_ofs_x = mavlink_msg_sensor_offsets_get_mag_ofs_x(msg);
-	sensor_offsets.mag_ofs_y = mavlink_msg_sensor_offsets_get_mag_ofs_y(msg);
-	sensor_offsets.mag_ofs_z = mavlink_msg_sensor_offsets_get_mag_ofs_z(msg);
-} else {
-    int len = 42; //Marshal.SizeOf(sensor_offsets);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    sensor_offsets = (mavlink_sensor_offsets_t)Marshal.PtrToStructure(i, ((object)sensor_offsets).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	sensor_offsets.mag_declination = mavlink_msg_sensor_offsets_get_mag_declination(msg);
+    	sensor_offsets.raw_press = mavlink_msg_sensor_offsets_get_raw_press(msg);
+    	sensor_offsets.raw_temp = mavlink_msg_sensor_offsets_get_raw_temp(msg);
+    	sensor_offsets.gyro_cal_x = mavlink_msg_sensor_offsets_get_gyro_cal_x(msg);
+    	sensor_offsets.gyro_cal_y = mavlink_msg_sensor_offsets_get_gyro_cal_y(msg);
+    	sensor_offsets.gyro_cal_z = mavlink_msg_sensor_offsets_get_gyro_cal_z(msg);
+    	sensor_offsets.accel_cal_x = mavlink_msg_sensor_offsets_get_accel_cal_x(msg);
+    	sensor_offsets.accel_cal_y = mavlink_msg_sensor_offsets_get_accel_cal_y(msg);
+    	sensor_offsets.accel_cal_z = mavlink_msg_sensor_offsets_get_accel_cal_z(msg);
+    	sensor_offsets.mag_ofs_x = mavlink_msg_sensor_offsets_get_mag_ofs_x(msg);
+    	sensor_offsets.mag_ofs_y = mavlink_msg_sensor_offsets_get_mag_ofs_y(msg);
+    	sensor_offsets.mag_ofs_z = mavlink_msg_sensor_offsets_get_mag_ofs_z(msg);
+    
+    } else {
+        int len = 42; //Marshal.SizeOf(sensor_offsets);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        sensor_offsets = (mavlink_sensor_offsets_t)Marshal.PtrToStructure(i, ((object)sensor_offsets).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

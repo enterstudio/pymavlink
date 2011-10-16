@@ -67,39 +67,37 @@ public partial class Mavlink
  * @param ground_z Ground truth Z
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_image_available_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt64 public cam_id, byte public cam_no, UInt64 public timestamp, UInt64 public valid_until, UInt32 public img_seq, UInt32 public img_buf_index, UInt16 public width, UInt16 public height, UInt16 public depth, byte public channels, UInt32 public key, UInt32 public exposure, Single public gain, Single public roll, Single public pitch, Single public yaw, Single public local_z, Single public lat, Single public lon, Single public alt, Single public ground_x, Single public ground_y, Single public ground_z)
+ 
+public static UInt16 mavlink_msg_image_available_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt64 cam_id, byte cam_no, UInt64 timestamp, UInt64 valid_until, UInt32 img_seq, UInt32 img_buf_index, UInt16 width, UInt16 height, UInt16 depth, byte channels, UInt32 key, UInt32 exposure, Single gain, Single roll, Single pitch, Single yaw, Single local_z, Single lat, Single lon, Single alt, Single ground_x, Single ground_y, Single ground_z)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[92];
-	_mav_put_UInt64(buf, 0, cam_id);
-	_mav_put_byte(buf, 8, cam_no);
-	_mav_put_UInt64(buf, 9, timestamp);
-	_mav_put_UInt64(buf, 17, valid_until);
-	_mav_put_UInt32(buf, 25, img_seq);
-	_mav_put_UInt32(buf, 29, img_buf_index);
-	_mav_put_UInt16(buf, 33, width);
-	_mav_put_UInt16(buf, 35, height);
-	_mav_put_UInt16(buf, 37, depth);
-	_mav_put_byte(buf, 39, channels);
-	_mav_put_UInt32(buf, 40, key);
-	_mav_put_UInt32(buf, 44, exposure);
-	_mav_put_Single(buf, 48, gain);
-	_mav_put_Single(buf, 52, roll);
-	_mav_put_Single(buf, 56, pitch);
-	_mav_put_Single(buf, 60, yaw);
-	_mav_put_Single(buf, 64, local_z);
-	_mav_put_Single(buf, 68, lat);
-	_mav_put_Single(buf, 72, lon);
-	_mav_put_Single(buf, 76, alt);
-	_mav_put_Single(buf, 80, ground_x);
-	_mav_put_Single(buf, 84, ground_y);
-	_mav_put_Single(buf, 88, ground_z);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(cam_id),0,msg,0,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(cam_no),0,msg,8,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(timestamp),0,msg,9,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(valid_until),0,msg,17,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(img_seq),0,msg,25,sizeof(UInt32));
+	Array.Copy(BitConverter.GetBytes(img_buf_index),0,msg,29,sizeof(UInt32));
+	Array.Copy(BitConverter.GetBytes(width),0,msg,33,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(height),0,msg,35,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(depth),0,msg,37,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(channels),0,msg,39,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(key),0,msg,40,sizeof(UInt32));
+	Array.Copy(BitConverter.GetBytes(exposure),0,msg,44,sizeof(UInt32));
+	Array.Copy(BitConverter.GetBytes(gain),0,msg,48,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(roll),0,msg,52,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(pitch),0,msg,56,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yaw),0,msg,60,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(local_z),0,msg,64,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(lat),0,msg,68,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(lon),0,msg,72,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(alt),0,msg,76,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(ground_x),0,msg,80,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(ground_y),0,msg,84,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(ground_z),0,msg,88,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 92);
-#else
-    mavlink_image_available_t packet;
+} else {
+    mavlink_image_available_t packet = new mavlink_image_available_t();
 	packet.cam_id = cam_id;
 	packet.cam_no = cam_no;
 	packet.timestamp = timestamp;
@@ -124,13 +122,20 @@ static uint16 mavlink_msg_image_available_pack(byte system_id, byte component_id
 	packet.ground_y = ground_y;
 	packet.ground_z = ground_z;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 92);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_IMAGE_AVAILABLE;
-    return mavlink_finalize_message(msg, system_id, component_id, 92);
+        
+        int len = 92;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_IMAGE_AVAILABLE;
+    //return mavlink_finalize_message(msg, system_id, component_id, 92);
+    return 0;
+}
+
 /**
  * @brief Pack a image_available message on a channel
  * @param system_id ID of this system
@@ -572,37 +577,38 @@ public static Single mavlink_msg_image_available_get_ground_z(byte[] msg)
  */
 public static void mavlink_msg_image_available_decode(byte[] msg, ref mavlink_image_available_t image_available)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	image_available.cam_id = mavlink_msg_image_available_get_cam_id(msg);
-	image_available.cam_no = mavlink_msg_image_available_get_cam_no(msg);
-	image_available.timestamp = mavlink_msg_image_available_get_timestamp(msg);
-	image_available.valid_until = mavlink_msg_image_available_get_valid_until(msg);
-	image_available.img_seq = mavlink_msg_image_available_get_img_seq(msg);
-	image_available.img_buf_index = mavlink_msg_image_available_get_img_buf_index(msg);
-	image_available.width = mavlink_msg_image_available_get_width(msg);
-	image_available.height = mavlink_msg_image_available_get_height(msg);
-	image_available.depth = mavlink_msg_image_available_get_depth(msg);
-	image_available.channels = mavlink_msg_image_available_get_channels(msg);
-	image_available.key = mavlink_msg_image_available_get_key(msg);
-	image_available.exposure = mavlink_msg_image_available_get_exposure(msg);
-	image_available.gain = mavlink_msg_image_available_get_gain(msg);
-	image_available.roll = mavlink_msg_image_available_get_roll(msg);
-	image_available.pitch = mavlink_msg_image_available_get_pitch(msg);
-	image_available.yaw = mavlink_msg_image_available_get_yaw(msg);
-	image_available.local_z = mavlink_msg_image_available_get_local_z(msg);
-	image_available.lat = mavlink_msg_image_available_get_lat(msg);
-	image_available.lon = mavlink_msg_image_available_get_lon(msg);
-	image_available.alt = mavlink_msg_image_available_get_alt(msg);
-	image_available.ground_x = mavlink_msg_image_available_get_ground_x(msg);
-	image_available.ground_y = mavlink_msg_image_available_get_ground_y(msg);
-	image_available.ground_z = mavlink_msg_image_available_get_ground_z(msg);
-} else {
-    int len = 92; //Marshal.SizeOf(image_available);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    image_available = (mavlink_image_available_t)Marshal.PtrToStructure(i, ((object)image_available).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	image_available.cam_id = mavlink_msg_image_available_get_cam_id(msg);
+    	image_available.cam_no = mavlink_msg_image_available_get_cam_no(msg);
+    	image_available.timestamp = mavlink_msg_image_available_get_timestamp(msg);
+    	image_available.valid_until = mavlink_msg_image_available_get_valid_until(msg);
+    	image_available.img_seq = mavlink_msg_image_available_get_img_seq(msg);
+    	image_available.img_buf_index = mavlink_msg_image_available_get_img_buf_index(msg);
+    	image_available.width = mavlink_msg_image_available_get_width(msg);
+    	image_available.height = mavlink_msg_image_available_get_height(msg);
+    	image_available.depth = mavlink_msg_image_available_get_depth(msg);
+    	image_available.channels = mavlink_msg_image_available_get_channels(msg);
+    	image_available.key = mavlink_msg_image_available_get_key(msg);
+    	image_available.exposure = mavlink_msg_image_available_get_exposure(msg);
+    	image_available.gain = mavlink_msg_image_available_get_gain(msg);
+    	image_available.roll = mavlink_msg_image_available_get_roll(msg);
+    	image_available.pitch = mavlink_msg_image_available_get_pitch(msg);
+    	image_available.yaw = mavlink_msg_image_available_get_yaw(msg);
+    	image_available.local_z = mavlink_msg_image_available_get_local_z(msg);
+    	image_available.lat = mavlink_msg_image_available_get_lat(msg);
+    	image_available.lon = mavlink_msg_image_available_get_lon(msg);
+    	image_available.alt = mavlink_msg_image_available_get_alt(msg);
+    	image_available.ground_x = mavlink_msg_image_available_get_ground_x(msg);
+    	image_available.ground_y = mavlink_msg_image_available_get_ground_y(msg);
+    	image_available.ground_z = mavlink_msg_image_available_get_ground_z(msg);
+    
+    } else {
+        int len = 92; //Marshal.SizeOf(image_available);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        image_available = (mavlink_image_available_t)Marshal.PtrToStructure(i, ((object)image_available).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

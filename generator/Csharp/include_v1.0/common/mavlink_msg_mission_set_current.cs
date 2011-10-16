@@ -27,30 +27,35 @@ public partial class Mavlink
  * @param seq Sequence
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_mission_set_current_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target_system, byte public target_component, UInt16 public seq)
+ 
+public static UInt16 mavlink_msg_mission_set_current_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system, byte target_component, UInt16 seq)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[4];
-	_mav_put_UInt16(buf, 0, seq);
-	_mav_put_byte(buf, 2, target_system);
-	_mav_put_byte(buf, 3, target_component);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(seq),0,msg,0,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,2,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(target_component),0,msg,3,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 4);
-#else
-    mavlink_mission_set_current_t packet;
+} else {
+    mavlink_mission_set_current_t packet = new mavlink_mission_set_current_t();
 	packet.seq = seq;
 	packet.target_system = target_system;
 	packet.target_component = target_component;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 4);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_MISSION_SET_CURRENT;
-    return mavlink_finalize_message(msg, system_id, component_id, 4, 28);
+        
+        int len = 4;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_MISSION_SET_CURRENT;
+    //return mavlink_finalize_message(msg, system_id, component_id, 4, 28);
+    return 0;
+}
+
 /**
  * @brief Pack a mission_set_current message on a channel
  * @param system_id ID of this system

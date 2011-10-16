@@ -14,6 +14,7 @@ public partial class Mavlink
      public  Single y; /// y position
      public  Single z; /// z position
      public  Single yaw; /// Desired yaw angle
+     public  byte coordinate_frame; /// Coordinate frame - valid values are only MAV_FRAME_LOCAL_NED or MAV_FRAME_LOCAL_ENU
     
     };
 
@@ -23,44 +24,53 @@ public partial class Mavlink
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
+ * @param coordinate_frame Coordinate frame - valid values are only MAV_FRAME_LOCAL_NED or MAV_FRAME_LOCAL_ENU
  * @param x x position
  * @param y y position
  * @param z z position
  * @param yaw Desired yaw angle
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_local_position_setpoint_pack(byte system_id, byte component_id, ref byte[] msg,
-                               Single public x, Single public y, Single public z, Single public yaw)
+ 
+public static UInt16 mavlink_msg_local_position_setpoint_pack(byte system_id, byte component_id, byte[] msg,
+                               byte coordinate_frame, Single x, Single y, Single z, Single yaw)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[16];
-	_mav_put_Single(buf, 0, x);
-	_mav_put_Single(buf, 4, y);
-	_mav_put_Single(buf, 8, z);
-	_mav_put_Single(buf, 12, yaw);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(x),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(y),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(z),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yaw),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(coordinate_frame),0,msg,16,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 16);
-#else
-    mavlink_local_position_setpoint_t packet;
+} else {
+    mavlink_local_position_setpoint_t packet = new mavlink_local_position_setpoint_t();
 	packet.x = x;
 	packet.y = y;
 	packet.z = z;
 	packet.yaw = yaw;
+	packet.coordinate_frame = coordinate_frame;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 16);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_LOCAL_POSITION_SETPOINT;
-    return mavlink_finalize_message(msg, system_id, component_id, 16, 50);
+        
+        int len = 17;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_LOCAL_POSITION_SETPOINT;
+    //return mavlink_finalize_message(msg, system_id, component_id, 17, 223);
+    return 0;
+}
+
 /**
  * @brief Pack a local_position_setpoint message on a channel
  * @param system_id ID of this system
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message was sent over
  * @param msg The MAVLink message to compress the data into
+ * @param coordinate_frame Coordinate frame - valid values are only MAV_FRAME_LOCAL_NED or MAV_FRAME_LOCAL_ENU
  * @param x x position
  * @param y y position
  * @param z z position
@@ -70,28 +80,30 @@ static uint16 mavlink_msg_local_position_setpoint_pack(byte system_id, byte comp
  /*
 static inline uint16_t mavlink_msg_local_position_setpoint_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   Single public x,Single public y,Single public z,Single public yaw)
+                                   byte public coordinate_frame,Single public x,Single public y,Single public z,Single public yaw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    char buf[16];
+    char buf[17];
 	_mav_put_Single(buf, 0, x);
 	_mav_put_Single(buf, 4, y);
 	_mav_put_Single(buf, 8, z);
 	_mav_put_Single(buf, 12, yaw);
+	_mav_put_byte(buf, 16, coordinate_frame);
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 16);
+        memcpy(_MAV_PAYLOAD(msg), buf, 17);
 #else
     mavlink_local_position_setpoint_t packet;
 	packet.x = x;
 	packet.y = y;
 	packet.z = z;
 	packet.yaw = yaw;
+	packet.coordinate_frame = coordinate_frame;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 16);
+        memcpy(_MAV_PAYLOAD(msg), &packet, 17);
 #endif
 
     msg->msgid = MAVLINK_MSG_ID_LOCAL_POSITION_SETPOINT;
-    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 16, 50);
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 17, 223);
 }
 */
 /**
@@ -104,13 +116,14 @@ static inline uint16_t mavlink_msg_local_position_setpoint_pack_chan(uint8_t sys
  *//*
 static inline uint16_t mavlink_msg_local_position_setpoint_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_local_position_setpoint_t* local_position_setpoint)
 {
-    return mavlink_msg_local_position_setpoint_pack(system_id, component_id, msg, local_position_setpoint->x, local_position_setpoint->y, local_position_setpoint->z, local_position_setpoint->yaw);
+    return mavlink_msg_local_position_setpoint_pack(system_id, component_id, msg, local_position_setpoint->coordinate_frame, local_position_setpoint->x, local_position_setpoint->y, local_position_setpoint->z, local_position_setpoint->yaw);
 }
 */
 /**
  * @brief Send a local_position_setpoint message
  * @param chan MAVLink channel to send the message
  *
+ * @param coordinate_frame Coordinate frame - valid values are only MAV_FRAME_LOCAL_NED or MAV_FRAME_LOCAL_ENU
  * @param x x position
  * @param y y position
  * @param z z position
@@ -118,24 +131,26 @@ static inline uint16_t mavlink_msg_local_position_setpoint_encode(uint8_t system
  *//*
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_local_position_setpoint_send(mavlink_channel_t chan, Single public x, Single public y, Single public z, Single public yaw)
+static inline void mavlink_msg_local_position_setpoint_send(mavlink_channel_t chan, byte public coordinate_frame, Single public x, Single public y, Single public z, Single public yaw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    char buf[16];
+    char buf[17];
 	_mav_put_Single(buf, 0, x);
 	_mav_put_Single(buf, 4, y);
 	_mav_put_Single(buf, 8, z);
 	_mav_put_Single(buf, 12, yaw);
+	_mav_put_byte(buf, 16, coordinate_frame);
 
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOCAL_POSITION_SETPOINT, buf, 16, 50);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOCAL_POSITION_SETPOINT, buf, 17, 223);
 #else
     mavlink_local_position_setpoint_t packet;
 	packet.x = x;
 	packet.y = y;
 	packet.z = z;
 	packet.yaw = yaw;
+	packet.coordinate_frame = coordinate_frame;
 
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOCAL_POSITION_SETPOINT, (const char *)&packet, 16, 50);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOCAL_POSITION_SETPOINT, (const char *)&packet, 17, 223);
 #endif
 }
 
@@ -143,6 +158,16 @@ static inline void mavlink_msg_local_position_setpoint_send(mavlink_channel_t ch
 */
 // MESSAGE LOCAL_POSITION_SETPOINT UNPACKING
 
+
+/**
+ * @brief Get field coordinate_frame from local_position_setpoint message
+ *
+ * @return Coordinate frame - valid values are only MAV_FRAME_LOCAL_NED or MAV_FRAME_LOCAL_ENU
+ */
+public static byte mavlink_msg_local_position_setpoint_get_coordinate_frame(byte[] msg)
+{
+    return getByte(msg,  16);
+}
 
 /**
  * @brief Get field x from local_position_setpoint message
@@ -192,18 +217,20 @@ public static Single mavlink_msg_local_position_setpoint_get_yaw(byte[] msg)
  */
 public static void mavlink_msg_local_position_setpoint_decode(byte[] msg, ref mavlink_local_position_setpoint_t local_position_setpoint)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	local_position_setpoint.x = mavlink_msg_local_position_setpoint_get_x(msg);
-	local_position_setpoint.y = mavlink_msg_local_position_setpoint_get_y(msg);
-	local_position_setpoint.z = mavlink_msg_local_position_setpoint_get_z(msg);
-	local_position_setpoint.yaw = mavlink_msg_local_position_setpoint_get_yaw(msg);
-} else {
-    int len = 16; //Marshal.SizeOf(local_position_setpoint);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    local_position_setpoint = (mavlink_local_position_setpoint_t)Marshal.PtrToStructure(i, ((object)local_position_setpoint).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	local_position_setpoint.x = mavlink_msg_local_position_setpoint_get_x(msg);
+    	local_position_setpoint.y = mavlink_msg_local_position_setpoint_get_y(msg);
+    	local_position_setpoint.z = mavlink_msg_local_position_setpoint_get_z(msg);
+    	local_position_setpoint.yaw = mavlink_msg_local_position_setpoint_get_yaw(msg);
+    	local_position_setpoint.coordinate_frame = mavlink_msg_local_position_setpoint_get_coordinate_frame(msg);
+    
+    } else {
+        int len = 17; //Marshal.SizeOf(local_position_setpoint);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        local_position_setpoint = (mavlink_local_position_setpoint_t)Marshal.PtrToStructure(i, ((object)local_position_setpoint).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

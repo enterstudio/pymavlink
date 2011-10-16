@@ -39,25 +39,23 @@ public partial class Mavlink
  * @param thrust_manual thrust auto:0, manual:1
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_attitude_control_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target, Single public roll, Single public pitch, Single public yaw, Single public thrust, byte public roll_manual, byte public pitch_manual, byte public yaw_manual, byte public thrust_manual)
+ 
+public static UInt16 mavlink_msg_attitude_control_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target, Single roll, Single pitch, Single yaw, Single thrust, byte roll_manual, byte pitch_manual, byte yaw_manual, byte thrust_manual)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[21];
-	_mav_put_byte(buf, 0, target);
-	_mav_put_Single(buf, 1, roll);
-	_mav_put_Single(buf, 5, pitch);
-	_mav_put_Single(buf, 9, yaw);
-	_mav_put_Single(buf, 13, thrust);
-	_mav_put_byte(buf, 17, roll_manual);
-	_mav_put_byte(buf, 18, pitch_manual);
-	_mav_put_byte(buf, 19, yaw_manual);
-	_mav_put_byte(buf, 20, thrust_manual);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(target),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(roll),0,msg,1,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(pitch),0,msg,5,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yaw),0,msg,9,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(thrust),0,msg,13,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(roll_manual),0,msg,17,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(pitch_manual),0,msg,18,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(yaw_manual),0,msg,19,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(thrust_manual),0,msg,20,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 21);
-#else
-    mavlink_attitude_control_t packet;
+} else {
+    mavlink_attitude_control_t packet = new mavlink_attitude_control_t();
 	packet.target = target;
 	packet.roll = roll;
 	packet.pitch = pitch;
@@ -68,13 +66,20 @@ static uint16 mavlink_msg_attitude_control_pack(byte system_id, byte component_i
 	packet.yaw_manual = yaw_manual;
 	packet.thrust_manual = thrust_manual;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 21);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_ATTITUDE_CONTROL;
-    return mavlink_finalize_message(msg, system_id, component_id, 21);
+        
+        int len = 21;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_ATTITUDE_CONTROL;
+    //return mavlink_finalize_message(msg, system_id, component_id, 21);
+    return 0;
+}
+
 /**
  * @brief Pack a attitude_control message on a channel
  * @param system_id ID of this system
@@ -292,23 +297,24 @@ public static byte mavlink_msg_attitude_control_get_thrust_manual(byte[] msg)
  */
 public static void mavlink_msg_attitude_control_decode(byte[] msg, ref mavlink_attitude_control_t attitude_control)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	attitude_control.target = mavlink_msg_attitude_control_get_target(msg);
-	attitude_control.roll = mavlink_msg_attitude_control_get_roll(msg);
-	attitude_control.pitch = mavlink_msg_attitude_control_get_pitch(msg);
-	attitude_control.yaw = mavlink_msg_attitude_control_get_yaw(msg);
-	attitude_control.thrust = mavlink_msg_attitude_control_get_thrust(msg);
-	attitude_control.roll_manual = mavlink_msg_attitude_control_get_roll_manual(msg);
-	attitude_control.pitch_manual = mavlink_msg_attitude_control_get_pitch_manual(msg);
-	attitude_control.yaw_manual = mavlink_msg_attitude_control_get_yaw_manual(msg);
-	attitude_control.thrust_manual = mavlink_msg_attitude_control_get_thrust_manual(msg);
-} else {
-    int len = 21; //Marshal.SizeOf(attitude_control);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    attitude_control = (mavlink_attitude_control_t)Marshal.PtrToStructure(i, ((object)attitude_control).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	attitude_control.target = mavlink_msg_attitude_control_get_target(msg);
+    	attitude_control.roll = mavlink_msg_attitude_control_get_roll(msg);
+    	attitude_control.pitch = mavlink_msg_attitude_control_get_pitch(msg);
+    	attitude_control.yaw = mavlink_msg_attitude_control_get_yaw(msg);
+    	attitude_control.thrust = mavlink_msg_attitude_control_get_thrust(msg);
+    	attitude_control.roll_manual = mavlink_msg_attitude_control_get_roll_manual(msg);
+    	attitude_control.pitch_manual = mavlink_msg_attitude_control_get_pitch_manual(msg);
+    	attitude_control.yaw_manual = mavlink_msg_attitude_control_get_yaw_manual(msg);
+    	attitude_control.thrust_manual = mavlink_msg_attitude_control_get_thrust_manual(msg);
+    
+    } else {
+        int len = 21; //Marshal.SizeOf(attitude_control);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        attitude_control = (mavlink_attitude_control_t)Marshal.PtrToStructure(i, ((object)attitude_control).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

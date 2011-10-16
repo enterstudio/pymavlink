@@ -37,24 +37,22 @@ public partial class Mavlink
  * @param yawspeed Yaw angular speed (rad/s)
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_attitude_quaternion_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt32 public time_boot_ms, Single public q1, Single public q2, Single public q3, Single public q4, Single public rollspeed, Single public pitchspeed, Single public yawspeed)
+ 
+public static UInt16 mavlink_msg_attitude_quaternion_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt32 time_boot_ms, Single q1, Single q2, Single q3, Single q4, Single rollspeed, Single pitchspeed, Single yawspeed)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[32];
-	_mav_put_UInt32(buf, 0, time_boot_ms);
-	_mav_put_Single(buf, 4, q1);
-	_mav_put_Single(buf, 8, q2);
-	_mav_put_Single(buf, 12, q3);
-	_mav_put_Single(buf, 16, q4);
-	_mav_put_Single(buf, 20, rollspeed);
-	_mav_put_Single(buf, 24, pitchspeed);
-	_mav_put_Single(buf, 28, yawspeed);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(time_boot_ms),0,msg,0,sizeof(UInt32));
+	Array.Copy(BitConverter.GetBytes(q1),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(q2),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(q3),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(q4),0,msg,16,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(rollspeed),0,msg,20,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(pitchspeed),0,msg,24,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yawspeed),0,msg,28,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 32);
-#else
-    mavlink_attitude_quaternion_t packet;
+} else {
+    mavlink_attitude_quaternion_t packet = new mavlink_attitude_quaternion_t();
 	packet.time_boot_ms = time_boot_ms;
 	packet.q1 = q1;
 	packet.q2 = q2;
@@ -64,13 +62,20 @@ static uint16 mavlink_msg_attitude_quaternion_pack(byte system_id, byte componen
 	packet.pitchspeed = pitchspeed;
 	packet.yawspeed = yawspeed;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 32);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_ATTITUDE_QUATERNION;
-    return mavlink_finalize_message(msg, system_id, component_id, 32, 246);
+        
+        int len = 32;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_ATTITUDE_QUATERNION;
+    //return mavlink_finalize_message(msg, system_id, component_id, 32, 246);
+    return 0;
+}
+
 /**
  * @brief Pack a attitude_quaternion message on a channel
  * @param system_id ID of this system

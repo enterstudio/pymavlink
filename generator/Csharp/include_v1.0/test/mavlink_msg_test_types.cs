@@ -38,7 +38,7 @@ public partial class Mavlink
      [MarshalAs(UnmanagedType.ByValArray,SizeConst=10)]
  public string s; /// string
      public  byte u8; /// uint8_t
-     public  int8_t s8; /// int8_t
+     public  byte s8; /// int8_t
      [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
  public byte[] u8_array; /// uint8_t_array
      [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
@@ -76,48 +76,35 @@ public partial class Mavlink
  * @param d_array double_array
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_test_types_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public c, const string [MarshalAs(UnmanagedType.ByValArray,SizeConst=10)]
- publics, byte public u8, UInt16 public u16, UInt32 public u32, UInt64 public u64, int8_t public s8, Int16 public s16, Int32 public s32, Int64 public s64, Single public f, double public d, const byte[] [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- publicu8_array, const uint16_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- publicu16_array, const uint32_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- publicu32_array, const uint64_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- publicu64_array, const byte[] [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- publics8_array, const int16_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- publics16_array, const int32_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- publics32_array, const int64_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- publics64_array, const float [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- publicf_array, const double [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- publicd_array)
+ 
+public static UInt16 mavlink_msg_test_types_pack(byte system_id, byte component_id, byte[] msg,
+                               byte c, string s, byte u8, UInt16 u16, UInt32 u32, UInt64 u64, byte s8, Int16 s16, Int32 s32, Int64 s64, Single f, double d, byte[] u8_array, uint16_t u16_array, uint32_t u32_array, uint64_t u64_array, byte[] s8_array, int16_t s16_array, int32_t s32_array, int64_t s64_array, float f_array, double d_array)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[179];
-	_mav_put_UInt64(buf, 0, u64);
-	_mav_put_Int64(buf, 8, s64);
-	_mav_put_double(buf, 16, d);
-	_mav_put_UInt32(buf, 96, u32);
-	_mav_put_Int32(buf, 100, s32);
-	_mav_put_Single(buf, 104, f);
-	_mav_put_UInt16(buf, 144, u16);
-	_mav_put_Int16(buf, 146, s16);
-	_mav_put_byte(buf, 160, c);
-	_mav_put_byte(buf, 171, u8);
-	_mav_put_int8_t(buf, 172, s8);
-	_mav_put_uint64_t_array(buf, 24, u64_array, 3);
-	_mav_put_int64_t_array(buf, 48, s64_array, 3);
-	_mav_put_double_array(buf, 72, d_array, 3);
-	_mav_put_uint32_t_array(buf, 108, u32_array, 3);
-	_mav_put_int32_t_array(buf, 120, s32_array, 3);
-	_mav_put_float_array(buf, 132, f_array, 3);
-	_mav_put_uint16_t_array(buf, 148, u16_array, 3);
-	_mav_put_int16_t_array(buf, 154, s16_array, 3);
-	_mav_put_string_array(buf, 161, s, 10);
-	_mav_put_byte[]_array(buf, 173, u8_array, 3);
-	_mav_put_byte[]_array(buf, 176, s8_array, 3);
-        memcpy(_MAV_PAYLOAD(msg), buf, 179);
-#else
-    mavlink_test_types_t packet;
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(u64),0,msg,0,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(s64),0,msg,8,sizeof(Int64));
+	Array.Copy(BitConverter.GetBytes(d),0,msg,16,sizeof(double));
+	Array.Copy(BitConverter.GetBytes(u32),0,msg,96,sizeof(UInt32));
+	Array.Copy(BitConverter.GetBytes(s32),0,msg,100,sizeof(Int32));
+	Array.Copy(BitConverter.GetBytes(f),0,msg,104,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(u16),0,msg,144,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(s16),0,msg,146,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(c),0,msg,160,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(u8),0,msg,171,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(s8),0,msg,172,sizeof(byte));
+	//Array.Copy(u64_array,0,msg,24,3);
+	//Array.Copy(s64_array,0,msg,48,3);
+	//Array.Copy(d_array,0,msg,72,3);
+	//Array.Copy(u32_array,0,msg,108,3);
+	//Array.Copy(s32_array,0,msg,120,3);
+	//Array.Copy(f_array,0,msg,132,3);
+	//Array.Copy(u16_array,0,msg,148,3);
+	//Array.Copy(s16_array,0,msg,154,3);
+	//Array.Copy(s,0,msg,161,10);
+	//Array.Copy(u8_array,0,msg,173,3);
+	//Array.Copy(s8_array,0,msg,176,3);
+} else {
+    mavlink_test_types_t packet = new mavlink_test_types_t();
 	packet.u64 = u64;
 	packet.s64 = s64;
 	packet.d = d;
@@ -129,24 +116,31 @@ static uint16 mavlink_msg_test_types_pack(byte system_id, byte component_id, ref
 	packet.c = c;
 	packet.u8 = u8;
 	packet.s8 = s8;
-	memcpy(packet.u64_array, u64_array, sizeof(uint64_t)*3);
-	memcpy(packet.s64_array, s64_array, sizeof(int64_t)*3);
-	memcpy(packet.d_array, d_array, sizeof(double)*3);
-	memcpy(packet.u32_array, u32_array, sizeof(uint32_t)*3);
-	memcpy(packet.s32_array, s32_array, sizeof(int32_t)*3);
-	memcpy(packet.f_array, f_array, sizeof(float)*3);
-	memcpy(packet.u16_array, u16_array, sizeof(uint16_t)*3);
-	memcpy(packet.s16_array, s16_array, sizeof(int16_t)*3);
-	memcpy(packet.s, s, sizeof(string)*10);
-	memcpy(packet.u8_array, u8_array, sizeof(byte[])*3);
-	memcpy(packet.s8_array, s8_array, sizeof(byte[])*3);
-        memcpy(_MAV_PAYLOAD(msg), &packet, 179);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_TEST_TYPES;
-    return mavlink_finalize_message(msg, system_id, component_id, 179, 103);
+	packet.u64_array = u64_array;
+	packet.s64_array = s64_array;
+	packet.d_array = d_array;
+	packet.u32_array = u32_array;
+	packet.s32_array = s32_array;
+	packet.f_array = f_array;
+	packet.u16_array = u16_array;
+	packet.s16_array = s16_array;
+	packet.s = s;
+	packet.u8_array = u8_array;
+	packet.s8_array = s8_array;
+        
+        int len = 179;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_TEST_TYPES;
+    //return mavlink_finalize_message(msg, system_id, component_id, 179, 103);
+    return 0;
+}
+
 /**
  * @brief Pack a test_types message on a channel
  * @param system_id ID of this system
@@ -181,7 +175,7 @@ static uint16 mavlink_msg_test_types_pack(byte system_id, byte component_id, ref
 static inline uint16_t mavlink_msg_test_types_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
                                    byte public c,const string [MarshalAs(UnmanagedType.ByValArray,SizeConst=10)]
- publics,byte public u8,UInt16 public u16,UInt32 public u32,UInt64 public u64,int8_t public s8,Int16 public s16,Int32 public s32,Int64 public s64,Single public f,double public d,const byte[] [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ publics,byte public u8,UInt16 public u16,UInt32 public u32,UInt64 public u64,byte public s8,Int16 public s16,Int32 public s32,Int64 public s64,Single public f,double public d,const byte[] [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
  publicu8_array,const uint16_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
  publicu16_array,const uint32_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
  publicu32_array,const uint64_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
@@ -205,7 +199,7 @@ static inline uint16_t mavlink_msg_test_types_pack_chan(uint8_t system_id, uint8
 	_mav_put_Int16(buf, 146, s16);
 	_mav_put_byte(buf, 160, c);
 	_mav_put_byte(buf, 171, u8);
-	_mav_put_int8_t(buf, 172, s8);
+	_mav_put_byte(buf, 172, s8);
 	_mav_put_uint64_t_array(buf, 24, u64_array, 3);
 	_mav_put_int64_t_array(buf, 48, s64_array, 3);
 	_mav_put_double_array(buf, 72, d_array, 3);
@@ -292,7 +286,7 @@ static inline uint16_t mavlink_msg_test_types_encode(uint8_t system_id, uint8_t 
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
 static inline void mavlink_msg_test_types_send(mavlink_channel_t chan, byte public c, const string [MarshalAs(UnmanagedType.ByValArray,SizeConst=10)]
- publics, byte public u8, UInt16 public u16, UInt32 public u32, UInt64 public u64, int8_t public s8, Int16 public s16, Int32 public s32, Int64 public s64, Single public f, double public d, const byte[] [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ publics, byte public u8, UInt16 public u16, UInt32 public u32, UInt64 public u64, byte public s8, Int16 public s16, Int32 public s32, Int64 public s64, Single public f, double public d, const byte[] [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
  publicu8_array, const uint16_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
  publicu16_array, const uint32_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
  publicu32_array, const uint64_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
@@ -316,7 +310,7 @@ static inline void mavlink_msg_test_types_send(mavlink_channel_t chan, byte publ
 	_mav_put_Int16(buf, 146, s16);
 	_mav_put_byte(buf, 160, c);
 	_mav_put_byte(buf, 171, u8);
-	_mav_put_int8_t(buf, 172, s8);
+	_mav_put_byte(buf, 172, s8);
 	_mav_put_uint64_t_array(buf, 24, u64_array, 3);
 	_mav_put_int64_t_array(buf, 48, s64_array, 3);
 	_mav_put_double_array(buf, 72, d_array, 3);
@@ -427,9 +421,9 @@ public static UInt64 mavlink_msg_test_types_get_u64(byte[] msg)
  *
  * @return int8_t
  */
-public static int8_t mavlink_msg_test_types_get_s8(byte[] msg)
+public static byte mavlink_msg_test_types_get_s8(byte[] msg)
 {
-    return BitConverter.Toint8_t(msg,  172);
+    return getByte(msg,  172);
 }
 
 /**
@@ -590,36 +584,37 @@ public static void mavlink_msg_test_types_get_d_array(byte[] msg)
  */
 public static void mavlink_msg_test_types_decode(byte[] msg, ref mavlink_test_types_t test_types)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	test_types.u64 = mavlink_msg_test_types_get_u64(msg);
-	test_types.s64 = mavlink_msg_test_types_get_s64(msg);
-	test_types.d = mavlink_msg_test_types_get_d(msg);
-	test_types.u64_array = mavlink_msg_test_types_get_u64_array(msg);
-	test_types.s64_array = mavlink_msg_test_types_get_s64_array(msg);
-	test_types.d_array = mavlink_msg_test_types_get_d_array(msg);
-	test_types.u32 = mavlink_msg_test_types_get_u32(msg);
-	test_types.s32 = mavlink_msg_test_types_get_s32(msg);
-	test_types.f = mavlink_msg_test_types_get_f(msg);
-	test_types.u32_array = mavlink_msg_test_types_get_u32_array(msg);
-	test_types.s32_array = mavlink_msg_test_types_get_s32_array(msg);
-	test_types.f_array = mavlink_msg_test_types_get_f_array(msg);
-	test_types.u16 = mavlink_msg_test_types_get_u16(msg);
-	test_types.s16 = mavlink_msg_test_types_get_s16(msg);
-	test_types.u16_array = mavlink_msg_test_types_get_u16_array(msg);
-	test_types.s16_array = mavlink_msg_test_types_get_s16_array(msg);
-	test_types.c = mavlink_msg_test_types_get_c(msg);
-	test_types.s = mavlink_msg_test_types_get_s(msg);
-	test_types.u8 = mavlink_msg_test_types_get_u8(msg);
-	test_types.s8 = mavlink_msg_test_types_get_s8(msg);
-	test_types.u8_array = mavlink_msg_test_types_get_u8_array(msg);
-	test_types.s8_array = mavlink_msg_test_types_get_s8_array(msg);
-} else {
-    int len = 179; //Marshal.SizeOf(test_types);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    test_types = (mavlink_test_types_t)Marshal.PtrToStructure(i, ((object)test_types).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	test_types.u64 = mavlink_msg_test_types_get_u64(msg);
+    	test_types.s64 = mavlink_msg_test_types_get_s64(msg);
+    	test_types.d = mavlink_msg_test_types_get_d(msg);
+    	test_types.u64_array = mavlink_msg_test_types_get_u64_array(msg);
+    	test_types.s64_array = mavlink_msg_test_types_get_s64_array(msg);
+    	test_types.d_array = mavlink_msg_test_types_get_d_array(msg);
+    	test_types.u32 = mavlink_msg_test_types_get_u32(msg);
+    	test_types.s32 = mavlink_msg_test_types_get_s32(msg);
+    	test_types.f = mavlink_msg_test_types_get_f(msg);
+    	test_types.u32_array = mavlink_msg_test_types_get_u32_array(msg);
+    	test_types.s32_array = mavlink_msg_test_types_get_s32_array(msg);
+    	test_types.f_array = mavlink_msg_test_types_get_f_array(msg);
+    	test_types.u16 = mavlink_msg_test_types_get_u16(msg);
+    	test_types.s16 = mavlink_msg_test_types_get_s16(msg);
+    	test_types.u16_array = mavlink_msg_test_types_get_u16_array(msg);
+    	test_types.s16_array = mavlink_msg_test_types_get_s16_array(msg);
+    	test_types.c = mavlink_msg_test_types_get_c(msg);
+    	test_types.s = mavlink_msg_test_types_get_s(msg);
+    	test_types.u8 = mavlink_msg_test_types_get_u8(msg);
+    	test_types.s8 = mavlink_msg_test_types_get_s8(msg);
+    	test_types.u8_array = mavlink_msg_test_types_get_u8_array(msg);
+    	test_types.s8_array = mavlink_msg_test_types_get_s8_array(msg);
+    
+    } else {
+        int len = 179; //Marshal.SizeOf(test_types);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        test_types = (mavlink_test_types_t)Marshal.PtrToStructure(i, ((object)test_types).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

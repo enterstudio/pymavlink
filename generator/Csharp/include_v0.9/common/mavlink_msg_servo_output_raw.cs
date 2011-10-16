@@ -37,24 +37,22 @@ public partial class Mavlink
  * @param servo8_raw Servo output 8 value, in microseconds
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_servo_output_raw_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt16 public servo1_raw, UInt16 public servo2_raw, UInt16 public servo3_raw, UInt16 public servo4_raw, UInt16 public servo5_raw, UInt16 public servo6_raw, UInt16 public servo7_raw, UInt16 public servo8_raw)
+ 
+public static UInt16 mavlink_msg_servo_output_raw_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt16 servo1_raw, UInt16 servo2_raw, UInt16 servo3_raw, UInt16 servo4_raw, UInt16 servo5_raw, UInt16 servo6_raw, UInt16 servo7_raw, UInt16 servo8_raw)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[16];
-	_mav_put_UInt16(buf, 0, servo1_raw);
-	_mav_put_UInt16(buf, 2, servo2_raw);
-	_mav_put_UInt16(buf, 4, servo3_raw);
-	_mav_put_UInt16(buf, 6, servo4_raw);
-	_mav_put_UInt16(buf, 8, servo5_raw);
-	_mav_put_UInt16(buf, 10, servo6_raw);
-	_mav_put_UInt16(buf, 12, servo7_raw);
-	_mav_put_UInt16(buf, 14, servo8_raw);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(servo1_raw),0,msg,0,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(servo2_raw),0,msg,2,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(servo3_raw),0,msg,4,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(servo4_raw),0,msg,6,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(servo5_raw),0,msg,8,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(servo6_raw),0,msg,10,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(servo7_raw),0,msg,12,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(servo8_raw),0,msg,14,sizeof(UInt16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 16);
-#else
-    mavlink_servo_output_raw_t packet;
+} else {
+    mavlink_servo_output_raw_t packet = new mavlink_servo_output_raw_t();
 	packet.servo1_raw = servo1_raw;
 	packet.servo2_raw = servo2_raw;
 	packet.servo3_raw = servo3_raw;
@@ -64,13 +62,20 @@ static uint16 mavlink_msg_servo_output_raw_pack(byte system_id, byte component_i
 	packet.servo7_raw = servo7_raw;
 	packet.servo8_raw = servo8_raw;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 16);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SERVO_OUTPUT_RAW;
-    return mavlink_finalize_message(msg, system_id, component_id, 16);
+        
+        int len = 16;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SERVO_OUTPUT_RAW;
+    //return mavlink_finalize_message(msg, system_id, component_id, 16);
+    return 0;
+}
+
 /**
  * @brief Pack a servo_output_raw message on a channel
  * @param system_id ID of this system
@@ -272,22 +277,23 @@ public static UInt16 mavlink_msg_servo_output_raw_get_servo8_raw(byte[] msg)
  */
 public static void mavlink_msg_servo_output_raw_decode(byte[] msg, ref mavlink_servo_output_raw_t servo_output_raw)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	servo_output_raw.servo1_raw = mavlink_msg_servo_output_raw_get_servo1_raw(msg);
-	servo_output_raw.servo2_raw = mavlink_msg_servo_output_raw_get_servo2_raw(msg);
-	servo_output_raw.servo3_raw = mavlink_msg_servo_output_raw_get_servo3_raw(msg);
-	servo_output_raw.servo4_raw = mavlink_msg_servo_output_raw_get_servo4_raw(msg);
-	servo_output_raw.servo5_raw = mavlink_msg_servo_output_raw_get_servo5_raw(msg);
-	servo_output_raw.servo6_raw = mavlink_msg_servo_output_raw_get_servo6_raw(msg);
-	servo_output_raw.servo7_raw = mavlink_msg_servo_output_raw_get_servo7_raw(msg);
-	servo_output_raw.servo8_raw = mavlink_msg_servo_output_raw_get_servo8_raw(msg);
-} else {
-    int len = 16; //Marshal.SizeOf(servo_output_raw);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    servo_output_raw = (mavlink_servo_output_raw_t)Marshal.PtrToStructure(i, ((object)servo_output_raw).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	servo_output_raw.servo1_raw = mavlink_msg_servo_output_raw_get_servo1_raw(msg);
+    	servo_output_raw.servo2_raw = mavlink_msg_servo_output_raw_get_servo2_raw(msg);
+    	servo_output_raw.servo3_raw = mavlink_msg_servo_output_raw_get_servo3_raw(msg);
+    	servo_output_raw.servo4_raw = mavlink_msg_servo_output_raw_get_servo4_raw(msg);
+    	servo_output_raw.servo5_raw = mavlink_msg_servo_output_raw_get_servo5_raw(msg);
+    	servo_output_raw.servo6_raw = mavlink_msg_servo_output_raw_get_servo6_raw(msg);
+    	servo_output_raw.servo7_raw = mavlink_msg_servo_output_raw_get_servo7_raw(msg);
+    	servo_output_raw.servo8_raw = mavlink_msg_servo_output_raw_get_servo8_raw(msg);
+    
+    } else {
+        int len = 16; //Marshal.SizeOf(servo_output_raw);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        servo_output_raw = (mavlink_servo_output_raw_t)Marshal.PtrToStructure(i, ((object)servo_output_raw).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

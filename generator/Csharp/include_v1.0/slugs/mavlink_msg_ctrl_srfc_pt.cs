@@ -25,28 +25,33 @@ public partial class Mavlink
  * @param bitfieldPt Bitfield containing the PT configuration
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_ctrl_srfc_pt_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target, UInt16 public bitfieldPt)
+ 
+public static UInt16 mavlink_msg_ctrl_srfc_pt_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target, UInt16 bitfieldPt)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[3];
-	_mav_put_UInt16(buf, 0, bitfieldPt);
-	_mav_put_byte(buf, 2, target);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(bitfieldPt),0,msg,0,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(target),0,msg,2,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 3);
-#else
-    mavlink_ctrl_srfc_pt_t packet;
+} else {
+    mavlink_ctrl_srfc_pt_t packet = new mavlink_ctrl_srfc_pt_t();
 	packet.bitfieldPt = bitfieldPt;
 	packet.target = target;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 3);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_CTRL_SRFC_PT;
-    return mavlink_finalize_message(msg, system_id, component_id, 3, 104);
+        
+        int len = 3;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_CTRL_SRFC_PT;
+    //return mavlink_finalize_message(msg, system_id, component_id, 3, 104);
+    return 0;
+}
+
 /**
  * @brief Pack a ctrl_srfc_pt message on a channel
  * @param system_id ID of this system
@@ -152,16 +157,17 @@ public static UInt16 mavlink_msg_ctrl_srfc_pt_get_bitfieldPt(byte[] msg)
  */
 public static void mavlink_msg_ctrl_srfc_pt_decode(byte[] msg, ref mavlink_ctrl_srfc_pt_t ctrl_srfc_pt)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	ctrl_srfc_pt.bitfieldPt = mavlink_msg_ctrl_srfc_pt_get_bitfieldPt(msg);
-	ctrl_srfc_pt.target = mavlink_msg_ctrl_srfc_pt_get_target(msg);
-} else {
-    int len = 3; //Marshal.SizeOf(ctrl_srfc_pt);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    ctrl_srfc_pt = (mavlink_ctrl_srfc_pt_t)Marshal.PtrToStructure(i, ((object)ctrl_srfc_pt).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	ctrl_srfc_pt.bitfieldPt = mavlink_msg_ctrl_srfc_pt_get_bitfieldPt(msg);
+    	ctrl_srfc_pt.target = mavlink_msg_ctrl_srfc_pt_get_target(msg);
+    
+    } else {
+        int len = 3; //Marshal.SizeOf(ctrl_srfc_pt);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        ctrl_srfc_pt = (mavlink_ctrl_srfc_pt_t)Marshal.PtrToStructure(i, ((object)ctrl_srfc_pt).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

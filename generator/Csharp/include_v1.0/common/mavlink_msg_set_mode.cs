@@ -10,8 +10,9 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_set_mode_t
     {
-         public  byte target; /// The system setting the mode
-     public  byte mode; /// The new mode
+         public  UInt16 custom_mode; /// The new autopilot-specific mode. This field can be ignored by an autopilot.
+     public  byte target_system; /// The system setting the mode
+     public  byte base_mode; /// The new base mode
     
     };
 
@@ -21,63 +22,74 @@ public partial class Mavlink
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param target The system setting the mode
- * @param mode The new mode
+ * @param target_system The system setting the mode
+ * @param base_mode The new base mode
+ * @param custom_mode The new autopilot-specific mode. This field can be ignored by an autopilot.
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_set_mode_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target, byte public mode)
+ 
+public static UInt16 mavlink_msg_set_mode_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system, byte base_mode, UInt16 custom_mode)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[2];
-	_mav_put_byte(buf, 0, target);
-	_mav_put_byte(buf, 1, mode);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(custom_mode),0,msg,0,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,2,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(base_mode),0,msg,3,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 2);
-#else
-    mavlink_set_mode_t packet;
-	packet.target = target;
-	packet.mode = mode;
+} else {
+    mavlink_set_mode_t packet = new mavlink_set_mode_t();
+	packet.custom_mode = custom_mode;
+	packet.target_system = target_system;
+	packet.base_mode = base_mode;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 2);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SET_MODE;
-    return mavlink_finalize_message(msg, system_id, component_id, 2, 186);
+        
+        int len = 4;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SET_MODE;
+    //return mavlink_finalize_message(msg, system_id, component_id, 4, 197);
+    return 0;
+}
+
 /**
  * @brief Pack a set_mode message on a channel
  * @param system_id ID of this system
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message was sent over
  * @param msg The MAVLink message to compress the data into
- * @param target The system setting the mode
- * @param mode The new mode
+ * @param target_system The system setting the mode
+ * @param base_mode The new base mode
+ * @param custom_mode The new autopilot-specific mode. This field can be ignored by an autopilot.
  * @return length of the message in bytes (excluding serial stream start sign)
  */
  /*
 static inline uint16_t mavlink_msg_set_mode_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   byte public target,byte public mode)
+                                   byte public target_system,byte public base_mode,UInt16 public custom_mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    char buf[2];
-	_mav_put_byte(buf, 0, target);
-	_mav_put_byte(buf, 1, mode);
+    char buf[4];
+	_mav_put_UInt16(buf, 0, custom_mode);
+	_mav_put_byte(buf, 2, target_system);
+	_mav_put_byte(buf, 3, base_mode);
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 2);
+        memcpy(_MAV_PAYLOAD(msg), buf, 4);
 #else
     mavlink_set_mode_t packet;
-	packet.target = target;
-	packet.mode = mode;
+	packet.custom_mode = custom_mode;
+	packet.target_system = target_system;
+	packet.base_mode = base_mode;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 2);
+        memcpy(_MAV_PAYLOAD(msg), &packet, 4);
 #endif
 
     msg->msgid = MAVLINK_MSG_ID_SET_MODE;
-    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 2, 186);
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 4, 197);
 }
 */
 /**
@@ -90,32 +102,35 @@ static inline uint16_t mavlink_msg_set_mode_pack_chan(uint8_t system_id, uint8_t
  *//*
 static inline uint16_t mavlink_msg_set_mode_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_set_mode_t* set_mode)
 {
-    return mavlink_msg_set_mode_pack(system_id, component_id, msg, set_mode->target, set_mode->mode);
+    return mavlink_msg_set_mode_pack(system_id, component_id, msg, set_mode->target_system, set_mode->base_mode, set_mode->custom_mode);
 }
 */
 /**
  * @brief Send a set_mode message
  * @param chan MAVLink channel to send the message
  *
- * @param target The system setting the mode
- * @param mode The new mode
+ * @param target_system The system setting the mode
+ * @param base_mode The new base mode
+ * @param custom_mode The new autopilot-specific mode. This field can be ignored by an autopilot.
  *//*
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_set_mode_send(mavlink_channel_t chan, byte public target, byte public mode)
+static inline void mavlink_msg_set_mode_send(mavlink_channel_t chan, byte public target_system, byte public base_mode, UInt16 public custom_mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    char buf[2];
-	_mav_put_byte(buf, 0, target);
-	_mav_put_byte(buf, 1, mode);
+    char buf[4];
+	_mav_put_UInt16(buf, 0, custom_mode);
+	_mav_put_byte(buf, 2, target_system);
+	_mav_put_byte(buf, 3, base_mode);
 
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_MODE, buf, 2, 186);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_MODE, buf, 4, 197);
 #else
     mavlink_set_mode_t packet;
-	packet.target = target;
-	packet.mode = mode;
+	packet.custom_mode = custom_mode;
+	packet.target_system = target_system;
+	packet.base_mode = base_mode;
 
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_MODE, (const char *)&packet, 2, 186);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_MODE, (const char *)&packet, 4, 197);
 #endif
 }
 
@@ -125,23 +140,33 @@ static inline void mavlink_msg_set_mode_send(mavlink_channel_t chan, byte public
 
 
 /**
- * @brief Get field target from set_mode message
+ * @brief Get field target_system from set_mode message
  *
  * @return The system setting the mode
  */
-public static byte mavlink_msg_set_mode_get_target(byte[] msg)
+public static byte mavlink_msg_set_mode_get_target_system(byte[] msg)
 {
-    return getByte(msg,  0);
+    return getByte(msg,  2);
 }
 
 /**
- * @brief Get field mode from set_mode message
+ * @brief Get field base_mode from set_mode message
  *
- * @return The new mode
+ * @return The new base mode
  */
-public static byte mavlink_msg_set_mode_get_mode(byte[] msg)
+public static byte mavlink_msg_set_mode_get_base_mode(byte[] msg)
 {
-    return getByte(msg,  1);
+    return getByte(msg,  3);
+}
+
+/**
+ * @brief Get field custom_mode from set_mode message
+ *
+ * @return The new autopilot-specific mode. This field can be ignored by an autopilot.
+ */
+public static UInt16 mavlink_msg_set_mode_get_custom_mode(byte[] msg)
+{
+    return BitConverter.ToUInt16(msg,  0);
 }
 
 /**
@@ -152,16 +177,18 @@ public static byte mavlink_msg_set_mode_get_mode(byte[] msg)
  */
 public static void mavlink_msg_set_mode_decode(byte[] msg, ref mavlink_set_mode_t set_mode)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	set_mode.target = mavlink_msg_set_mode_get_target(msg);
-	set_mode.mode = mavlink_msg_set_mode_get_mode(msg);
-} else {
-    int len = 2; //Marshal.SizeOf(set_mode);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    set_mode = (mavlink_set_mode_t)Marshal.PtrToStructure(i, ((object)set_mode).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	set_mode.custom_mode = mavlink_msg_set_mode_get_custom_mode(msg);
+    	set_mode.target_system = mavlink_msg_set_mode_get_target_system(msg);
+    	set_mode.base_mode = mavlink_msg_set_mode_get_base_mode(msg);
+    
+    } else {
+        int len = 4; //Marshal.SizeOf(set_mode);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        set_mode = (mavlink_set_mode_t)Marshal.PtrToStructure(i, ((object)set_mode).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

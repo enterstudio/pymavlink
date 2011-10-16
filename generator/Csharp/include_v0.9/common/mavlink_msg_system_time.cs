@@ -23,26 +23,31 @@ public partial class Mavlink
  * @param time_usec Timestamp of the master clock in microseconds since UNIX epoch.
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_system_time_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt64 public time_usec)
+ 
+public static UInt16 mavlink_msg_system_time_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt64 time_usec)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[8];
-	_mav_put_UInt64(buf, 0, time_usec);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(time_usec),0,msg,0,sizeof(UInt64));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 8);
-#else
-    mavlink_system_time_t packet;
+} else {
+    mavlink_system_time_t packet = new mavlink_system_time_t();
 	packet.time_usec = time_usec;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 8);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SYSTEM_TIME;
-    return mavlink_finalize_message(msg, system_id, component_id, 8);
+        
+        int len = 8;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SYSTEM_TIME;
+    //return mavlink_finalize_message(msg, system_id, component_id, 8);
+    return 0;
+}
+
 /**
  * @brief Pack a system_time message on a channel
  * @param system_id ID of this system
@@ -132,15 +137,16 @@ public static UInt64 mavlink_msg_system_time_get_time_usec(byte[] msg)
  */
 public static void mavlink_msg_system_time_decode(byte[] msg, ref mavlink_system_time_t system_time)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	system_time.time_usec = mavlink_msg_system_time_get_time_usec(msg);
-} else {
-    int len = 8; //Marshal.SizeOf(system_time);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    system_time = (mavlink_system_time_t)Marshal.PtrToStructure(i, ((object)system_time).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	system_time.time_usec = mavlink_msg_system_time_get_time_usec(msg);
+    
+    } else {
+        int len = 8; //Marshal.SizeOf(system_time);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        system_time = (mavlink_system_time_t)Marshal.PtrToStructure(i, ((object)system_time).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

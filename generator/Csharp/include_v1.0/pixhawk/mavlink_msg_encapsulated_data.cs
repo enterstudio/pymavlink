@@ -26,27 +26,31 @@ public partial class Mavlink
  * @param data image data bytes
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_encapsulated_data_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt16 public seqnr, const byte[] [MarshalAs(UnmanagedType.ByValArray,SizeConst=253)]
- publicdata)
+ 
+public static UInt16 mavlink_msg_encapsulated_data_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt16 seqnr, byte[] data)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[255];
-	_mav_put_UInt16(buf, 0, seqnr);
-	_mav_put_byte[]_array(buf, 2, data, 253);
-        memcpy(_MAV_PAYLOAD(msg), buf, 255);
-#else
-    mavlink_encapsulated_data_t packet;
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(seqnr),0,msg,0,sizeof(UInt16));
+	//Array.Copy(data,0,msg,2,253);
+} else {
+    mavlink_encapsulated_data_t packet = new mavlink_encapsulated_data_t();
 	packet.seqnr = seqnr;
-	memcpy(packet.data, data, sizeof(byte[])*253);
-        memcpy(_MAV_PAYLOAD(msg), &packet, 255);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_ENCAPSULATED_DATA;
-    return mavlink_finalize_message(msg, system_id, component_id, 255, 223);
+	packet.data = data;
+        
+        int len = 255;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_ENCAPSULATED_DATA;
+    //return mavlink_finalize_message(msg, system_id, component_id, 255, 223);
+    return 0;
+}
+
 /**
  * @brief Pack a encapsulated_data message on a channel
  * @param system_id ID of this system
@@ -150,16 +154,17 @@ public static byte[] mavlink_msg_encapsulated_data_get_data(byte[] msg)
  */
 public static void mavlink_msg_encapsulated_data_decode(byte[] msg, ref mavlink_encapsulated_data_t encapsulated_data)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	encapsulated_data.seqnr = mavlink_msg_encapsulated_data_get_seqnr(msg);
-	encapsulated_data.data = mavlink_msg_encapsulated_data_get_data(msg);
-} else {
-    int len = 255; //Marshal.SizeOf(encapsulated_data);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    encapsulated_data = (mavlink_encapsulated_data_t)Marshal.PtrToStructure(i, ((object)encapsulated_data).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	encapsulated_data.seqnr = mavlink_msg_encapsulated_data_get_seqnr(msg);
+    	encapsulated_data.data = mavlink_msg_encapsulated_data_get_data(msg);
+    
+    } else {
+        int len = 255; //Marshal.SizeOf(encapsulated_data);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        encapsulated_data = (mavlink_encapsulated_data_t)Marshal.PtrToStructure(i, ((object)encapsulated_data).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

@@ -29,32 +29,37 @@ public partial class Mavlink
  * @param temperature Temperature measurement (0.01 degrees celsius)
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_scaled_pressure_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt64 public usec, Single public press_abs, Single public press_diff, Int16 public temperature)
+ 
+public static UInt16 mavlink_msg_scaled_pressure_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt64 usec, Single press_abs, Single press_diff, Int16 temperature)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[18];
-	_mav_put_UInt64(buf, 0, usec);
-	_mav_put_Single(buf, 8, press_abs);
-	_mav_put_Single(buf, 12, press_diff);
-	_mav_put_Int16(buf, 16, temperature);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(usec),0,msg,0,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(press_abs),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(press_diff),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(temperature),0,msg,16,sizeof(Int16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 18);
-#else
-    mavlink_scaled_pressure_t packet;
+} else {
+    mavlink_scaled_pressure_t packet = new mavlink_scaled_pressure_t();
 	packet.usec = usec;
 	packet.press_abs = press_abs;
 	packet.press_diff = press_diff;
 	packet.temperature = temperature;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 18);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SCALED_PRESSURE;
-    return mavlink_finalize_message(msg, system_id, component_id, 18);
+        
+        int len = 18;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SCALED_PRESSURE;
+    //return mavlink_finalize_message(msg, system_id, component_id, 18);
+    return 0;
+}
+
 /**
  * @brief Pack a scaled_pressure message on a channel
  * @param system_id ID of this system
@@ -192,18 +197,19 @@ public static Int16 mavlink_msg_scaled_pressure_get_temperature(byte[] msg)
  */
 public static void mavlink_msg_scaled_pressure_decode(byte[] msg, ref mavlink_scaled_pressure_t scaled_pressure)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	scaled_pressure.usec = mavlink_msg_scaled_pressure_get_usec(msg);
-	scaled_pressure.press_abs = mavlink_msg_scaled_pressure_get_press_abs(msg);
-	scaled_pressure.press_diff = mavlink_msg_scaled_pressure_get_press_diff(msg);
-	scaled_pressure.temperature = mavlink_msg_scaled_pressure_get_temperature(msg);
-} else {
-    int len = 18; //Marshal.SizeOf(scaled_pressure);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    scaled_pressure = (mavlink_scaled_pressure_t)Marshal.PtrToStructure(i, ((object)scaled_pressure).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	scaled_pressure.usec = mavlink_msg_scaled_pressure_get_usec(msg);
+    	scaled_pressure.press_abs = mavlink_msg_scaled_pressure_get_press_abs(msg);
+    	scaled_pressure.press_diff = mavlink_msg_scaled_pressure_get_press_diff(msg);
+    	scaled_pressure.temperature = mavlink_msg_scaled_pressure_get_temperature(msg);
+    
+    } else {
+        int len = 18; //Marshal.SizeOf(scaled_pressure);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        scaled_pressure = (mavlink_scaled_pressure_t)Marshal.PtrToStructure(i, ((object)scaled_pressure).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

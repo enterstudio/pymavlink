@@ -39,25 +39,23 @@ public partial class Mavlink
  * @param hdg Compass heading in degrees, 0..360 degrees
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_gps_raw_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt64 public usec, byte public fix_type, Single public lat, Single public lon, Single public alt, Single public eph, Single public epv, Single public v, Single public hdg)
+ 
+public static UInt16 mavlink_msg_gps_raw_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt64 usec, byte fix_type, Single lat, Single lon, Single alt, Single eph, Single epv, Single v, Single hdg)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[37];
-	_mav_put_UInt64(buf, 0, usec);
-	_mav_put_byte(buf, 8, fix_type);
-	_mav_put_Single(buf, 9, lat);
-	_mav_put_Single(buf, 13, lon);
-	_mav_put_Single(buf, 17, alt);
-	_mav_put_Single(buf, 21, eph);
-	_mav_put_Single(buf, 25, epv);
-	_mav_put_Single(buf, 29, v);
-	_mav_put_Single(buf, 33, hdg);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(usec),0,msg,0,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(fix_type),0,msg,8,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(lat),0,msg,9,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(lon),0,msg,13,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(alt),0,msg,17,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(eph),0,msg,21,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(epv),0,msg,25,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(v),0,msg,29,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(hdg),0,msg,33,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 37);
-#else
-    mavlink_gps_raw_t packet;
+} else {
+    mavlink_gps_raw_t packet = new mavlink_gps_raw_t();
 	packet.usec = usec;
 	packet.fix_type = fix_type;
 	packet.lat = lat;
@@ -68,13 +66,20 @@ static uint16 mavlink_msg_gps_raw_pack(byte system_id, byte component_id, ref by
 	packet.v = v;
 	packet.hdg = hdg;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 37);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_GPS_RAW;
-    return mavlink_finalize_message(msg, system_id, component_id, 37);
+        
+        int len = 37;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_GPS_RAW;
+    //return mavlink_finalize_message(msg, system_id, component_id, 37);
+    return 0;
+}
+
 /**
  * @brief Pack a gps_raw message on a channel
  * @param system_id ID of this system
@@ -292,23 +297,24 @@ public static Single mavlink_msg_gps_raw_get_hdg(byte[] msg)
  */
 public static void mavlink_msg_gps_raw_decode(byte[] msg, ref mavlink_gps_raw_t gps_raw)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	gps_raw.usec = mavlink_msg_gps_raw_get_usec(msg);
-	gps_raw.fix_type = mavlink_msg_gps_raw_get_fix_type(msg);
-	gps_raw.lat = mavlink_msg_gps_raw_get_lat(msg);
-	gps_raw.lon = mavlink_msg_gps_raw_get_lon(msg);
-	gps_raw.alt = mavlink_msg_gps_raw_get_alt(msg);
-	gps_raw.eph = mavlink_msg_gps_raw_get_eph(msg);
-	gps_raw.epv = mavlink_msg_gps_raw_get_epv(msg);
-	gps_raw.v = mavlink_msg_gps_raw_get_v(msg);
-	gps_raw.hdg = mavlink_msg_gps_raw_get_hdg(msg);
-} else {
-    int len = 37; //Marshal.SizeOf(gps_raw);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    gps_raw = (mavlink_gps_raw_t)Marshal.PtrToStructure(i, ((object)gps_raw).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	gps_raw.usec = mavlink_msg_gps_raw_get_usec(msg);
+    	gps_raw.fix_type = mavlink_msg_gps_raw_get_fix_type(msg);
+    	gps_raw.lat = mavlink_msg_gps_raw_get_lat(msg);
+    	gps_raw.lon = mavlink_msg_gps_raw_get_lon(msg);
+    	gps_raw.alt = mavlink_msg_gps_raw_get_alt(msg);
+    	gps_raw.eph = mavlink_msg_gps_raw_get_eph(msg);
+    	gps_raw.epv = mavlink_msg_gps_raw_get_epv(msg);
+    	gps_raw.v = mavlink_msg_gps_raw_get_v(msg);
+    	gps_raw.hdg = mavlink_msg_gps_raw_get_hdg(msg);
+    
+    } else {
+        int len = 37; //Marshal.SizeOf(gps_raw);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        gps_raw = (mavlink_gps_raw_t)Marshal.PtrToStructure(i, ((object)gps_raw).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

@@ -51,7 +51,7 @@ public partial class Mavlink
 
     const byte MAVLINK_ENDIAN = ${mavlink_endian};
 
-    const byte MAVLINK_ALIGNED_FIELDS = ${aligned_fields_define};
+    const bool MAVLINK_ALIGNED_FIELDS = (${aligned_fields_define} == 1);
 
     const byte MAVLINK_CRC_EXTRA = ${crc_extra_define};
     
@@ -96,6 +96,17 @@ public partial class Mavlink
     }
 
 // ENUM DEFINITIONS
+
+public struct mavlink_message_t {
+	public byte magic;   ///< protocol magic marker
+	public byte len;     ///< Length of payload
+	public byte seq;     ///< Sequence of packet
+	public byte sysid;   ///< ID of message sender system/aircraft
+	public byte compid;  ///< ID of the message sender component
+	public byte msgid;   ///< ID of message in payload
+	public byte[] payload;
+    public UInt16 checksum; /// sent at end of packet
+};
 
 ${{enum:
 /** @brief ${description} */
@@ -142,30 +153,35 @@ ${{arg_fields: * @param ${name} ${description}
 }}
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_${name_lower}_pack(byte system_id, byte component_id, ref byte[] msg,
-                              ${{arg_fields: ${array_const}${type} ${array_prefix}${name},}})
+ 
+public static UInt16 mavlink_msg_${name_lower}_pack(byte system_id, byte component_id, byte[] msg,
+                              ${{arg_fields: ${type} ${name},}})
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[${wire_length}];
-${{scalar_fields:	_mav_put_${type}(buf, ${wire_offset}, ${putname});
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+${{scalar_fields:	Array.Copy(BitConverter.GetBytes(${putname}),0,msg,${wire_offset},sizeof(${type}));
 }}
-${{array_fields:	_mav_put_${type}_array(buf, ${wire_offset}, ${name}, ${array_length});
+${{array_fields:	//Array.Copy(${name},0,msg,${wire_offset},${array_length});
 }}
-        memcpy(_MAV_PAYLOAD(msg), buf, ${wire_length});
-#else
-    mavlink_${name_lower}_t packet;
+} else {
+    mavlink_${name_lower}_t packet = new mavlink_${name_lower}_t();
 ${{scalar_fields:	packet.${name} = ${putname};
 }}
-${{array_fields:	memcpy(packet.${name}, ${name}, sizeof(${type})*${array_length});
+${{array_fields:	packet.${name} = ${putname};
 }}
-        memcpy(_MAV_PAYLOAD(msg), &packet, ${wire_length});
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_${name};
-    return mavlink_finalize_message(msg, system_id, component_id, ${wire_length}${crc_extra_arg});
+        
+        int len = ${wire_length};
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_${name};
+    //return mavlink_finalize_message(msg, system_id, component_id, ${wire_length}${crc_extra_arg});
+    return 0;
+}
+
 /**
  * @brief Pack a ${name_lower} message on a channel
  * @param system_id ID of this system
@@ -378,6 +394,7 @@ def generate_one(basename, xml):
                     f.type = "string"
                     f.array_tag = 'System.Text.ASCIIEncoding.ASCII.GetString(msg,%u,%u); //' % (f.wire_offset, f.array_length)
                     f.return_type = 'string'
+                    f.c_test_value = ".ToCharArray()";
                 elif f.type == 'uint8_t':
                     f.type = "byte[]";
                     f.array_tag = 'getBytes'
@@ -397,6 +414,8 @@ def generate_one(basename, xml):
                 if f.type == 'char':
                     f.type = "byte";
                 elif f.type == 'uint8_t':
+                    f.type = "byte";
+                elif f.type == 'int8_t':
                     f.type = "byte";
                 elif f.type == 'uint16_t': 
                     f.type = "UInt16";

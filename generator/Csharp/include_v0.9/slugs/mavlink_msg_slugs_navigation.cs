@@ -39,25 +39,23 @@ public partial class Mavlink
  * @param toWP Destination WP
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_slugs_navigation_pack(byte system_id, byte component_id, ref byte[] msg,
-                               Single public u_m, Single public phi_c, Single public theta_c, Single public psiDot_c, Single public ay_body, Single public totalDist, Single public dist2Go, byte public fromWP, byte public toWP)
+ 
+public static UInt16 mavlink_msg_slugs_navigation_pack(byte system_id, byte component_id, byte[] msg,
+                               Single u_m, Single phi_c, Single theta_c, Single psiDot_c, Single ay_body, Single totalDist, Single dist2Go, byte fromWP, byte toWP)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[30];
-	_mav_put_Single(buf, 0, u_m);
-	_mav_put_Single(buf, 4, phi_c);
-	_mav_put_Single(buf, 8, theta_c);
-	_mav_put_Single(buf, 12, psiDot_c);
-	_mav_put_Single(buf, 16, ay_body);
-	_mav_put_Single(buf, 20, totalDist);
-	_mav_put_Single(buf, 24, dist2Go);
-	_mav_put_byte(buf, 28, fromWP);
-	_mav_put_byte(buf, 29, toWP);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(u_m),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(phi_c),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(theta_c),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(psiDot_c),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(ay_body),0,msg,16,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(totalDist),0,msg,20,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(dist2Go),0,msg,24,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(fromWP),0,msg,28,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(toWP),0,msg,29,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 30);
-#else
-    mavlink_slugs_navigation_t packet;
+} else {
+    mavlink_slugs_navigation_t packet = new mavlink_slugs_navigation_t();
 	packet.u_m = u_m;
 	packet.phi_c = phi_c;
 	packet.theta_c = theta_c;
@@ -68,13 +66,20 @@ static uint16 mavlink_msg_slugs_navigation_pack(byte system_id, byte component_i
 	packet.fromWP = fromWP;
 	packet.toWP = toWP;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 30);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SLUGS_NAVIGATION;
-    return mavlink_finalize_message(msg, system_id, component_id, 30);
+        
+        int len = 30;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SLUGS_NAVIGATION;
+    //return mavlink_finalize_message(msg, system_id, component_id, 30);
+    return 0;
+}
+
 /**
  * @brief Pack a slugs_navigation message on a channel
  * @param system_id ID of this system
@@ -292,23 +297,24 @@ public static byte mavlink_msg_slugs_navigation_get_toWP(byte[] msg)
  */
 public static void mavlink_msg_slugs_navigation_decode(byte[] msg, ref mavlink_slugs_navigation_t slugs_navigation)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	slugs_navigation.u_m = mavlink_msg_slugs_navigation_get_u_m(msg);
-	slugs_navigation.phi_c = mavlink_msg_slugs_navigation_get_phi_c(msg);
-	slugs_navigation.theta_c = mavlink_msg_slugs_navigation_get_theta_c(msg);
-	slugs_navigation.psiDot_c = mavlink_msg_slugs_navigation_get_psiDot_c(msg);
-	slugs_navigation.ay_body = mavlink_msg_slugs_navigation_get_ay_body(msg);
-	slugs_navigation.totalDist = mavlink_msg_slugs_navigation_get_totalDist(msg);
-	slugs_navigation.dist2Go = mavlink_msg_slugs_navigation_get_dist2Go(msg);
-	slugs_navigation.fromWP = mavlink_msg_slugs_navigation_get_fromWP(msg);
-	slugs_navigation.toWP = mavlink_msg_slugs_navigation_get_toWP(msg);
-} else {
-    int len = 30; //Marshal.SizeOf(slugs_navigation);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    slugs_navigation = (mavlink_slugs_navigation_t)Marshal.PtrToStructure(i, ((object)slugs_navigation).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	slugs_navigation.u_m = mavlink_msg_slugs_navigation_get_u_m(msg);
+    	slugs_navigation.phi_c = mavlink_msg_slugs_navigation_get_phi_c(msg);
+    	slugs_navigation.theta_c = mavlink_msg_slugs_navigation_get_theta_c(msg);
+    	slugs_navigation.psiDot_c = mavlink_msg_slugs_navigation_get_psiDot_c(msg);
+    	slugs_navigation.ay_body = mavlink_msg_slugs_navigation_get_ay_body(msg);
+    	slugs_navigation.totalDist = mavlink_msg_slugs_navigation_get_totalDist(msg);
+    	slugs_navigation.dist2Go = mavlink_msg_slugs_navigation_get_dist2Go(msg);
+    	slugs_navigation.fromWP = mavlink_msg_slugs_navigation_get_fromWP(msg);
+    	slugs_navigation.toWP = mavlink_msg_slugs_navigation_get_toWP(msg);
+    
+    } else {
+        int len = 30; //Marshal.SizeOf(slugs_navigation);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        slugs_navigation = (mavlink_slugs_navigation_t)Marshal.PtrToStructure(i, ((object)slugs_navigation).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

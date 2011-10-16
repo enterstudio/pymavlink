@@ -26,27 +26,31 @@ public partial class Mavlink
  * @param value Floating point value
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_named_value_float_pack(byte system_id, byte component_id, ref byte[] msg,
-                               const string [MarshalAs(UnmanagedType.ByValArray,SizeConst=10)]
- publicname, Single public value)
+ 
+public static UInt16 mavlink_msg_named_value_float_pack(byte system_id, byte component_id, byte[] msg,
+                               string name, Single value)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[14];
-	_mav_put_Single(buf, 10, value);
-	_mav_put_string_array(buf, 0, name, 10);
-        memcpy(_MAV_PAYLOAD(msg), buf, 14);
-#else
-    mavlink_named_value_float_t packet;
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(value),0,msg,10,sizeof(Single));
+	//Array.Copy(name,0,msg,0,10);
+} else {
+    mavlink_named_value_float_t packet = new mavlink_named_value_float_t();
 	packet.value = value;
-	memcpy(packet.name, name, sizeof(string)*10);
-        memcpy(_MAV_PAYLOAD(msg), &packet, 14);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_NAMED_VALUE_FLOAT;
-    return mavlink_finalize_message(msg, system_id, component_id, 14);
+	packet.name = name;
+        
+        int len = 14;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_NAMED_VALUE_FLOAT;
+    //return mavlink_finalize_message(msg, system_id, component_id, 14);
+    return 0;
+}
+
 /**
  * @brief Pack a named_value_float message on a channel
  * @param system_id ID of this system
@@ -150,16 +154,17 @@ public static Single mavlink_msg_named_value_float_get_value(byte[] msg)
  */
 public static void mavlink_msg_named_value_float_decode(byte[] msg, ref mavlink_named_value_float_t named_value_float)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	named_value_float.name = mavlink_msg_named_value_float_get_name(msg);
-	named_value_float.value = mavlink_msg_named_value_float_get_value(msg);
-} else {
-    int len = 14; //Marshal.SizeOf(named_value_float);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    named_value_float = (mavlink_named_value_float_t)Marshal.PtrToStructure(i, ((object)named_value_float).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	named_value_float.name = mavlink_msg_named_value_float_get_name(msg);
+    	named_value_float.value = mavlink_msg_named_value_float_get_value(msg);
+    
+    } else {
+        int len = 14; //Marshal.SizeOf(named_value_float);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        named_value_float = (mavlink_named_value_float_t)Marshal.PtrToStructure(i, ((object)named_value_float).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

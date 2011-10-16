@@ -31,34 +31,39 @@ public partial class Mavlink
  * @param jpg_quality JPEG quality out of [1,100]
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_data_transmission_handshake_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public type, UInt32 public size, byte public packets, byte public payload, byte public jpg_quality)
+ 
+public static UInt16 mavlink_msg_data_transmission_handshake_pack(byte system_id, byte component_id, byte[] msg,
+                               byte type, UInt32 size, byte packets, byte payload, byte jpg_quality)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[8];
-	_mav_put_byte(buf, 0, type);
-	_mav_put_UInt32(buf, 1, size);
-	_mav_put_byte(buf, 5, packets);
-	_mav_put_byte(buf, 6, payload);
-	_mav_put_byte(buf, 7, jpg_quality);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(type),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(size),0,msg,1,sizeof(UInt32));
+	Array.Copy(BitConverter.GetBytes(packets),0,msg,5,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(payload),0,msg,6,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(jpg_quality),0,msg,7,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 8);
-#else
-    mavlink_data_transmission_handshake_t packet;
+} else {
+    mavlink_data_transmission_handshake_t packet = new mavlink_data_transmission_handshake_t();
 	packet.type = type;
 	packet.size = size;
 	packet.packets = packets;
 	packet.payload = payload;
 	packet.jpg_quality = jpg_quality;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 8);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE;
-    return mavlink_finalize_message(msg, system_id, component_id, 8);
+        
+        int len = 8;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE;
+    //return mavlink_finalize_message(msg, system_id, component_id, 8);
+    return 0;
+}
+
 /**
  * @brief Pack a data_transmission_handshake message on a channel
  * @param system_id ID of this system
@@ -212,19 +217,20 @@ public static byte mavlink_msg_data_transmission_handshake_get_jpg_quality(byte[
  */
 public static void mavlink_msg_data_transmission_handshake_decode(byte[] msg, ref mavlink_data_transmission_handshake_t data_transmission_handshake)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	data_transmission_handshake.type = mavlink_msg_data_transmission_handshake_get_type(msg);
-	data_transmission_handshake.size = mavlink_msg_data_transmission_handshake_get_size(msg);
-	data_transmission_handshake.packets = mavlink_msg_data_transmission_handshake_get_packets(msg);
-	data_transmission_handshake.payload = mavlink_msg_data_transmission_handshake_get_payload(msg);
-	data_transmission_handshake.jpg_quality = mavlink_msg_data_transmission_handshake_get_jpg_quality(msg);
-} else {
-    int len = 8; //Marshal.SizeOf(data_transmission_handshake);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    data_transmission_handshake = (mavlink_data_transmission_handshake_t)Marshal.PtrToStructure(i, ((object)data_transmission_handshake).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	data_transmission_handshake.type = mavlink_msg_data_transmission_handshake_get_type(msg);
+    	data_transmission_handshake.size = mavlink_msg_data_transmission_handshake_get_size(msg);
+    	data_transmission_handshake.packets = mavlink_msg_data_transmission_handshake_get_packets(msg);
+    	data_transmission_handshake.payload = mavlink_msg_data_transmission_handshake_get_payload(msg);
+    	data_transmission_handshake.jpg_quality = mavlink_msg_data_transmission_handshake_get_jpg_quality(msg);
+    
+    } else {
+        int len = 8; //Marshal.SizeOf(data_transmission_handshake);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        data_transmission_handshake = (mavlink_data_transmission_handshake_t)Marshal.PtrToStructure(i, ((object)data_transmission_handshake).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

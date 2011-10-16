@@ -24,27 +24,31 @@ public partial class Mavlink
  * @param key key
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_auth_key_pack(byte system_id, byte component_id, ref byte[] msg,
-                               const string [MarshalAs(UnmanagedType.ByValArray,SizeConst=32)]
- publickey)
+ 
+public static UInt16 mavlink_msg_auth_key_pack(byte system_id, byte component_id, byte[] msg,
+                               string key)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[32];
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 
-	_mav_put_string_array(buf, 0, key, 32);
-        memcpy(_MAV_PAYLOAD(msg), buf, 32);
-#else
-    mavlink_auth_key_t packet;
+	//Array.Copy(key,0,msg,0,32);
+} else {
+    mavlink_auth_key_t packet = new mavlink_auth_key_t();
 
-	memcpy(packet.key, key, sizeof(string)*32);
-        memcpy(_MAV_PAYLOAD(msg), &packet, 32);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_AUTH_KEY;
-    return mavlink_finalize_message(msg, system_id, component_id, 32, 119);
+	packet.key = key;
+        
+        int len = 32;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_AUTH_KEY;
+    //return mavlink_finalize_message(msg, system_id, component_id, 32, 119);
+    return 0;
+}
+
 /**
  * @brief Pack a auth_key message on a channel
  * @param system_id ID of this system
@@ -136,15 +140,16 @@ public static string mavlink_msg_auth_key_get_key(byte[] msg)
  */
 public static void mavlink_msg_auth_key_decode(byte[] msg, ref mavlink_auth_key_t auth_key)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	auth_key.key = mavlink_msg_auth_key_get_key(msg);
-} else {
-    int len = 32; //Marshal.SizeOf(auth_key);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    auth_key = (mavlink_auth_key_t)Marshal.PtrToStructure(i, ((object)auth_key).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	auth_key.key = mavlink_msg_auth_key_get_key(msg);
+    
+    } else {
+        int len = 32; //Marshal.SizeOf(auth_key);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        auth_key = (mavlink_auth_key_t)Marshal.PtrToStructure(i, ((object)auth_key).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

@@ -38,24 +38,21 @@ public partial class Mavlink
  * @param name POI name
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_point_of_interest_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public type, byte public color, byte public coordinate_system, UInt16 public timeout, Single public x, Single public y, Single public z, const string [MarshalAs(UnmanagedType.ByValArray,SizeConst=26)]
- publicname)
+ 
+public static UInt16 mavlink_msg_point_of_interest_pack(byte system_id, byte component_id, byte[] msg,
+                               byte type, byte color, byte coordinate_system, UInt16 timeout, Single x, Single y, Single z, string name)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[43];
-	_mav_put_Single(buf, 0, x);
-	_mav_put_Single(buf, 4, y);
-	_mav_put_Single(buf, 8, z);
-	_mav_put_UInt16(buf, 12, timeout);
-	_mav_put_byte(buf, 14, type);
-	_mav_put_byte(buf, 15, color);
-	_mav_put_byte(buf, 16, coordinate_system);
-	_mav_put_string_array(buf, 17, name, 26);
-        memcpy(_MAV_PAYLOAD(msg), buf, 43);
-#else
-    mavlink_point_of_interest_t packet;
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(x),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(y),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(z),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(timeout),0,msg,12,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(type),0,msg,14,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(color),0,msg,15,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(coordinate_system),0,msg,16,sizeof(byte));
+	//Array.Copy(name,0,msg,17,26);
+} else {
+    mavlink_point_of_interest_t packet = new mavlink_point_of_interest_t();
 	packet.x = x;
 	packet.y = y;
 	packet.z = z;
@@ -63,14 +60,21 @@ static uint16 mavlink_msg_point_of_interest_pack(byte system_id, byte component_
 	packet.type = type;
 	packet.color = color;
 	packet.coordinate_system = coordinate_system;
-	memcpy(packet.name, name, sizeof(string)*26);
-        memcpy(_MAV_PAYLOAD(msg), &packet, 43);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_POINT_OF_INTEREST;
-    return mavlink_finalize_message(msg, system_id, component_id, 43, 95);
+	packet.name = name;
+        
+        int len = 43;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_POINT_OF_INTEREST;
+    //return mavlink_finalize_message(msg, system_id, component_id, 43, 95);
+    return 0;
+}
+
 /**
  * @brief Pack a point_of_interest message on a channel
  * @param system_id ID of this system
@@ -270,22 +274,23 @@ public static string mavlink_msg_point_of_interest_get_name(byte[] msg)
  */
 public static void mavlink_msg_point_of_interest_decode(byte[] msg, ref mavlink_point_of_interest_t point_of_interest)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	point_of_interest.x = mavlink_msg_point_of_interest_get_x(msg);
-	point_of_interest.y = mavlink_msg_point_of_interest_get_y(msg);
-	point_of_interest.z = mavlink_msg_point_of_interest_get_z(msg);
-	point_of_interest.timeout = mavlink_msg_point_of_interest_get_timeout(msg);
-	point_of_interest.type = mavlink_msg_point_of_interest_get_type(msg);
-	point_of_interest.color = mavlink_msg_point_of_interest_get_color(msg);
-	point_of_interest.coordinate_system = mavlink_msg_point_of_interest_get_coordinate_system(msg);
-	point_of_interest.name = mavlink_msg_point_of_interest_get_name(msg);
-} else {
-    int len = 43; //Marshal.SizeOf(point_of_interest);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    point_of_interest = (mavlink_point_of_interest_t)Marshal.PtrToStructure(i, ((object)point_of_interest).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	point_of_interest.x = mavlink_msg_point_of_interest_get_x(msg);
+    	point_of_interest.y = mavlink_msg_point_of_interest_get_y(msg);
+    	point_of_interest.z = mavlink_msg_point_of_interest_get_z(msg);
+    	point_of_interest.timeout = mavlink_msg_point_of_interest_get_timeout(msg);
+    	point_of_interest.type = mavlink_msg_point_of_interest_get_type(msg);
+    	point_of_interest.color = mavlink_msg_point_of_interest_get_color(msg);
+    	point_of_interest.coordinate_system = mavlink_msg_point_of_interest_get_coordinate_system(msg);
+    	point_of_interest.name = mavlink_msg_point_of_interest_get_name(msg);
+    
+    } else {
+        int len = 43; //Marshal.SizeOf(point_of_interest);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        point_of_interest = (mavlink_point_of_interest_t)Marshal.PtrToStructure(i, ((object)point_of_interest).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

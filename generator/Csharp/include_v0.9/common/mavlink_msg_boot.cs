@@ -23,26 +23,31 @@ public partial class Mavlink
  * @param version The onboard software version
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_boot_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt32 public version)
+ 
+public static UInt16 mavlink_msg_boot_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt32 version)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[4];
-	_mav_put_UInt32(buf, 0, version);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(version),0,msg,0,sizeof(UInt32));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 4);
-#else
-    mavlink_boot_t packet;
+} else {
+    mavlink_boot_t packet = new mavlink_boot_t();
 	packet.version = version;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 4);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_BOOT;
-    return mavlink_finalize_message(msg, system_id, component_id, 4);
+        
+        int len = 4;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_BOOT;
+    //return mavlink_finalize_message(msg, system_id, component_id, 4);
+    return 0;
+}
+
 /**
  * @brief Pack a boot message on a channel
  * @param system_id ID of this system
@@ -132,15 +137,16 @@ public static UInt32 mavlink_msg_boot_get_version(byte[] msg)
  */
 public static void mavlink_msg_boot_decode(byte[] msg, ref mavlink_boot_t boot)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	boot.version = mavlink_msg_boot_get_version(msg);
-} else {
-    int len = 4; //Marshal.SizeOf(boot);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    boot = (mavlink_boot_t)Marshal.PtrToStructure(i, ((object)boot).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	boot.version = mavlink_msg_boot_get_version(msg);
+    
+    } else {
+        int len = 4; //Marshal.SizeOf(boot);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        boot = (mavlink_boot_t)Marshal.PtrToStructure(i, ((object)boot).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

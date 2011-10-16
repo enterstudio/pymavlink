@@ -41,26 +41,24 @@ public partial class Mavlink
  * @param zmag Z Magnetic field (milli tesla)
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_scaled_imu_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt64 public usec, Int16 public xacc, Int16 public yacc, Int16 public zacc, Int16 public xgyro, Int16 public ygyro, Int16 public zgyro, Int16 public xmag, Int16 public ymag, Int16 public zmag)
+ 
+public static UInt16 mavlink_msg_scaled_imu_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt64 usec, Int16 xacc, Int16 yacc, Int16 zacc, Int16 xgyro, Int16 ygyro, Int16 zgyro, Int16 xmag, Int16 ymag, Int16 zmag)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[26];
-	_mav_put_UInt64(buf, 0, usec);
-	_mav_put_Int16(buf, 8, xacc);
-	_mav_put_Int16(buf, 10, yacc);
-	_mav_put_Int16(buf, 12, zacc);
-	_mav_put_Int16(buf, 14, xgyro);
-	_mav_put_Int16(buf, 16, ygyro);
-	_mav_put_Int16(buf, 18, zgyro);
-	_mav_put_Int16(buf, 20, xmag);
-	_mav_put_Int16(buf, 22, ymag);
-	_mav_put_Int16(buf, 24, zmag);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(usec),0,msg,0,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(xacc),0,msg,8,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(yacc),0,msg,10,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(zacc),0,msg,12,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(xgyro),0,msg,14,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(ygyro),0,msg,16,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(zgyro),0,msg,18,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(xmag),0,msg,20,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(ymag),0,msg,22,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(zmag),0,msg,24,sizeof(Int16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 26);
-#else
-    mavlink_scaled_imu_t packet;
+} else {
+    mavlink_scaled_imu_t packet = new mavlink_scaled_imu_t();
 	packet.usec = usec;
 	packet.xacc = xacc;
 	packet.yacc = yacc;
@@ -72,13 +70,20 @@ static uint16 mavlink_msg_scaled_imu_pack(byte system_id, byte component_id, ref
 	packet.ymag = ymag;
 	packet.zmag = zmag;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 26);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SCALED_IMU;
-    return mavlink_finalize_message(msg, system_id, component_id, 26);
+        
+        int len = 26;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SCALED_IMU;
+    //return mavlink_finalize_message(msg, system_id, component_id, 26);
+    return 0;
+}
+
 /**
  * @brief Pack a scaled_imu message on a channel
  * @param system_id ID of this system
@@ -312,24 +317,25 @@ public static Int16 mavlink_msg_scaled_imu_get_zmag(byte[] msg)
  */
 public static void mavlink_msg_scaled_imu_decode(byte[] msg, ref mavlink_scaled_imu_t scaled_imu)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	scaled_imu.usec = mavlink_msg_scaled_imu_get_usec(msg);
-	scaled_imu.xacc = mavlink_msg_scaled_imu_get_xacc(msg);
-	scaled_imu.yacc = mavlink_msg_scaled_imu_get_yacc(msg);
-	scaled_imu.zacc = mavlink_msg_scaled_imu_get_zacc(msg);
-	scaled_imu.xgyro = mavlink_msg_scaled_imu_get_xgyro(msg);
-	scaled_imu.ygyro = mavlink_msg_scaled_imu_get_ygyro(msg);
-	scaled_imu.zgyro = mavlink_msg_scaled_imu_get_zgyro(msg);
-	scaled_imu.xmag = mavlink_msg_scaled_imu_get_xmag(msg);
-	scaled_imu.ymag = mavlink_msg_scaled_imu_get_ymag(msg);
-	scaled_imu.zmag = mavlink_msg_scaled_imu_get_zmag(msg);
-} else {
-    int len = 26; //Marshal.SizeOf(scaled_imu);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    scaled_imu = (mavlink_scaled_imu_t)Marshal.PtrToStructure(i, ((object)scaled_imu).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	scaled_imu.usec = mavlink_msg_scaled_imu_get_usec(msg);
+    	scaled_imu.xacc = mavlink_msg_scaled_imu_get_xacc(msg);
+    	scaled_imu.yacc = mavlink_msg_scaled_imu_get_yacc(msg);
+    	scaled_imu.zacc = mavlink_msg_scaled_imu_get_zacc(msg);
+    	scaled_imu.xgyro = mavlink_msg_scaled_imu_get_xgyro(msg);
+    	scaled_imu.ygyro = mavlink_msg_scaled_imu_get_ygyro(msg);
+    	scaled_imu.zgyro = mavlink_msg_scaled_imu_get_zgyro(msg);
+    	scaled_imu.xmag = mavlink_msg_scaled_imu_get_xmag(msg);
+    	scaled_imu.ymag = mavlink_msg_scaled_imu_get_ymag(msg);
+    	scaled_imu.zmag = mavlink_msg_scaled_imu_get_zmag(msg);
+    
+    } else {
+        int len = 26; //Marshal.SizeOf(scaled_imu);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        scaled_imu = (mavlink_scaled_imu_t)Marshal.PtrToStructure(i, ((object)scaled_imu).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

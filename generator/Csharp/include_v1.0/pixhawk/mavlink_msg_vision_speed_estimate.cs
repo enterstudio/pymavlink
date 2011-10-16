@@ -29,32 +29,37 @@ public partial class Mavlink
  * @param z Global Z speed
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_vision_speed_estimate_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt64 public usec, Single public x, Single public y, Single public z)
+ 
+public static UInt16 mavlink_msg_vision_speed_estimate_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt64 usec, Single x, Single y, Single z)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[20];
-	_mav_put_UInt64(buf, 0, usec);
-	_mav_put_Single(buf, 8, x);
-	_mav_put_Single(buf, 12, y);
-	_mav_put_Single(buf, 16, z);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(usec),0,msg,0,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(x),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(y),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(z),0,msg,16,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 20);
-#else
-    mavlink_vision_speed_estimate_t packet;
+} else {
+    mavlink_vision_speed_estimate_t packet = new mavlink_vision_speed_estimate_t();
 	packet.usec = usec;
 	packet.x = x;
 	packet.y = y;
 	packet.z = z;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 20);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE;
-    return mavlink_finalize_message(msg, system_id, component_id, 20, 208);
+        
+        int len = 20;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE;
+    //return mavlink_finalize_message(msg, system_id, component_id, 20, 208);
+    return 0;
+}
+
 /**
  * @brief Pack a vision_speed_estimate message on a channel
  * @param system_id ID of this system
@@ -192,18 +197,19 @@ public static Single mavlink_msg_vision_speed_estimate_get_z(byte[] msg)
  */
 public static void mavlink_msg_vision_speed_estimate_decode(byte[] msg, ref mavlink_vision_speed_estimate_t vision_speed_estimate)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	vision_speed_estimate.usec = mavlink_msg_vision_speed_estimate_get_usec(msg);
-	vision_speed_estimate.x = mavlink_msg_vision_speed_estimate_get_x(msg);
-	vision_speed_estimate.y = mavlink_msg_vision_speed_estimate_get_y(msg);
-	vision_speed_estimate.z = mavlink_msg_vision_speed_estimate_get_z(msg);
-} else {
-    int len = 20; //Marshal.SizeOf(vision_speed_estimate);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    vision_speed_estimate = (mavlink_vision_speed_estimate_t)Marshal.PtrToStructure(i, ((object)vision_speed_estimate).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	vision_speed_estimate.usec = mavlink_msg_vision_speed_estimate_get_usec(msg);
+    	vision_speed_estimate.x = mavlink_msg_vision_speed_estimate_get_x(msg);
+    	vision_speed_estimate.y = mavlink_msg_vision_speed_estimate_get_y(msg);
+    	vision_speed_estimate.z = mavlink_msg_vision_speed_estimate_get_z(msg);
+    
+    } else {
+        int len = 20; //Marshal.SizeOf(vision_speed_estimate);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        vision_speed_estimate = (mavlink_vision_speed_estimate_t)Marshal.PtrToStructure(i, ((object)vision_speed_estimate).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

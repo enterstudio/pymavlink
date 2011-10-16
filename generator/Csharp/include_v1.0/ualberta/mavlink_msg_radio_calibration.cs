@@ -39,42 +39,41 @@ public partial class Mavlink
  * @param throttle Throttle curve setpoints (every 25%)
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_radio_calibration_pack(byte system_id, byte component_id, ref byte[] msg,
-                               const uint16_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- publicaileron, const uint16_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- publicelevator, const uint16_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- publicrudder, const uint16_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=2)]
- publicgyro, const uint16_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=5)]
- publicpitch, const uint16_t [MarshalAs(UnmanagedType.ByValArray,SizeConst=5)]
- publicthrottle)
+ 
+public static UInt16 mavlink_msg_radio_calibration_pack(byte system_id, byte component_id, byte[] msg,
+                               uint16_t aileron, uint16_t elevator, uint16_t rudder, uint16_t gyro, uint16_t pitch, uint16_t throttle)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[42];
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 
-	_mav_put_uint16_t_array(buf, 0, aileron, 3);
-	_mav_put_uint16_t_array(buf, 6, elevator, 3);
-	_mav_put_uint16_t_array(buf, 12, rudder, 3);
-	_mav_put_uint16_t_array(buf, 18, gyro, 2);
-	_mav_put_uint16_t_array(buf, 22, pitch, 5);
-	_mav_put_uint16_t_array(buf, 32, throttle, 5);
-        memcpy(_MAV_PAYLOAD(msg), buf, 42);
-#else
-    mavlink_radio_calibration_t packet;
+	//Array.Copy(aileron,0,msg,0,3);
+	//Array.Copy(elevator,0,msg,6,3);
+	//Array.Copy(rudder,0,msg,12,3);
+	//Array.Copy(gyro,0,msg,18,2);
+	//Array.Copy(pitch,0,msg,22,5);
+	//Array.Copy(throttle,0,msg,32,5);
+} else {
+    mavlink_radio_calibration_t packet = new mavlink_radio_calibration_t();
 
-	memcpy(packet.aileron, aileron, sizeof(uint16_t)*3);
-	memcpy(packet.elevator, elevator, sizeof(uint16_t)*3);
-	memcpy(packet.rudder, rudder, sizeof(uint16_t)*3);
-	memcpy(packet.gyro, gyro, sizeof(uint16_t)*2);
-	memcpy(packet.pitch, pitch, sizeof(uint16_t)*5);
-	memcpy(packet.throttle, throttle, sizeof(uint16_t)*5);
-        memcpy(_MAV_PAYLOAD(msg), &packet, 42);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_RADIO_CALIBRATION;
-    return mavlink_finalize_message(msg, system_id, component_id, 42, 71);
+	packet.aileron = aileron;
+	packet.elevator = elevator;
+	packet.rudder = rudder;
+	packet.gyro = gyro;
+	packet.pitch = pitch;
+	packet.throttle = throttle;
+        
+        int len = 42;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_RADIO_CALIBRATION;
+    //return mavlink_finalize_message(msg, system_id, component_id, 42, 71);
+    return 0;
+}
+
 /**
  * @brief Pack a radio_calibration message on a channel
  * @param system_id ID of this system
@@ -256,20 +255,21 @@ public static void mavlink_msg_radio_calibration_get_throttle(byte[] msg)
  */
 public static void mavlink_msg_radio_calibration_decode(byte[] msg, ref mavlink_radio_calibration_t radio_calibration)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	radio_calibration.aileron = mavlink_msg_radio_calibration_get_aileron(msg);
-	radio_calibration.elevator = mavlink_msg_radio_calibration_get_elevator(msg);
-	radio_calibration.rudder = mavlink_msg_radio_calibration_get_rudder(msg);
-	radio_calibration.gyro = mavlink_msg_radio_calibration_get_gyro(msg);
-	radio_calibration.pitch = mavlink_msg_radio_calibration_get_pitch(msg);
-	radio_calibration.throttle = mavlink_msg_radio_calibration_get_throttle(msg);
-} else {
-    int len = 42; //Marshal.SizeOf(radio_calibration);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    radio_calibration = (mavlink_radio_calibration_t)Marshal.PtrToStructure(i, ((object)radio_calibration).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	radio_calibration.aileron = mavlink_msg_radio_calibration_get_aileron(msg);
+    	radio_calibration.elevator = mavlink_msg_radio_calibration_get_elevator(msg);
+    	radio_calibration.rudder = mavlink_msg_radio_calibration_get_rudder(msg);
+    	radio_calibration.gyro = mavlink_msg_radio_calibration_get_gyro(msg);
+    	radio_calibration.pitch = mavlink_msg_radio_calibration_get_pitch(msg);
+    	radio_calibration.throttle = mavlink_msg_radio_calibration_get_throttle(msg);
+    
+    } else {
+        int len = 42; //Marshal.SizeOf(radio_calibration);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        radio_calibration = (mavlink_radio_calibration_t)Marshal.PtrToStructure(i, ((object)radio_calibration).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

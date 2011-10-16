@@ -32,10 +32,10 @@ MAVLINK_HELPER mavlink_status_t* mavlink_get_channel_status(uint8_t chan)
  */
 #if MAVLINK_CRC_EXTRA
 MAVLINK_HELPER uint16_t mavlink_finalize_message_chan(mavlink_message_t* msg, uint8_t system_id, uint8_t component_id, 
-						      uint8_t chan, uint16_t length, uint8_t crc_extra)
+						      uint8_t chan, uint8_t length, uint8_t crc_extra)
 #else
 MAVLINK_HELPER uint16_t mavlink_finalize_message_chan(mavlink_message_t* msg, uint8_t system_id, uint8_t component_id, 
-						      uint8_t chan, uint16_t length)
+						      uint8_t chan, uint8_t length)
 #endif
 {
 	// This code part is the same for all messages;
@@ -63,13 +63,13 @@ MAVLINK_HELPER uint16_t mavlink_finalize_message_chan(mavlink_message_t* msg, ui
  */
 #if MAVLINK_CRC_EXTRA
 MAVLINK_HELPER uint16_t mavlink_finalize_message(mavlink_message_t* msg, uint8_t system_id, uint8_t component_id, 
-						 uint16_t length, uint8_t crc_extra)
+						 uint8_t length, uint8_t crc_extra)
 {
 	return mavlink_finalize_message_chan(msg, system_id, component_id, MAVLINK_COMM_0, length, crc_extra);
 }
 #else
 MAVLINK_HELPER uint16_t mavlink_finalize_message(mavlink_message_t* msg, uint8_t system_id, uint8_t component_id, 
-						 uint16_t length)
+						 uint8_t length)
 {
 	return mavlink_finalize_message_chan(msg, system_id, component_id, MAVLINK_COMM_0, length);
 }
@@ -214,7 +214,13 @@ MAVLINK_HELPER uint8_t mavlink_parse_char(uint8_t chan, uint8_t c, mavlink_messa
 		break;
 
 	case MAVLINK_PARSE_STATE_GOT_STX:
-		if (status->msg_received)
+			if (status->msg_received 
+			/* Support shorter buffers than the
+			 default maximum packet size */
+#if (MAVLINK_MAX_PAYLOAD_LEN < 255)
+				|| c > MAVLINK_MAX_PAYLOAD_LEN
+#endif
+				)
 		{
 			status->buffer_overrun++;
 			status->parse_error++;
@@ -408,7 +414,7 @@ MAVLINK_HELPER uint8_t put_bitfield_n_by_index(int32_t b, uint8_t bits, uint8_t 
 		if (bits_remain <= (uint8_t)(8 - i_bit_index))
 		{
 			// Enough space
-			curr_bits_n = bits_remain;
+			curr_bits_n = (uint8_t)bits_remain;
 		}
 		else
 		{

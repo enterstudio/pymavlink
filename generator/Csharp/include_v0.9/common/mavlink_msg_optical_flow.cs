@@ -33,22 +33,20 @@ public partial class Mavlink
  * @param ground_distance Ground distance in meters
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_optical_flow_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt64 public time, byte public sensor_id, Int16 public flow_x, Int16 public flow_y, byte public quality, Single public ground_distance)
+ 
+public static UInt16 mavlink_msg_optical_flow_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt64 time, byte sensor_id, Int16 flow_x, Int16 flow_y, byte quality, Single ground_distance)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[18];
-	_mav_put_UInt64(buf, 0, time);
-	_mav_put_byte(buf, 8, sensor_id);
-	_mav_put_Int16(buf, 9, flow_x);
-	_mav_put_Int16(buf, 11, flow_y);
-	_mav_put_byte(buf, 13, quality);
-	_mav_put_Single(buf, 14, ground_distance);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(time),0,msg,0,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(sensor_id),0,msg,8,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(flow_x),0,msg,9,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(flow_y),0,msg,11,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(quality),0,msg,13,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(ground_distance),0,msg,14,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 18);
-#else
-    mavlink_optical_flow_t packet;
+} else {
+    mavlink_optical_flow_t packet = new mavlink_optical_flow_t();
 	packet.time = time;
 	packet.sensor_id = sensor_id;
 	packet.flow_x = flow_x;
@@ -56,13 +54,20 @@ static uint16 mavlink_msg_optical_flow_pack(byte system_id, byte component_id, r
 	packet.quality = quality;
 	packet.ground_distance = ground_distance;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 18);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_OPTICAL_FLOW;
-    return mavlink_finalize_message(msg, system_id, component_id, 18);
+        
+        int len = 18;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_OPTICAL_FLOW;
+    //return mavlink_finalize_message(msg, system_id, component_id, 18);
+    return 0;
+}
+
 /**
  * @brief Pack a optical_flow message on a channel
  * @param system_id ID of this system
@@ -232,20 +237,21 @@ public static Single mavlink_msg_optical_flow_get_ground_distance(byte[] msg)
  */
 public static void mavlink_msg_optical_flow_decode(byte[] msg, ref mavlink_optical_flow_t optical_flow)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	optical_flow.time = mavlink_msg_optical_flow_get_time(msg);
-	optical_flow.sensor_id = mavlink_msg_optical_flow_get_sensor_id(msg);
-	optical_flow.flow_x = mavlink_msg_optical_flow_get_flow_x(msg);
-	optical_flow.flow_y = mavlink_msg_optical_flow_get_flow_y(msg);
-	optical_flow.quality = mavlink_msg_optical_flow_get_quality(msg);
-	optical_flow.ground_distance = mavlink_msg_optical_flow_get_ground_distance(msg);
-} else {
-    int len = 18; //Marshal.SizeOf(optical_flow);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    optical_flow = (mavlink_optical_flow_t)Marshal.PtrToStructure(i, ((object)optical_flow).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	optical_flow.time = mavlink_msg_optical_flow_get_time(msg);
+    	optical_flow.sensor_id = mavlink_msg_optical_flow_get_sensor_id(msg);
+    	optical_flow.flow_x = mavlink_msg_optical_flow_get_flow_x(msg);
+    	optical_flow.flow_y = mavlink_msg_optical_flow_get_flow_y(msg);
+    	optical_flow.quality = mavlink_msg_optical_flow_get_quality(msg);
+    	optical_flow.ground_distance = mavlink_msg_optical_flow_get_ground_distance(msg);
+    
+    } else {
+        int len = 18; //Marshal.SizeOf(optical_flow);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        optical_flow = (mavlink_optical_flow_t)Marshal.PtrToStructure(i, ((object)optical_flow).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

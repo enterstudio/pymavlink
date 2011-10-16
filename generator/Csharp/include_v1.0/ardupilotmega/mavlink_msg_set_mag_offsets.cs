@@ -31,34 +31,39 @@ public partial class Mavlink
  * @param mag_ofs_z magnetometer Z offset
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_set_mag_offsets_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target_system, byte public target_component, Int16 public mag_ofs_x, Int16 public mag_ofs_y, Int16 public mag_ofs_z)
+ 
+public static UInt16 mavlink_msg_set_mag_offsets_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system, byte target_component, Int16 mag_ofs_x, Int16 mag_ofs_y, Int16 mag_ofs_z)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[8];
-	_mav_put_Int16(buf, 0, mag_ofs_x);
-	_mav_put_Int16(buf, 2, mag_ofs_y);
-	_mav_put_Int16(buf, 4, mag_ofs_z);
-	_mav_put_byte(buf, 6, target_system);
-	_mav_put_byte(buf, 7, target_component);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(mag_ofs_x),0,msg,0,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(mag_ofs_y),0,msg,2,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(mag_ofs_z),0,msg,4,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,6,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(target_component),0,msg,7,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 8);
-#else
-    mavlink_set_mag_offsets_t packet;
+} else {
+    mavlink_set_mag_offsets_t packet = new mavlink_set_mag_offsets_t();
 	packet.mag_ofs_x = mag_ofs_x;
 	packet.mag_ofs_y = mag_ofs_y;
 	packet.mag_ofs_z = mag_ofs_z;
 	packet.target_system = target_system;
 	packet.target_component = target_component;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 8);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SET_MAG_OFFSETS;
-    return mavlink_finalize_message(msg, system_id, component_id, 8, 219);
+        
+        int len = 8;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SET_MAG_OFFSETS;
+    //return mavlink_finalize_message(msg, system_id, component_id, 8, 219);
+    return 0;
+}
+
 /**
  * @brief Pack a set_mag_offsets message on a channel
  * @param system_id ID of this system
@@ -212,19 +217,20 @@ public static Int16 mavlink_msg_set_mag_offsets_get_mag_ofs_z(byte[] msg)
  */
 public static void mavlink_msg_set_mag_offsets_decode(byte[] msg, ref mavlink_set_mag_offsets_t set_mag_offsets)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	set_mag_offsets.mag_ofs_x = mavlink_msg_set_mag_offsets_get_mag_ofs_x(msg);
-	set_mag_offsets.mag_ofs_y = mavlink_msg_set_mag_offsets_get_mag_ofs_y(msg);
-	set_mag_offsets.mag_ofs_z = mavlink_msg_set_mag_offsets_get_mag_ofs_z(msg);
-	set_mag_offsets.target_system = mavlink_msg_set_mag_offsets_get_target_system(msg);
-	set_mag_offsets.target_component = mavlink_msg_set_mag_offsets_get_target_component(msg);
-} else {
-    int len = 8; //Marshal.SizeOf(set_mag_offsets);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    set_mag_offsets = (mavlink_set_mag_offsets_t)Marshal.PtrToStructure(i, ((object)set_mag_offsets).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	set_mag_offsets.mag_ofs_x = mavlink_msg_set_mag_offsets_get_mag_ofs_x(msg);
+    	set_mag_offsets.mag_ofs_y = mavlink_msg_set_mag_offsets_get_mag_ofs_y(msg);
+    	set_mag_offsets.mag_ofs_z = mavlink_msg_set_mag_offsets_get_mag_ofs_z(msg);
+    	set_mag_offsets.target_system = mavlink_msg_set_mag_offsets_get_target_system(msg);
+    	set_mag_offsets.target_component = mavlink_msg_set_mag_offsets_get_target_component(msg);
+    
+    } else {
+        int len = 8; //Marshal.SizeOf(set_mag_offsets);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        set_mag_offsets = (mavlink_set_mag_offsets_t)Marshal.PtrToStructure(i, ((object)set_mag_offsets).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

@@ -23,26 +23,31 @@ public partial class Mavlink
  * @param seq Sequence
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_mission_item_reached_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt16 public seq)
+ 
+public static UInt16 mavlink_msg_mission_item_reached_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt16 seq)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[2];
-	_mav_put_UInt16(buf, 0, seq);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(seq),0,msg,0,sizeof(UInt16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 2);
-#else
-    mavlink_mission_item_reached_t packet;
+} else {
+    mavlink_mission_item_reached_t packet = new mavlink_mission_item_reached_t();
 	packet.seq = seq;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 2);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_MISSION_ITEM_REACHED;
-    return mavlink_finalize_message(msg, system_id, component_id, 2, 11);
+        
+        int len = 2;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_MISSION_ITEM_REACHED;
+    //return mavlink_finalize_message(msg, system_id, component_id, 2, 11);
+    return 0;
+}
+
 /**
  * @brief Pack a mission_item_reached message on a channel
  * @param system_id ID of this system

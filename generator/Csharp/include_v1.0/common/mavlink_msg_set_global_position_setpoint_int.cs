@@ -31,34 +31,39 @@ public partial class Mavlink
  * @param yaw Desired yaw angle in degrees * 100
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_set_global_position_setpoint_int_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public coordinate_frame, Int32 public latitude, Int32 public longitude, Int32 public altitude, Int16 public yaw)
+ 
+public static UInt16 mavlink_msg_set_global_position_setpoint_int_pack(byte system_id, byte component_id, byte[] msg,
+                               byte coordinate_frame, Int32 latitude, Int32 longitude, Int32 altitude, Int16 yaw)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[15];
-	_mav_put_Int32(buf, 0, latitude);
-	_mav_put_Int32(buf, 4, longitude);
-	_mav_put_Int32(buf, 8, altitude);
-	_mav_put_Int16(buf, 12, yaw);
-	_mav_put_byte(buf, 14, coordinate_frame);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(latitude),0,msg,0,sizeof(Int32));
+	Array.Copy(BitConverter.GetBytes(longitude),0,msg,4,sizeof(Int32));
+	Array.Copy(BitConverter.GetBytes(altitude),0,msg,8,sizeof(Int32));
+	Array.Copy(BitConverter.GetBytes(yaw),0,msg,12,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(coordinate_frame),0,msg,14,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 15);
-#else
-    mavlink_set_global_position_setpoint_int_t packet;
+} else {
+    mavlink_set_global_position_setpoint_int_t packet = new mavlink_set_global_position_setpoint_int_t();
 	packet.latitude = latitude;
 	packet.longitude = longitude;
 	packet.altitude = altitude;
 	packet.yaw = yaw;
 	packet.coordinate_frame = coordinate_frame;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 15);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SET_GLOBAL_POSITION_SETPOINT_INT;
-    return mavlink_finalize_message(msg, system_id, component_id, 15, 33);
+        
+        int len = 15;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SET_GLOBAL_POSITION_SETPOINT_INT;
+    //return mavlink_finalize_message(msg, system_id, component_id, 15, 33);
+    return 0;
+}
+
 /**
  * @brief Pack a set_global_position_setpoint_int message on a channel
  * @param system_id ID of this system

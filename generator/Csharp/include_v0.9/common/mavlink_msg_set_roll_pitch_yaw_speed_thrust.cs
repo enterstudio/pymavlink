@@ -33,22 +33,20 @@ public partial class Mavlink
  * @param thrust Collective thrust, normalized to 0 .. 1
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_set_roll_pitch_yaw_speed_thrust_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target_system, byte public target_component, Single public roll_speed, Single public pitch_speed, Single public yaw_speed, Single public thrust)
+ 
+public static UInt16 mavlink_msg_set_roll_pitch_yaw_speed_thrust_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system, byte target_component, Single roll_speed, Single pitch_speed, Single yaw_speed, Single thrust)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[18];
-	_mav_put_byte(buf, 0, target_system);
-	_mav_put_byte(buf, 1, target_component);
-	_mav_put_Single(buf, 2, roll_speed);
-	_mav_put_Single(buf, 6, pitch_speed);
-	_mav_put_Single(buf, 10, yaw_speed);
-	_mav_put_Single(buf, 14, thrust);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(target_component),0,msg,1,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(roll_speed),0,msg,2,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(pitch_speed),0,msg,6,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yaw_speed),0,msg,10,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(thrust),0,msg,14,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 18);
-#else
-    mavlink_set_roll_pitch_yaw_speed_thrust_t packet;
+} else {
+    mavlink_set_roll_pitch_yaw_speed_thrust_t packet = new mavlink_set_roll_pitch_yaw_speed_thrust_t();
 	packet.target_system = target_system;
 	packet.target_component = target_component;
 	packet.roll_speed = roll_speed;
@@ -56,13 +54,20 @@ static uint16 mavlink_msg_set_roll_pitch_yaw_speed_thrust_pack(byte system_id, b
 	packet.yaw_speed = yaw_speed;
 	packet.thrust = thrust;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 18);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_SPEED_THRUST;
-    return mavlink_finalize_message(msg, system_id, component_id, 18);
+        
+        int len = 18;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_SPEED_THRUST;
+    //return mavlink_finalize_message(msg, system_id, component_id, 18);
+    return 0;
+}
+
 /**
  * @brief Pack a set_roll_pitch_yaw_speed_thrust message on a channel
  * @param system_id ID of this system
@@ -232,20 +237,21 @@ public static Single mavlink_msg_set_roll_pitch_yaw_speed_thrust_get_thrust(byte
  */
 public static void mavlink_msg_set_roll_pitch_yaw_speed_thrust_decode(byte[] msg, ref mavlink_set_roll_pitch_yaw_speed_thrust_t set_roll_pitch_yaw_speed_thrust)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	set_roll_pitch_yaw_speed_thrust.target_system = mavlink_msg_set_roll_pitch_yaw_speed_thrust_get_target_system(msg);
-	set_roll_pitch_yaw_speed_thrust.target_component = mavlink_msg_set_roll_pitch_yaw_speed_thrust_get_target_component(msg);
-	set_roll_pitch_yaw_speed_thrust.roll_speed = mavlink_msg_set_roll_pitch_yaw_speed_thrust_get_roll_speed(msg);
-	set_roll_pitch_yaw_speed_thrust.pitch_speed = mavlink_msg_set_roll_pitch_yaw_speed_thrust_get_pitch_speed(msg);
-	set_roll_pitch_yaw_speed_thrust.yaw_speed = mavlink_msg_set_roll_pitch_yaw_speed_thrust_get_yaw_speed(msg);
-	set_roll_pitch_yaw_speed_thrust.thrust = mavlink_msg_set_roll_pitch_yaw_speed_thrust_get_thrust(msg);
-} else {
-    int len = 18; //Marshal.SizeOf(set_roll_pitch_yaw_speed_thrust);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    set_roll_pitch_yaw_speed_thrust = (mavlink_set_roll_pitch_yaw_speed_thrust_t)Marshal.PtrToStructure(i, ((object)set_roll_pitch_yaw_speed_thrust).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	set_roll_pitch_yaw_speed_thrust.target_system = mavlink_msg_set_roll_pitch_yaw_speed_thrust_get_target_system(msg);
+    	set_roll_pitch_yaw_speed_thrust.target_component = mavlink_msg_set_roll_pitch_yaw_speed_thrust_get_target_component(msg);
+    	set_roll_pitch_yaw_speed_thrust.roll_speed = mavlink_msg_set_roll_pitch_yaw_speed_thrust_get_roll_speed(msg);
+    	set_roll_pitch_yaw_speed_thrust.pitch_speed = mavlink_msg_set_roll_pitch_yaw_speed_thrust_get_pitch_speed(msg);
+    	set_roll_pitch_yaw_speed_thrust.yaw_speed = mavlink_msg_set_roll_pitch_yaw_speed_thrust_get_yaw_speed(msg);
+    	set_roll_pitch_yaw_speed_thrust.thrust = mavlink_msg_set_roll_pitch_yaw_speed_thrust_get_thrust(msg);
+    
+    } else {
+        int len = 18; //Marshal.SizeOf(set_roll_pitch_yaw_speed_thrust);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        set_roll_pitch_yaw_speed_thrust = (mavlink_set_roll_pitch_yaw_speed_thrust_t)Marshal.PtrToStructure(i, ((object)set_roll_pitch_yaw_speed_thrust).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

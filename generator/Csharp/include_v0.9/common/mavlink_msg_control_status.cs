@@ -37,24 +37,22 @@ public partial class Mavlink
  * @param control_pos_yaw 0: Yaw angle control disabled, 1: enabled
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_control_status_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public position_fix, byte public vision_fix, byte public gps_fix, byte public ahrs_health, byte public control_att, byte public control_pos_xy, byte public control_pos_z, byte public control_pos_yaw)
+ 
+public static UInt16 mavlink_msg_control_status_pack(byte system_id, byte component_id, byte[] msg,
+                               byte position_fix, byte vision_fix, byte gps_fix, byte ahrs_health, byte control_att, byte control_pos_xy, byte control_pos_z, byte control_pos_yaw)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[8];
-	_mav_put_byte(buf, 0, position_fix);
-	_mav_put_byte(buf, 1, vision_fix);
-	_mav_put_byte(buf, 2, gps_fix);
-	_mav_put_byte(buf, 3, ahrs_health);
-	_mav_put_byte(buf, 4, control_att);
-	_mav_put_byte(buf, 5, control_pos_xy);
-	_mav_put_byte(buf, 6, control_pos_z);
-	_mav_put_byte(buf, 7, control_pos_yaw);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(position_fix),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(vision_fix),0,msg,1,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(gps_fix),0,msg,2,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(ahrs_health),0,msg,3,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(control_att),0,msg,4,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(control_pos_xy),0,msg,5,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(control_pos_z),0,msg,6,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(control_pos_yaw),0,msg,7,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 8);
-#else
-    mavlink_control_status_t packet;
+} else {
+    mavlink_control_status_t packet = new mavlink_control_status_t();
 	packet.position_fix = position_fix;
 	packet.vision_fix = vision_fix;
 	packet.gps_fix = gps_fix;
@@ -64,13 +62,20 @@ static uint16 mavlink_msg_control_status_pack(byte system_id, byte component_id,
 	packet.control_pos_z = control_pos_z;
 	packet.control_pos_yaw = control_pos_yaw;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 8);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_CONTROL_STATUS;
-    return mavlink_finalize_message(msg, system_id, component_id, 8);
+        
+        int len = 8;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_CONTROL_STATUS;
+    //return mavlink_finalize_message(msg, system_id, component_id, 8);
+    return 0;
+}
+
 /**
  * @brief Pack a control_status message on a channel
  * @param system_id ID of this system
@@ -272,22 +277,23 @@ public static byte mavlink_msg_control_status_get_control_pos_yaw(byte[] msg)
  */
 public static void mavlink_msg_control_status_decode(byte[] msg, ref mavlink_control_status_t control_status)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	control_status.position_fix = mavlink_msg_control_status_get_position_fix(msg);
-	control_status.vision_fix = mavlink_msg_control_status_get_vision_fix(msg);
-	control_status.gps_fix = mavlink_msg_control_status_get_gps_fix(msg);
-	control_status.ahrs_health = mavlink_msg_control_status_get_ahrs_health(msg);
-	control_status.control_att = mavlink_msg_control_status_get_control_att(msg);
-	control_status.control_pos_xy = mavlink_msg_control_status_get_control_pos_xy(msg);
-	control_status.control_pos_z = mavlink_msg_control_status_get_control_pos_z(msg);
-	control_status.control_pos_yaw = mavlink_msg_control_status_get_control_pos_yaw(msg);
-} else {
-    int len = 8; //Marshal.SizeOf(control_status);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    control_status = (mavlink_control_status_t)Marshal.PtrToStructure(i, ((object)control_status).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	control_status.position_fix = mavlink_msg_control_status_get_position_fix(msg);
+    	control_status.vision_fix = mavlink_msg_control_status_get_vision_fix(msg);
+    	control_status.gps_fix = mavlink_msg_control_status_get_gps_fix(msg);
+    	control_status.ahrs_health = mavlink_msg_control_status_get_ahrs_health(msg);
+    	control_status.control_att = mavlink_msg_control_status_get_control_att(msg);
+    	control_status.control_pos_xy = mavlink_msg_control_status_get_control_pos_xy(msg);
+    	control_status.control_pos_z = mavlink_msg_control_status_get_control_pos_z(msg);
+    	control_status.control_pos_yaw = mavlink_msg_control_status_get_control_pos_yaw(msg);
+    
+    } else {
+        int len = 8; //Marshal.SizeOf(control_status);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        control_status = (mavlink_control_status_t)Marshal.PtrToStructure(i, ((object)control_status).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

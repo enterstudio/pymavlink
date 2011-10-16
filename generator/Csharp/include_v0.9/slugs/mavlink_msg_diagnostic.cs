@@ -33,22 +33,20 @@ public partial class Mavlink
  * @param diagSh3 Diagnostic short 3
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_diagnostic_pack(byte system_id, byte component_id, ref byte[] msg,
-                               Single public diagFl1, Single public diagFl2, Single public diagFl3, Int16 public diagSh1, Int16 public diagSh2, Int16 public diagSh3)
+ 
+public static UInt16 mavlink_msg_diagnostic_pack(byte system_id, byte component_id, byte[] msg,
+                               Single diagFl1, Single diagFl2, Single diagFl3, Int16 diagSh1, Int16 diagSh2, Int16 diagSh3)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[18];
-	_mav_put_Single(buf, 0, diagFl1);
-	_mav_put_Single(buf, 4, diagFl2);
-	_mav_put_Single(buf, 8, diagFl3);
-	_mav_put_Int16(buf, 12, diagSh1);
-	_mav_put_Int16(buf, 14, diagSh2);
-	_mav_put_Int16(buf, 16, diagSh3);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(diagFl1),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(diagFl2),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(diagFl3),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(diagSh1),0,msg,12,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(diagSh2),0,msg,14,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(diagSh3),0,msg,16,sizeof(Int16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 18);
-#else
-    mavlink_diagnostic_t packet;
+} else {
+    mavlink_diagnostic_t packet = new mavlink_diagnostic_t();
 	packet.diagFl1 = diagFl1;
 	packet.diagFl2 = diagFl2;
 	packet.diagFl3 = diagFl3;
@@ -56,13 +54,20 @@ static uint16 mavlink_msg_diagnostic_pack(byte system_id, byte component_id, ref
 	packet.diagSh2 = diagSh2;
 	packet.diagSh3 = diagSh3;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 18);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_DIAGNOSTIC;
-    return mavlink_finalize_message(msg, system_id, component_id, 18);
+        
+        int len = 18;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_DIAGNOSTIC;
+    //return mavlink_finalize_message(msg, system_id, component_id, 18);
+    return 0;
+}
+
 /**
  * @brief Pack a diagnostic message on a channel
  * @param system_id ID of this system
@@ -232,20 +237,21 @@ public static Int16 mavlink_msg_diagnostic_get_diagSh3(byte[] msg)
  */
 public static void mavlink_msg_diagnostic_decode(byte[] msg, ref mavlink_diagnostic_t diagnostic)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	diagnostic.diagFl1 = mavlink_msg_diagnostic_get_diagFl1(msg);
-	diagnostic.diagFl2 = mavlink_msg_diagnostic_get_diagFl2(msg);
-	diagnostic.diagFl3 = mavlink_msg_diagnostic_get_diagFl3(msg);
-	diagnostic.diagSh1 = mavlink_msg_diagnostic_get_diagSh1(msg);
-	diagnostic.diagSh2 = mavlink_msg_diagnostic_get_diagSh2(msg);
-	diagnostic.diagSh3 = mavlink_msg_diagnostic_get_diagSh3(msg);
-} else {
-    int len = 18; //Marshal.SizeOf(diagnostic);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    diagnostic = (mavlink_diagnostic_t)Marshal.PtrToStructure(i, ((object)diagnostic).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	diagnostic.diagFl1 = mavlink_msg_diagnostic_get_diagFl1(msg);
+    	diagnostic.diagFl2 = mavlink_msg_diagnostic_get_diagFl2(msg);
+    	diagnostic.diagFl3 = mavlink_msg_diagnostic_get_diagFl3(msg);
+    	diagnostic.diagSh1 = mavlink_msg_diagnostic_get_diagSh1(msg);
+    	diagnostic.diagSh2 = mavlink_msg_diagnostic_get_diagSh2(msg);
+    	diagnostic.diagSh3 = mavlink_msg_diagnostic_get_diagSh3(msg);
+    
+    } else {
+        int len = 18; //Marshal.SizeOf(diagnostic);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        diagnostic = (mavlink_diagnostic_t)Marshal.PtrToStructure(i, ((object)diagnostic).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

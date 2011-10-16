@@ -26,30 +26,35 @@ public partial class Mavlink
  * @param autopilot Type of the Autopilot: 0: Generic, 1: PIXHAWK, 2: SLUGS, 3: Ardupilot (up to 15 types), defined in MAV_AUTOPILOT_TYPE ENUM
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_heartbeat_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public type, byte public autopilot)
+ 
+public static UInt16 mavlink_msg_heartbeat_pack(byte system_id, byte component_id, byte[] msg,
+                               byte type, byte autopilot)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[3];
-	_mav_put_byte(buf, 0, type);
-	_mav_put_byte(buf, 1, autopilot);
-	_mav_put_byte(buf, 2, 2);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(type),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(autopilot),0,msg,1,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(2),0,msg,2,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 3);
-#else
-    mavlink_heartbeat_t packet;
+} else {
+    mavlink_heartbeat_t packet = new mavlink_heartbeat_t();
 	packet.type = type;
 	packet.autopilot = autopilot;
 	packet.mavlink_version = 2;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 3);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_HEARTBEAT;
-    return mavlink_finalize_message(msg, system_id, component_id, 3);
+        
+        int len = 3;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_HEARTBEAT;
+    //return mavlink_finalize_message(msg, system_id, component_id, 3);
+    return 0;
+}
+
 /**
  * @brief Pack a heartbeat message on a channel
  * @param system_id ID of this system
@@ -169,17 +174,18 @@ public static byte mavlink_msg_heartbeat_get_mavlink_version(byte[] msg)
  */
 public static void mavlink_msg_heartbeat_decode(byte[] msg, ref mavlink_heartbeat_t heartbeat)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	heartbeat.type = mavlink_msg_heartbeat_get_type(msg);
-	heartbeat.autopilot = mavlink_msg_heartbeat_get_autopilot(msg);
-	heartbeat.mavlink_version = mavlink_msg_heartbeat_get_mavlink_version(msg);
-} else {
-    int len = 3; //Marshal.SizeOf(heartbeat);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    heartbeat = (mavlink_heartbeat_t)Marshal.PtrToStructure(i, ((object)heartbeat).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	heartbeat.type = mavlink_msg_heartbeat_get_type(msg);
+    	heartbeat.autopilot = mavlink_msg_heartbeat_get_autopilot(msg);
+    	heartbeat.mavlink_version = mavlink_msg_heartbeat_get_mavlink_version(msg);
+    
+    } else {
+        int len = 3; //Marshal.SizeOf(heartbeat);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        heartbeat = (mavlink_heartbeat_t)Marshal.PtrToStructure(i, ((object)heartbeat).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

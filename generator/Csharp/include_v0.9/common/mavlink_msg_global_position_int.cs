@@ -33,22 +33,20 @@ public partial class Mavlink
  * @param vz Ground Z Speed (Altitude), expressed as m/s * 100
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_global_position_int_pack(byte system_id, byte component_id, ref byte[] msg,
-                               Int32 public lat, Int32 public lon, Int32 public alt, Int16 public vx, Int16 public vy, Int16 public vz)
+ 
+public static UInt16 mavlink_msg_global_position_int_pack(byte system_id, byte component_id, byte[] msg,
+                               Int32 lat, Int32 lon, Int32 alt, Int16 vx, Int16 vy, Int16 vz)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[18];
-	_mav_put_Int32(buf, 0, lat);
-	_mav_put_Int32(buf, 4, lon);
-	_mav_put_Int32(buf, 8, alt);
-	_mav_put_Int16(buf, 12, vx);
-	_mav_put_Int16(buf, 14, vy);
-	_mav_put_Int16(buf, 16, vz);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(lat),0,msg,0,sizeof(Int32));
+	Array.Copy(BitConverter.GetBytes(lon),0,msg,4,sizeof(Int32));
+	Array.Copy(BitConverter.GetBytes(alt),0,msg,8,sizeof(Int32));
+	Array.Copy(BitConverter.GetBytes(vx),0,msg,12,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(vy),0,msg,14,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(vz),0,msg,16,sizeof(Int16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 18);
-#else
-    mavlink_global_position_int_t packet;
+} else {
+    mavlink_global_position_int_t packet = new mavlink_global_position_int_t();
 	packet.lat = lat;
 	packet.lon = lon;
 	packet.alt = alt;
@@ -56,13 +54,20 @@ static uint16 mavlink_msg_global_position_int_pack(byte system_id, byte componen
 	packet.vy = vy;
 	packet.vz = vz;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 18);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_GLOBAL_POSITION_INT;
-    return mavlink_finalize_message(msg, system_id, component_id, 18);
+        
+        int len = 18;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_GLOBAL_POSITION_INT;
+    //return mavlink_finalize_message(msg, system_id, component_id, 18);
+    return 0;
+}
+
 /**
  * @brief Pack a global_position_int message on a channel
  * @param system_id ID of this system
@@ -232,20 +237,21 @@ public static Int16 mavlink_msg_global_position_int_get_vz(byte[] msg)
  */
 public static void mavlink_msg_global_position_int_decode(byte[] msg, ref mavlink_global_position_int_t global_position_int)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	global_position_int.lat = mavlink_msg_global_position_int_get_lat(msg);
-	global_position_int.lon = mavlink_msg_global_position_int_get_lon(msg);
-	global_position_int.alt = mavlink_msg_global_position_int_get_alt(msg);
-	global_position_int.vx = mavlink_msg_global_position_int_get_vx(msg);
-	global_position_int.vy = mavlink_msg_global_position_int_get_vy(msg);
-	global_position_int.vz = mavlink_msg_global_position_int_get_vz(msg);
-} else {
-    int len = 18; //Marshal.SizeOf(global_position_int);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    global_position_int = (mavlink_global_position_int_t)Marshal.PtrToStructure(i, ((object)global_position_int).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	global_position_int.lat = mavlink_msg_global_position_int_get_lat(msg);
+    	global_position_int.lon = mavlink_msg_global_position_int_get_lon(msg);
+    	global_position_int.alt = mavlink_msg_global_position_int_get_alt(msg);
+    	global_position_int.vx = mavlink_msg_global_position_int_get_vx(msg);
+    	global_position_int.vy = mavlink_msg_global_position_int_get_vy(msg);
+    	global_position_int.vz = mavlink_msg_global_position_int_get_vz(msg);
+    
+    } else {
+        int len = 18; //Marshal.SizeOf(global_position_int);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        global_position_int = (mavlink_global_position_int_t)Marshal.PtrToStructure(i, ((object)global_position_int).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

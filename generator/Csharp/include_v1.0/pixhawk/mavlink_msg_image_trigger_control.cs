@@ -23,26 +23,31 @@ public partial class Mavlink
  * @param enable 0 to disable, 1 to enable
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_image_trigger_control_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public enable)
+ 
+public static UInt16 mavlink_msg_image_trigger_control_pack(byte system_id, byte component_id, byte[] msg,
+                               byte enable)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[1];
-	_mav_put_byte(buf, 0, enable);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(enable),0,msg,0,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 1);
-#else
-    mavlink_image_trigger_control_t packet;
+} else {
+    mavlink_image_trigger_control_t packet = new mavlink_image_trigger_control_t();
 	packet.enable = enable;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 1);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_IMAGE_TRIGGER_CONTROL;
-    return mavlink_finalize_message(msg, system_id, component_id, 1, 95);
+        
+        int len = 1;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_IMAGE_TRIGGER_CONTROL;
+    //return mavlink_finalize_message(msg, system_id, component_id, 1, 95);
+    return 0;
+}
+
 /**
  * @brief Pack a image_trigger_control message on a channel
  * @param system_id ID of this system
@@ -132,15 +137,16 @@ public static byte mavlink_msg_image_trigger_control_get_enable(byte[] msg)
  */
 public static void mavlink_msg_image_trigger_control_decode(byte[] msg, ref mavlink_image_trigger_control_t image_trigger_control)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	image_trigger_control.enable = mavlink_msg_image_trigger_control_get_enable(msg);
-} else {
-    int len = 1; //Marshal.SizeOf(image_trigger_control);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    image_trigger_control = (mavlink_image_trigger_control_t)Marshal.PtrToStructure(i, ((object)image_trigger_control).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	image_trigger_control.enable = mavlink_msg_image_trigger_control_get_enable(msg);
+    
+    } else {
+        int len = 1; //Marshal.SizeOf(image_trigger_control);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        image_trigger_control = (mavlink_image_trigger_control_t)Marshal.PtrToStructure(i, ((object)image_trigger_control).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

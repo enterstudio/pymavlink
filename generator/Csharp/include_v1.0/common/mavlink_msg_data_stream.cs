@@ -27,30 +27,35 @@ public partial class Mavlink
  * @param on_off 1 stream is enabled, 0 stream is stopped.
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_data_stream_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public stream_id, UInt16 public message_rate, byte public on_off)
+ 
+public static UInt16 mavlink_msg_data_stream_pack(byte system_id, byte component_id, byte[] msg,
+                               byte stream_id, UInt16 message_rate, byte on_off)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[4];
-	_mav_put_UInt16(buf, 0, message_rate);
-	_mav_put_byte(buf, 2, stream_id);
-	_mav_put_byte(buf, 3, on_off);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(message_rate),0,msg,0,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(stream_id),0,msg,2,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(on_off),0,msg,3,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 4);
-#else
-    mavlink_data_stream_t packet;
+} else {
+    mavlink_data_stream_t packet = new mavlink_data_stream_t();
 	packet.message_rate = message_rate;
 	packet.stream_id = stream_id;
 	packet.on_off = on_off;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 4);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_DATA_STREAM;
-    return mavlink_finalize_message(msg, system_id, component_id, 4, 21);
+        
+        int len = 4;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_DATA_STREAM;
+    //return mavlink_finalize_message(msg, system_id, component_id, 4, 21);
+    return 0;
+}
+
 /**
  * @brief Pack a data_stream message on a channel
  * @param system_id ID of this system
@@ -172,17 +177,18 @@ public static byte mavlink_msg_data_stream_get_on_off(byte[] msg)
  */
 public static void mavlink_msg_data_stream_decode(byte[] msg, ref mavlink_data_stream_t data_stream)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	data_stream.message_rate = mavlink_msg_data_stream_get_message_rate(msg);
-	data_stream.stream_id = mavlink_msg_data_stream_get_stream_id(msg);
-	data_stream.on_off = mavlink_msg_data_stream_get_on_off(msg);
-} else {
-    int len = 4; //Marshal.SizeOf(data_stream);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    data_stream = (mavlink_data_stream_t)Marshal.PtrToStructure(i, ((object)data_stream).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	data_stream.message_rate = mavlink_msg_data_stream_get_message_rate(msg);
+    	data_stream.stream_id = mavlink_msg_data_stream_get_stream_id(msg);
+    	data_stream.on_off = mavlink_msg_data_stream_get_on_off(msg);
+    
+    } else {
+        int len = 4; //Marshal.SizeOf(data_stream);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        data_stream = (mavlink_data_stream_t)Marshal.PtrToStructure(i, ((object)data_stream).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

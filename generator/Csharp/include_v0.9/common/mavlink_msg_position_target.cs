@@ -29,32 +29,37 @@ public partial class Mavlink
  * @param yaw yaw orientation in radians, 0 = NORTH
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_position_target_pack(byte system_id, byte component_id, ref byte[] msg,
-                               Single public x, Single public y, Single public z, Single public yaw)
+ 
+public static UInt16 mavlink_msg_position_target_pack(byte system_id, byte component_id, byte[] msg,
+                               Single x, Single y, Single z, Single yaw)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[16];
-	_mav_put_Single(buf, 0, x);
-	_mav_put_Single(buf, 4, y);
-	_mav_put_Single(buf, 8, z);
-	_mav_put_Single(buf, 12, yaw);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(x),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(y),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(z),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yaw),0,msg,12,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 16);
-#else
-    mavlink_position_target_t packet;
+} else {
+    mavlink_position_target_t packet = new mavlink_position_target_t();
 	packet.x = x;
 	packet.y = y;
 	packet.z = z;
 	packet.yaw = yaw;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 16);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_POSITION_TARGET;
-    return mavlink_finalize_message(msg, system_id, component_id, 16);
+        
+        int len = 16;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_POSITION_TARGET;
+    //return mavlink_finalize_message(msg, system_id, component_id, 16);
+    return 0;
+}
+
 /**
  * @brief Pack a position_target message on a channel
  * @param system_id ID of this system
@@ -192,18 +197,19 @@ public static Single mavlink_msg_position_target_get_yaw(byte[] msg)
  */
 public static void mavlink_msg_position_target_decode(byte[] msg, ref mavlink_position_target_t position_target)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	position_target.x = mavlink_msg_position_target_get_x(msg);
-	position_target.y = mavlink_msg_position_target_get_y(msg);
-	position_target.z = mavlink_msg_position_target_get_z(msg);
-	position_target.yaw = mavlink_msg_position_target_get_yaw(msg);
-} else {
-    int len = 16; //Marshal.SizeOf(position_target);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    position_target = (mavlink_position_target_t)Marshal.PtrToStructure(i, ((object)position_target).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	position_target.x = mavlink_msg_position_target_get_x(msg);
+    	position_target.y = mavlink_msg_position_target_get_y(msg);
+    	position_target.z = mavlink_msg_position_target_get_z(msg);
+    	position_target.yaw = mavlink_msg_position_target_get_yaw(msg);
+    
+    } else {
+        int len = 16; //Marshal.SizeOf(position_target);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        position_target = (mavlink_position_target_t)Marshal.PtrToStructure(i, ((object)position_target).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

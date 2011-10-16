@@ -25,28 +25,33 @@ public partial class Mavlink
  * @param value DEBUG value
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_debug_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public ind, Single public value)
+ 
+public static UInt16 mavlink_msg_debug_pack(byte system_id, byte component_id, byte[] msg,
+                               byte ind, Single value)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[5];
-	_mav_put_byte(buf, 0, ind);
-	_mav_put_Single(buf, 1, value);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(ind),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(value),0,msg,1,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 5);
-#else
-    mavlink_debug_t packet;
+} else {
+    mavlink_debug_t packet = new mavlink_debug_t();
 	packet.ind = ind;
 	packet.value = value;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 5);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_DEBUG;
-    return mavlink_finalize_message(msg, system_id, component_id, 5);
+        
+        int len = 5;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_DEBUG;
+    //return mavlink_finalize_message(msg, system_id, component_id, 5);
+    return 0;
+}
+
 /**
  * @brief Pack a debug message on a channel
  * @param system_id ID of this system
@@ -152,16 +157,17 @@ public static Single mavlink_msg_debug_get_value(byte[] msg)
  */
 public static void mavlink_msg_debug_decode(byte[] msg, ref mavlink_debug_t debug)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	debug.ind = mavlink_msg_debug_get_ind(msg);
-	debug.value = mavlink_msg_debug_get_value(msg);
-} else {
-    int len = 5; //Marshal.SizeOf(debug);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    debug = (mavlink_debug_t)Marshal.PtrToStructure(i, ((object)debug).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	debug.ind = mavlink_msg_debug_get_ind(msg);
+    	debug.value = mavlink_msg_debug_get_value(msg);
+    
+    } else {
+        int len = 5; //Marshal.SizeOf(debug);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        debug = (mavlink_debug_t)Marshal.PtrToStructure(i, ((object)debug).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

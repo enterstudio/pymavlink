@@ -25,28 +25,33 @@ public partial class Mavlink
  * @param target_component Component ID
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_waypoint_request_list_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target_system, byte public target_component)
+ 
+public static UInt16 mavlink_msg_waypoint_request_list_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system, byte target_component)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[2];
-	_mav_put_byte(buf, 0, target_system);
-	_mav_put_byte(buf, 1, target_component);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(target_component),0,msg,1,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 2);
-#else
-    mavlink_waypoint_request_list_t packet;
+} else {
+    mavlink_waypoint_request_list_t packet = new mavlink_waypoint_request_list_t();
 	packet.target_system = target_system;
 	packet.target_component = target_component;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 2);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_WAYPOINT_REQUEST_LIST;
-    return mavlink_finalize_message(msg, system_id, component_id, 2);
+        
+        int len = 2;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_WAYPOINT_REQUEST_LIST;
+    //return mavlink_finalize_message(msg, system_id, component_id, 2);
+    return 0;
+}
+
 /**
  * @brief Pack a waypoint_request_list message on a channel
  * @param system_id ID of this system
@@ -152,16 +157,17 @@ public static byte mavlink_msg_waypoint_request_list_get_target_component(byte[]
  */
 public static void mavlink_msg_waypoint_request_list_decode(byte[] msg, ref mavlink_waypoint_request_list_t waypoint_request_list)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	waypoint_request_list.target_system = mavlink_msg_waypoint_request_list_get_target_system(msg);
-	waypoint_request_list.target_component = mavlink_msg_waypoint_request_list_get_target_component(msg);
-} else {
-    int len = 2; //Marshal.SizeOf(waypoint_request_list);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    waypoint_request_list = (mavlink_waypoint_request_list_t)Marshal.PtrToStructure(i, ((object)waypoint_request_list).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	waypoint_request_list.target_system = mavlink_msg_waypoint_request_list_get_target_system(msg);
+    	waypoint_request_list.target_component = mavlink_msg_waypoint_request_list_get_target_component(msg);
+    
+    } else {
+        int len = 2; //Marshal.SizeOf(waypoint_request_list);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        waypoint_request_list = (mavlink_waypoint_request_list_t)Marshal.PtrToStructure(i, ((object)waypoint_request_list).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

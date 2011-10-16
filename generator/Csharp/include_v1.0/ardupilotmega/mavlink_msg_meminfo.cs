@@ -25,28 +25,33 @@ public partial class Mavlink
  * @param freemem free memory
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_meminfo_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt16 public brkval, UInt16 public freemem)
+ 
+public static UInt16 mavlink_msg_meminfo_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt16 brkval, UInt16 freemem)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[4];
-	_mav_put_UInt16(buf, 0, brkval);
-	_mav_put_UInt16(buf, 2, freemem);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(brkval),0,msg,0,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(freemem),0,msg,2,sizeof(UInt16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 4);
-#else
-    mavlink_meminfo_t packet;
+} else {
+    mavlink_meminfo_t packet = new mavlink_meminfo_t();
 	packet.brkval = brkval;
 	packet.freemem = freemem;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 4);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_MEMINFO;
-    return mavlink_finalize_message(msg, system_id, component_id, 4, 208);
+        
+        int len = 4;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_MEMINFO;
+    //return mavlink_finalize_message(msg, system_id, component_id, 4, 208);
+    return 0;
+}
+
 /**
  * @brief Pack a meminfo message on a channel
  * @param system_id ID of this system

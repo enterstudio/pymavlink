@@ -39,25 +39,23 @@ public partial class Mavlink
  * @param rssi Receive signal strength indicator, 0: 0%, 255: 100%
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_rc_channels_scaled_pack(byte system_id, byte component_id, ref byte[] msg,
-                               Int16 public chan1_scaled, Int16 public chan2_scaled, Int16 public chan3_scaled, Int16 public chan4_scaled, Int16 public chan5_scaled, Int16 public chan6_scaled, Int16 public chan7_scaled, Int16 public chan8_scaled, byte public rssi)
+ 
+public static UInt16 mavlink_msg_rc_channels_scaled_pack(byte system_id, byte component_id, byte[] msg,
+                               Int16 chan1_scaled, Int16 chan2_scaled, Int16 chan3_scaled, Int16 chan4_scaled, Int16 chan5_scaled, Int16 chan6_scaled, Int16 chan7_scaled, Int16 chan8_scaled, byte rssi)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[17];
-	_mav_put_Int16(buf, 0, chan1_scaled);
-	_mav_put_Int16(buf, 2, chan2_scaled);
-	_mav_put_Int16(buf, 4, chan3_scaled);
-	_mav_put_Int16(buf, 6, chan4_scaled);
-	_mav_put_Int16(buf, 8, chan5_scaled);
-	_mav_put_Int16(buf, 10, chan6_scaled);
-	_mav_put_Int16(buf, 12, chan7_scaled);
-	_mav_put_Int16(buf, 14, chan8_scaled);
-	_mav_put_byte(buf, 16, rssi);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(chan1_scaled),0,msg,0,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(chan2_scaled),0,msg,2,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(chan3_scaled),0,msg,4,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(chan4_scaled),0,msg,6,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(chan5_scaled),0,msg,8,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(chan6_scaled),0,msg,10,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(chan7_scaled),0,msg,12,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(chan8_scaled),0,msg,14,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(rssi),0,msg,16,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 17);
-#else
-    mavlink_rc_channels_scaled_t packet;
+} else {
+    mavlink_rc_channels_scaled_t packet = new mavlink_rc_channels_scaled_t();
 	packet.chan1_scaled = chan1_scaled;
 	packet.chan2_scaled = chan2_scaled;
 	packet.chan3_scaled = chan3_scaled;
@@ -68,13 +66,20 @@ static uint16 mavlink_msg_rc_channels_scaled_pack(byte system_id, byte component
 	packet.chan8_scaled = chan8_scaled;
 	packet.rssi = rssi;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 17);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_RC_CHANNELS_SCALED;
-    return mavlink_finalize_message(msg, system_id, component_id, 17);
+        
+        int len = 17;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_RC_CHANNELS_SCALED;
+    //return mavlink_finalize_message(msg, system_id, component_id, 17);
+    return 0;
+}
+
 /**
  * @brief Pack a rc_channels_scaled message on a channel
  * @param system_id ID of this system
@@ -292,23 +297,24 @@ public static byte mavlink_msg_rc_channels_scaled_get_rssi(byte[] msg)
  */
 public static void mavlink_msg_rc_channels_scaled_decode(byte[] msg, ref mavlink_rc_channels_scaled_t rc_channels_scaled)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	rc_channels_scaled.chan1_scaled = mavlink_msg_rc_channels_scaled_get_chan1_scaled(msg);
-	rc_channels_scaled.chan2_scaled = mavlink_msg_rc_channels_scaled_get_chan2_scaled(msg);
-	rc_channels_scaled.chan3_scaled = mavlink_msg_rc_channels_scaled_get_chan3_scaled(msg);
-	rc_channels_scaled.chan4_scaled = mavlink_msg_rc_channels_scaled_get_chan4_scaled(msg);
-	rc_channels_scaled.chan5_scaled = mavlink_msg_rc_channels_scaled_get_chan5_scaled(msg);
-	rc_channels_scaled.chan6_scaled = mavlink_msg_rc_channels_scaled_get_chan6_scaled(msg);
-	rc_channels_scaled.chan7_scaled = mavlink_msg_rc_channels_scaled_get_chan7_scaled(msg);
-	rc_channels_scaled.chan8_scaled = mavlink_msg_rc_channels_scaled_get_chan8_scaled(msg);
-	rc_channels_scaled.rssi = mavlink_msg_rc_channels_scaled_get_rssi(msg);
-} else {
-    int len = 17; //Marshal.SizeOf(rc_channels_scaled);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    rc_channels_scaled = (mavlink_rc_channels_scaled_t)Marshal.PtrToStructure(i, ((object)rc_channels_scaled).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	rc_channels_scaled.chan1_scaled = mavlink_msg_rc_channels_scaled_get_chan1_scaled(msg);
+    	rc_channels_scaled.chan2_scaled = mavlink_msg_rc_channels_scaled_get_chan2_scaled(msg);
+    	rc_channels_scaled.chan3_scaled = mavlink_msg_rc_channels_scaled_get_chan3_scaled(msg);
+    	rc_channels_scaled.chan4_scaled = mavlink_msg_rc_channels_scaled_get_chan4_scaled(msg);
+    	rc_channels_scaled.chan5_scaled = mavlink_msg_rc_channels_scaled_get_chan5_scaled(msg);
+    	rc_channels_scaled.chan6_scaled = mavlink_msg_rc_channels_scaled_get_chan6_scaled(msg);
+    	rc_channels_scaled.chan7_scaled = mavlink_msg_rc_channels_scaled_get_chan7_scaled(msg);
+    	rc_channels_scaled.chan8_scaled = mavlink_msg_rc_channels_scaled_get_chan8_scaled(msg);
+    	rc_channels_scaled.rssi = mavlink_msg_rc_channels_scaled_get_rssi(msg);
+    
+    } else {
+        int len = 17; //Marshal.SizeOf(rc_channels_scaled);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        rc_channels_scaled = (mavlink_rc_channels_scaled_t)Marshal.PtrToStructure(i, ((object)rc_channels_scaled).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

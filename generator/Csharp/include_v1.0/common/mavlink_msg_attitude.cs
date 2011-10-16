@@ -10,7 +10,7 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_attitude_t
     {
-         public  UInt64 usec; /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+         public  UInt32 time_boot_ms; /// Timestamp (milliseconds since system boot)
      public  Single roll; /// Roll angle (rad)
      public  Single pitch; /// Pitch angle (rad)
      public  Single yaw; /// Yaw angle (rad)
@@ -26,7 +26,7 @@ public partial class Mavlink
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param time_boot_ms Timestamp (milliseconds since system boot)
  * @param roll Roll angle (rad)
  * @param pitch Pitch angle (rad)
  * @param yaw Yaw angle (rad)
@@ -35,24 +35,22 @@ public partial class Mavlink
  * @param yawspeed Yaw angular speed (rad/s)
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_attitude_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt64 public usec, Single public roll, Single public pitch, Single public yaw, Single public rollspeed, Single public pitchspeed, Single public yawspeed)
+ 
+public static UInt16 mavlink_msg_attitude_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt32 time_boot_ms, Single roll, Single pitch, Single yaw, Single rollspeed, Single pitchspeed, Single yawspeed)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[32];
-	_mav_put_UInt64(buf, 0, usec);
-	_mav_put_Single(buf, 8, roll);
-	_mav_put_Single(buf, 12, pitch);
-	_mav_put_Single(buf, 16, yaw);
-	_mav_put_Single(buf, 20, rollspeed);
-	_mav_put_Single(buf, 24, pitchspeed);
-	_mav_put_Single(buf, 28, yawspeed);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(time_boot_ms),0,msg,0,sizeof(UInt32));
+	Array.Copy(BitConverter.GetBytes(roll),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(pitch),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yaw),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(rollspeed),0,msg,16,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(pitchspeed),0,msg,20,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yawspeed),0,msg,24,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 32);
-#else
-    mavlink_attitude_t packet;
-	packet.usec = usec;
+} else {
+    mavlink_attitude_t packet = new mavlink_attitude_t();
+	packet.time_boot_ms = time_boot_ms;
 	packet.roll = roll;
 	packet.pitch = pitch;
 	packet.yaw = yaw;
@@ -60,20 +58,27 @@ static uint16 mavlink_msg_attitude_pack(byte system_id, byte component_id, ref b
 	packet.pitchspeed = pitchspeed;
 	packet.yawspeed = yawspeed;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 32);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_ATTITUDE;
-    return mavlink_finalize_message(msg, system_id, component_id, 32, 66);
+        
+        int len = 28;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_ATTITUDE;
+    //return mavlink_finalize_message(msg, system_id, component_id, 28, 39);
+    return 0;
+}
+
 /**
  * @brief Pack a attitude message on a channel
  * @param system_id ID of this system
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message was sent over
  * @param msg The MAVLink message to compress the data into
- * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param time_boot_ms Timestamp (milliseconds since system boot)
  * @param roll Roll angle (rad)
  * @param pitch Pitch angle (rad)
  * @param yaw Yaw angle (rad)
@@ -85,22 +90,22 @@ static uint16 mavlink_msg_attitude_pack(byte system_id, byte component_id, ref b
  /*
 static inline uint16_t mavlink_msg_attitude_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   UInt64 public usec,Single public roll,Single public pitch,Single public yaw,Single public rollspeed,Single public pitchspeed,Single public yawspeed)
+                                   UInt32 public time_boot_ms,Single public roll,Single public pitch,Single public yaw,Single public rollspeed,Single public pitchspeed,Single public yawspeed)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    char buf[32];
-	_mav_put_UInt64(buf, 0, usec);
-	_mav_put_Single(buf, 8, roll);
-	_mav_put_Single(buf, 12, pitch);
-	_mav_put_Single(buf, 16, yaw);
-	_mav_put_Single(buf, 20, rollspeed);
-	_mav_put_Single(buf, 24, pitchspeed);
-	_mav_put_Single(buf, 28, yawspeed);
+    char buf[28];
+	_mav_put_UInt32(buf, 0, time_boot_ms);
+	_mav_put_Single(buf, 4, roll);
+	_mav_put_Single(buf, 8, pitch);
+	_mav_put_Single(buf, 12, yaw);
+	_mav_put_Single(buf, 16, rollspeed);
+	_mav_put_Single(buf, 20, pitchspeed);
+	_mav_put_Single(buf, 24, yawspeed);
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 32);
+        memcpy(_MAV_PAYLOAD(msg), buf, 28);
 #else
     mavlink_attitude_t packet;
-	packet.usec = usec;
+	packet.time_boot_ms = time_boot_ms;
 	packet.roll = roll;
 	packet.pitch = pitch;
 	packet.yaw = yaw;
@@ -108,11 +113,11 @@ static inline uint16_t mavlink_msg_attitude_pack_chan(uint8_t system_id, uint8_t
 	packet.pitchspeed = pitchspeed;
 	packet.yawspeed = yawspeed;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 32);
+        memcpy(_MAV_PAYLOAD(msg), &packet, 28);
 #endif
 
     msg->msgid = MAVLINK_MSG_ID_ATTITUDE;
-    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 32, 66);
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 28, 39);
 }
 */
 /**
@@ -125,14 +130,14 @@ static inline uint16_t mavlink_msg_attitude_pack_chan(uint8_t system_id, uint8_t
  *//*
 static inline uint16_t mavlink_msg_attitude_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_attitude_t* attitude)
 {
-    return mavlink_msg_attitude_pack(system_id, component_id, msg, attitude->usec, attitude->roll, attitude->pitch, attitude->yaw, attitude->rollspeed, attitude->pitchspeed, attitude->yawspeed);
+    return mavlink_msg_attitude_pack(system_id, component_id, msg, attitude->time_boot_ms, attitude->roll, attitude->pitch, attitude->yaw, attitude->rollspeed, attitude->pitchspeed, attitude->yawspeed);
 }
 */
 /**
  * @brief Send a attitude message
  * @param chan MAVLink channel to send the message
  *
- * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param time_boot_ms Timestamp (milliseconds since system boot)
  * @param roll Roll angle (rad)
  * @param pitch Pitch angle (rad)
  * @param yaw Yaw angle (rad)
@@ -142,22 +147,22 @@ static inline uint16_t mavlink_msg_attitude_encode(uint8_t system_id, uint8_t co
  *//*
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_attitude_send(mavlink_channel_t chan, UInt64 public usec, Single public roll, Single public pitch, Single public yaw, Single public rollspeed, Single public pitchspeed, Single public yawspeed)
+static inline void mavlink_msg_attitude_send(mavlink_channel_t chan, UInt32 public time_boot_ms, Single public roll, Single public pitch, Single public yaw, Single public rollspeed, Single public pitchspeed, Single public yawspeed)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    char buf[32];
-	_mav_put_UInt64(buf, 0, usec);
-	_mav_put_Single(buf, 8, roll);
-	_mav_put_Single(buf, 12, pitch);
-	_mav_put_Single(buf, 16, yaw);
-	_mav_put_Single(buf, 20, rollspeed);
-	_mav_put_Single(buf, 24, pitchspeed);
-	_mav_put_Single(buf, 28, yawspeed);
+    char buf[28];
+	_mav_put_UInt32(buf, 0, time_boot_ms);
+	_mav_put_Single(buf, 4, roll);
+	_mav_put_Single(buf, 8, pitch);
+	_mav_put_Single(buf, 12, yaw);
+	_mav_put_Single(buf, 16, rollspeed);
+	_mav_put_Single(buf, 20, pitchspeed);
+	_mav_put_Single(buf, 24, yawspeed);
 
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ATTITUDE, buf, 32, 66);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ATTITUDE, buf, 28, 39);
 #else
     mavlink_attitude_t packet;
-	packet.usec = usec;
+	packet.time_boot_ms = time_boot_ms;
 	packet.roll = roll;
 	packet.pitch = pitch;
 	packet.yaw = yaw;
@@ -165,7 +170,7 @@ static inline void mavlink_msg_attitude_send(mavlink_channel_t chan, UInt64 publ
 	packet.pitchspeed = pitchspeed;
 	packet.yawspeed = yawspeed;
 
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ATTITUDE, (const char *)&packet, 32, 66);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ATTITUDE, (const char *)&packet, 28, 39);
 #endif
 }
 
@@ -175,13 +180,13 @@ static inline void mavlink_msg_attitude_send(mavlink_channel_t chan, UInt64 publ
 
 
 /**
- * @brief Get field usec from attitude message
+ * @brief Get field time_boot_ms from attitude message
  *
- * @return Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @return Timestamp (milliseconds since system boot)
  */
-public static UInt64 mavlink_msg_attitude_get_usec(byte[] msg)
+public static UInt32 mavlink_msg_attitude_get_time_boot_ms(byte[] msg)
 {
-    return BitConverter.ToUInt64(msg,  0);
+    return BitConverter.ToUInt32(msg,  0);
 }
 
 /**
@@ -191,7 +196,7 @@ public static UInt64 mavlink_msg_attitude_get_usec(byte[] msg)
  */
 public static Single mavlink_msg_attitude_get_roll(byte[] msg)
 {
-    return BitConverter.ToSingle(msg,  8);
+    return BitConverter.ToSingle(msg,  4);
 }
 
 /**
@@ -201,7 +206,7 @@ public static Single mavlink_msg_attitude_get_roll(byte[] msg)
  */
 public static Single mavlink_msg_attitude_get_pitch(byte[] msg)
 {
-    return BitConverter.ToSingle(msg,  12);
+    return BitConverter.ToSingle(msg,  8);
 }
 
 /**
@@ -211,7 +216,7 @@ public static Single mavlink_msg_attitude_get_pitch(byte[] msg)
  */
 public static Single mavlink_msg_attitude_get_yaw(byte[] msg)
 {
-    return BitConverter.ToSingle(msg,  16);
+    return BitConverter.ToSingle(msg,  12);
 }
 
 /**
@@ -221,7 +226,7 @@ public static Single mavlink_msg_attitude_get_yaw(byte[] msg)
  */
 public static Single mavlink_msg_attitude_get_rollspeed(byte[] msg)
 {
-    return BitConverter.ToSingle(msg,  20);
+    return BitConverter.ToSingle(msg,  16);
 }
 
 /**
@@ -231,7 +236,7 @@ public static Single mavlink_msg_attitude_get_rollspeed(byte[] msg)
  */
 public static Single mavlink_msg_attitude_get_pitchspeed(byte[] msg)
 {
-    return BitConverter.ToSingle(msg,  24);
+    return BitConverter.ToSingle(msg,  20);
 }
 
 /**
@@ -241,7 +246,7 @@ public static Single mavlink_msg_attitude_get_pitchspeed(byte[] msg)
  */
 public static Single mavlink_msg_attitude_get_yawspeed(byte[] msg)
 {
-    return BitConverter.ToSingle(msg,  28);
+    return BitConverter.ToSingle(msg,  24);
 }
 
 /**
@@ -252,21 +257,22 @@ public static Single mavlink_msg_attitude_get_yawspeed(byte[] msg)
  */
 public static void mavlink_msg_attitude_decode(byte[] msg, ref mavlink_attitude_t attitude)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	attitude.usec = mavlink_msg_attitude_get_usec(msg);
-	attitude.roll = mavlink_msg_attitude_get_roll(msg);
-	attitude.pitch = mavlink_msg_attitude_get_pitch(msg);
-	attitude.yaw = mavlink_msg_attitude_get_yaw(msg);
-	attitude.rollspeed = mavlink_msg_attitude_get_rollspeed(msg);
-	attitude.pitchspeed = mavlink_msg_attitude_get_pitchspeed(msg);
-	attitude.yawspeed = mavlink_msg_attitude_get_yawspeed(msg);
-} else {
-    int len = 32; //Marshal.SizeOf(attitude);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    attitude = (mavlink_attitude_t)Marshal.PtrToStructure(i, ((object)attitude).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	attitude.time_boot_ms = mavlink_msg_attitude_get_time_boot_ms(msg);
+    	attitude.roll = mavlink_msg_attitude_get_roll(msg);
+    	attitude.pitch = mavlink_msg_attitude_get_pitch(msg);
+    	attitude.yaw = mavlink_msg_attitude_get_yaw(msg);
+    	attitude.rollspeed = mavlink_msg_attitude_get_rollspeed(msg);
+    	attitude.pitchspeed = mavlink_msg_attitude_get_pitchspeed(msg);
+    	attitude.yawspeed = mavlink_msg_attitude_get_yawspeed(msg);
+    
+    } else {
+        int len = 28; //Marshal.SizeOf(attitude);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        attitude = (mavlink_attitude_t)Marshal.PtrToStructure(i, ((object)attitude).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

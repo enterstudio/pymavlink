@@ -35,23 +35,21 @@ public partial class Mavlink
  * @param vz Z Speed
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_local_position_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt64 public usec, Single public x, Single public y, Single public z, Single public vx, Single public vy, Single public vz)
+ 
+public static UInt16 mavlink_msg_local_position_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt64 usec, Single x, Single y, Single z, Single vx, Single vy, Single vz)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[32];
-	_mav_put_UInt64(buf, 0, usec);
-	_mav_put_Single(buf, 8, x);
-	_mav_put_Single(buf, 12, y);
-	_mav_put_Single(buf, 16, z);
-	_mav_put_Single(buf, 20, vx);
-	_mav_put_Single(buf, 24, vy);
-	_mav_put_Single(buf, 28, vz);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(usec),0,msg,0,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(x),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(y),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(z),0,msg,16,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(vx),0,msg,20,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(vy),0,msg,24,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(vz),0,msg,28,sizeof(Single));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 32);
-#else
-    mavlink_local_position_t packet;
+} else {
+    mavlink_local_position_t packet = new mavlink_local_position_t();
 	packet.usec = usec;
 	packet.x = x;
 	packet.y = y;
@@ -60,13 +58,20 @@ static uint16 mavlink_msg_local_position_pack(byte system_id, byte component_id,
 	packet.vy = vy;
 	packet.vz = vz;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 32);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_LOCAL_POSITION;
-    return mavlink_finalize_message(msg, system_id, component_id, 32);
+        
+        int len = 32;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_LOCAL_POSITION;
+    //return mavlink_finalize_message(msg, system_id, component_id, 32);
+    return 0;
+}
+
 /**
  * @brief Pack a local_position message on a channel
  * @param system_id ID of this system
@@ -252,21 +257,22 @@ public static Single mavlink_msg_local_position_get_vz(byte[] msg)
  */
 public static void mavlink_msg_local_position_decode(byte[] msg, ref mavlink_local_position_t local_position)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	local_position.usec = mavlink_msg_local_position_get_usec(msg);
-	local_position.x = mavlink_msg_local_position_get_x(msg);
-	local_position.y = mavlink_msg_local_position_get_y(msg);
-	local_position.z = mavlink_msg_local_position_get_z(msg);
-	local_position.vx = mavlink_msg_local_position_get_vx(msg);
-	local_position.vy = mavlink_msg_local_position_get_vy(msg);
-	local_position.vz = mavlink_msg_local_position_get_vz(msg);
-} else {
-    int len = 32; //Marshal.SizeOf(local_position);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    local_position = (mavlink_local_position_t)Marshal.PtrToStructure(i, ((object)local_position).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	local_position.usec = mavlink_msg_local_position_get_usec(msg);
+    	local_position.x = mavlink_msg_local_position_get_x(msg);
+    	local_position.y = mavlink_msg_local_position_get_y(msg);
+    	local_position.z = mavlink_msg_local_position_get_z(msg);
+    	local_position.vx = mavlink_msg_local_position_get_vx(msg);
+    	local_position.vy = mavlink_msg_local_position_get_vy(msg);
+    	local_position.vz = mavlink_msg_local_position_get_vz(msg);
+    
+    } else {
+        int len = 32; //Marshal.SizeOf(local_position);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        local_position = (mavlink_local_position_t)Marshal.PtrToStructure(i, ((object)local_position).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

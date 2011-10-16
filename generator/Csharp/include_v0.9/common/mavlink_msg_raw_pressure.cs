@@ -31,34 +31,39 @@ public partial class Mavlink
  * @param temperature Raw Temperature measurement (raw)
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_raw_pressure_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt64 public usec, Int16 public press_abs, Int16 public press_diff1, Int16 public press_diff2, Int16 public temperature)
+ 
+public static UInt16 mavlink_msg_raw_pressure_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt64 usec, Int16 press_abs, Int16 press_diff1, Int16 press_diff2, Int16 temperature)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[16];
-	_mav_put_UInt64(buf, 0, usec);
-	_mav_put_Int16(buf, 8, press_abs);
-	_mav_put_Int16(buf, 10, press_diff1);
-	_mav_put_Int16(buf, 12, press_diff2);
-	_mav_put_Int16(buf, 14, temperature);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(usec),0,msg,0,sizeof(UInt64));
+	Array.Copy(BitConverter.GetBytes(press_abs),0,msg,8,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(press_diff1),0,msg,10,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(press_diff2),0,msg,12,sizeof(Int16));
+	Array.Copy(BitConverter.GetBytes(temperature),0,msg,14,sizeof(Int16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 16);
-#else
-    mavlink_raw_pressure_t packet;
+} else {
+    mavlink_raw_pressure_t packet = new mavlink_raw_pressure_t();
 	packet.usec = usec;
 	packet.press_abs = press_abs;
 	packet.press_diff1 = press_diff1;
 	packet.press_diff2 = press_diff2;
 	packet.temperature = temperature;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 16);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_RAW_PRESSURE;
-    return mavlink_finalize_message(msg, system_id, component_id, 16);
+        
+        int len = 16;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_RAW_PRESSURE;
+    //return mavlink_finalize_message(msg, system_id, component_id, 16);
+    return 0;
+}
+
 /**
  * @brief Pack a raw_pressure message on a channel
  * @param system_id ID of this system
@@ -212,19 +217,20 @@ public static Int16 mavlink_msg_raw_pressure_get_temperature(byte[] msg)
  */
 public static void mavlink_msg_raw_pressure_decode(byte[] msg, ref mavlink_raw_pressure_t raw_pressure)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	raw_pressure.usec = mavlink_msg_raw_pressure_get_usec(msg);
-	raw_pressure.press_abs = mavlink_msg_raw_pressure_get_press_abs(msg);
-	raw_pressure.press_diff1 = mavlink_msg_raw_pressure_get_press_diff1(msg);
-	raw_pressure.press_diff2 = mavlink_msg_raw_pressure_get_press_diff2(msg);
-	raw_pressure.temperature = mavlink_msg_raw_pressure_get_temperature(msg);
-} else {
-    int len = 16; //Marshal.SizeOf(raw_pressure);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    raw_pressure = (mavlink_raw_pressure_t)Marshal.PtrToStructure(i, ((object)raw_pressure).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	raw_pressure.usec = mavlink_msg_raw_pressure_get_usec(msg);
+    	raw_pressure.press_abs = mavlink_msg_raw_pressure_get_press_abs(msg);
+    	raw_pressure.press_diff1 = mavlink_msg_raw_pressure_get_press_diff1(msg);
+    	raw_pressure.press_diff2 = mavlink_msg_raw_pressure_get_press_diff2(msg);
+    	raw_pressure.temperature = mavlink_msg_raw_pressure_get_temperature(msg);
+    
+    } else {
+        int len = 16; //Marshal.SizeOf(raw_pressure);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        raw_pressure = (mavlink_raw_pressure_t)Marshal.PtrToStructure(i, ((object)raw_pressure).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

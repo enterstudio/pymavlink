@@ -31,34 +31,39 @@ public partial class Mavlink
  * @param start_stop 1 to start sending, 0 to stop sending.
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_request_data_stream_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target_system, byte public target_component, byte public req_stream_id, UInt16 public req_message_rate, byte public start_stop)
+ 
+public static UInt16 mavlink_msg_request_data_stream_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system, byte target_component, byte req_stream_id, UInt16 req_message_rate, byte start_stop)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[6];
-	_mav_put_UInt16(buf, 0, req_message_rate);
-	_mav_put_byte(buf, 2, target_system);
-	_mav_put_byte(buf, 3, target_component);
-	_mav_put_byte(buf, 4, req_stream_id);
-	_mav_put_byte(buf, 5, start_stop);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(req_message_rate),0,msg,0,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,2,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(target_component),0,msg,3,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(req_stream_id),0,msg,4,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(start_stop),0,msg,5,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 6);
-#else
-    mavlink_request_data_stream_t packet;
+} else {
+    mavlink_request_data_stream_t packet = new mavlink_request_data_stream_t();
 	packet.req_message_rate = req_message_rate;
 	packet.target_system = target_system;
 	packet.target_component = target_component;
 	packet.req_stream_id = req_stream_id;
 	packet.start_stop = start_stop;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 6);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_REQUEST_DATA_STREAM;
-    return mavlink_finalize_message(msg, system_id, component_id, 6, 148);
+        
+        int len = 6;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_REQUEST_DATA_STREAM;
+    //return mavlink_finalize_message(msg, system_id, component_id, 6, 148);
+    return 0;
+}
+
 /**
  * @brief Pack a request_data_stream message on a channel
  * @param system_id ID of this system
@@ -212,19 +217,20 @@ public static byte mavlink_msg_request_data_stream_get_start_stop(byte[] msg)
  */
 public static void mavlink_msg_request_data_stream_decode(byte[] msg, ref mavlink_request_data_stream_t request_data_stream)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	request_data_stream.req_message_rate = mavlink_msg_request_data_stream_get_req_message_rate(msg);
-	request_data_stream.target_system = mavlink_msg_request_data_stream_get_target_system(msg);
-	request_data_stream.target_component = mavlink_msg_request_data_stream_get_target_component(msg);
-	request_data_stream.req_stream_id = mavlink_msg_request_data_stream_get_req_stream_id(msg);
-	request_data_stream.start_stop = mavlink_msg_request_data_stream_get_start_stop(msg);
-} else {
-    int len = 6; //Marshal.SizeOf(request_data_stream);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    request_data_stream = (mavlink_request_data_stream_t)Marshal.PtrToStructure(i, ((object)request_data_stream).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	request_data_stream.req_message_rate = mavlink_msg_request_data_stream_get_req_message_rate(msg);
+    	request_data_stream.target_system = mavlink_msg_request_data_stream_get_target_system(msg);
+    	request_data_stream.target_component = mavlink_msg_request_data_stream_get_target_component(msg);
+    	request_data_stream.req_stream_id = mavlink_msg_request_data_stream_get_req_stream_id(msg);
+    	request_data_stream.start_stop = mavlink_msg_request_data_stream_get_start_stop(msg);
+    
+    } else {
+        int len = 6; //Marshal.SizeOf(request_data_stream);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        request_data_stream = (mavlink_request_data_stream_t)Marshal.PtrToStructure(i, ((object)request_data_stream).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

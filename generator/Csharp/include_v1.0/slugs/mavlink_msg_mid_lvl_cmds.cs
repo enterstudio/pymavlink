@@ -29,32 +29,37 @@ public partial class Mavlink
  * @param rCommand Log value 3 
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_mid_lvl_cmds_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target, Single public hCommand, Single public uCommand, Single public rCommand)
+ 
+public static UInt16 mavlink_msg_mid_lvl_cmds_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target, Single hCommand, Single uCommand, Single rCommand)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[13];
-	_mav_put_Single(buf, 0, hCommand);
-	_mav_put_Single(buf, 4, uCommand);
-	_mav_put_Single(buf, 8, rCommand);
-	_mav_put_byte(buf, 12, target);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(hCommand),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(uCommand),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(rCommand),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(target),0,msg,12,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 13);
-#else
-    mavlink_mid_lvl_cmds_t packet;
+} else {
+    mavlink_mid_lvl_cmds_t packet = new mavlink_mid_lvl_cmds_t();
 	packet.hCommand = hCommand;
 	packet.uCommand = uCommand;
 	packet.rCommand = rCommand;
 	packet.target = target;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 13);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_MID_LVL_CMDS;
-    return mavlink_finalize_message(msg, system_id, component_id, 13, 146);
+        
+        int len = 13;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_MID_LVL_CMDS;
+    //return mavlink_finalize_message(msg, system_id, component_id, 13, 146);
+    return 0;
+}
+
 /**
  * @brief Pack a mid_lvl_cmds message on a channel
  * @param system_id ID of this system
@@ -192,18 +197,19 @@ public static Single mavlink_msg_mid_lvl_cmds_get_rCommand(byte[] msg)
  */
 public static void mavlink_msg_mid_lvl_cmds_decode(byte[] msg, ref mavlink_mid_lvl_cmds_t mid_lvl_cmds)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	mid_lvl_cmds.hCommand = mavlink_msg_mid_lvl_cmds_get_hCommand(msg);
-	mid_lvl_cmds.uCommand = mavlink_msg_mid_lvl_cmds_get_uCommand(msg);
-	mid_lvl_cmds.rCommand = mavlink_msg_mid_lvl_cmds_get_rCommand(msg);
-	mid_lvl_cmds.target = mavlink_msg_mid_lvl_cmds_get_target(msg);
-} else {
-    int len = 13; //Marshal.SizeOf(mid_lvl_cmds);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    mid_lvl_cmds = (mavlink_mid_lvl_cmds_t)Marshal.PtrToStructure(i, ((object)mid_lvl_cmds).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	mid_lvl_cmds.hCommand = mavlink_msg_mid_lvl_cmds_get_hCommand(msg);
+    	mid_lvl_cmds.uCommand = mavlink_msg_mid_lvl_cmds_get_uCommand(msg);
+    	mid_lvl_cmds.rCommand = mavlink_msg_mid_lvl_cmds_get_rCommand(msg);
+    	mid_lvl_cmds.target = mavlink_msg_mid_lvl_cmds_get_target(msg);
+    
+    } else {
+        int len = 13; //Marshal.SizeOf(mid_lvl_cmds);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        mid_lvl_cmds = (mavlink_mid_lvl_cmds_t)Marshal.PtrToStructure(i, ((object)mid_lvl_cmds).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

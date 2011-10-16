@@ -31,6 +31,17 @@ public partial class Mavlink
 
 // ENUM DEFINITIONS
 
+public struct mavlink_message_t {
+	public byte magic;   ///< protocol magic marker
+	public byte len;     ///< Length of payload
+	public byte seq;     ///< Sequence of packet
+	public byte sysid;   ///< ID of message sender system/aircraft
+	public byte compid;  ///< ID of the message sender component
+	public byte msgid;   ///< ID of message in payload
+	public byte[] payload;
+    public UInt16 checksum; /// sent at end of packet
+};
+
 
 /** @brief Available autopilot modes for ualberta uav */
     public enum UALBERTA_AUTOPILOT_MODE

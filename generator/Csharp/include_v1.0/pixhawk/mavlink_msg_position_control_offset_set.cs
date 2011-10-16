@@ -33,22 +33,20 @@ public partial class Mavlink
  * @param yaw yaw orientation offset in radians, 0 = NORTH
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_position_control_offset_set_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target_system, byte public target_component, Single public x, Single public y, Single public z, Single public yaw)
+ 
+public static UInt16 mavlink_msg_position_control_offset_set_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system, byte target_component, Single x, Single y, Single z, Single yaw)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[18];
-	_mav_put_Single(buf, 0, x);
-	_mav_put_Single(buf, 4, y);
-	_mav_put_Single(buf, 8, z);
-	_mav_put_Single(buf, 12, yaw);
-	_mav_put_byte(buf, 16, target_system);
-	_mav_put_byte(buf, 17, target_component);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(x),0,msg,0,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(y),0,msg,4,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(z),0,msg,8,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(yaw),0,msg,12,sizeof(Single));
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,16,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(target_component),0,msg,17,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 18);
-#else
-    mavlink_position_control_offset_set_t packet;
+} else {
+    mavlink_position_control_offset_set_t packet = new mavlink_position_control_offset_set_t();
 	packet.x = x;
 	packet.y = y;
 	packet.z = z;
@@ -56,13 +54,20 @@ static uint16 mavlink_msg_position_control_offset_set_pack(byte system_id, byte 
 	packet.target_system = target_system;
 	packet.target_component = target_component;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 18);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_POSITION_CONTROL_OFFSET_SET;
-    return mavlink_finalize_message(msg, system_id, component_id, 18, 244);
+        
+        int len = 18;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_POSITION_CONTROL_OFFSET_SET;
+    //return mavlink_finalize_message(msg, system_id, component_id, 18, 244);
+    return 0;
+}
+
 /**
  * @brief Pack a position_control_offset_set message on a channel
  * @param system_id ID of this system
@@ -232,20 +237,21 @@ public static Single mavlink_msg_position_control_offset_set_get_yaw(byte[] msg)
  */
 public static void mavlink_msg_position_control_offset_set_decode(byte[] msg, ref mavlink_position_control_offset_set_t position_control_offset_set)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	position_control_offset_set.x = mavlink_msg_position_control_offset_set_get_x(msg);
-	position_control_offset_set.y = mavlink_msg_position_control_offset_set_get_y(msg);
-	position_control_offset_set.z = mavlink_msg_position_control_offset_set_get_z(msg);
-	position_control_offset_set.yaw = mavlink_msg_position_control_offset_set_get_yaw(msg);
-	position_control_offset_set.target_system = mavlink_msg_position_control_offset_set_get_target_system(msg);
-	position_control_offset_set.target_component = mavlink_msg_position_control_offset_set_get_target_component(msg);
-} else {
-    int len = 18; //Marshal.SizeOf(position_control_offset_set);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    position_control_offset_set = (mavlink_position_control_offset_set_t)Marshal.PtrToStructure(i, ((object)position_control_offset_set).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	position_control_offset_set.x = mavlink_msg_position_control_offset_set_get_x(msg);
+    	position_control_offset_set.y = mavlink_msg_position_control_offset_set_get_y(msg);
+    	position_control_offset_set.z = mavlink_msg_position_control_offset_set_get_z(msg);
+    	position_control_offset_set.yaw = mavlink_msg_position_control_offset_set_get_yaw(msg);
+    	position_control_offset_set.target_system = mavlink_msg_position_control_offset_set_get_target_system(msg);
+    	position_control_offset_set.target_component = mavlink_msg_position_control_offset_set_get_target_component(msg);
+    
+    } else {
+        int len = 18; //Marshal.SizeOf(position_control_offset_set);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        position_control_offset_set = (mavlink_position_control_offset_set_t)Marshal.PtrToStructure(i, ((object)position_control_offset_set).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

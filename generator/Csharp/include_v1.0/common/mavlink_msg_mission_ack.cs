@@ -27,30 +27,35 @@ public partial class Mavlink
  * @param type 0: OK, 1: generic error / not accepting mission commands at all right now, 2: coordinate frame is not supported, 3: command is not supported, 4: mission item exceeds storage space, 5: one of the parameters has an invalid value, 6: param1 has an invalid value, 7: param2 has an invalid value, 8: param3 has an invalid value, 9: param4 has an invalid value, 10: x/param5 has an invalid value, 11: y:param6 has an invalid value, 12: z:param7 has an invalid value, 13: received waypoint out of sequence, 14: not accepting any mission commands from this communication partner
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_mission_ack_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target_system, byte public target_component, byte public type)
+ 
+public static UInt16 mavlink_msg_mission_ack_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system, byte target_component, byte type)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[3];
-	_mav_put_byte(buf, 0, target_system);
-	_mav_put_byte(buf, 1, target_component);
-	_mav_put_byte(buf, 2, type);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(target_component),0,msg,1,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(type),0,msg,2,sizeof(byte));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 3);
-#else
-    mavlink_mission_ack_t packet;
+} else {
+    mavlink_mission_ack_t packet = new mavlink_mission_ack_t();
 	packet.target_system = target_system;
 	packet.target_component = target_component;
 	packet.type = type;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 3);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_MISSION_ACK;
-    return mavlink_finalize_message(msg, system_id, component_id, 3, 153);
+        
+        int len = 3;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_MISSION_ACK;
+    //return mavlink_finalize_message(msg, system_id, component_id, 3, 153);
+    return 0;
+}
+
 /**
  * @brief Pack a mission_ack message on a channel
  * @param system_id ID of this system

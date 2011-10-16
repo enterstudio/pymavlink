@@ -27,30 +27,35 @@ public partial class Mavlink
  * @param count Number of Waypoints in the Sequence
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_waypoint_count_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target_system, byte public target_component, UInt16 public count)
+ 
+public static UInt16 mavlink_msg_waypoint_count_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system, byte target_component, UInt16 count)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[4];
-	_mav_put_byte(buf, 0, target_system);
-	_mav_put_byte(buf, 1, target_component);
-	_mav_put_UInt16(buf, 2, count);
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(target_component),0,msg,1,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(count),0,msg,2,sizeof(UInt16));
 
-        memcpy(_MAV_PAYLOAD(msg), buf, 4);
-#else
-    mavlink_waypoint_count_t packet;
+} else {
+    mavlink_waypoint_count_t packet = new mavlink_waypoint_count_t();
 	packet.target_system = target_system;
 	packet.target_component = target_component;
 	packet.count = count;
 
-        memcpy(_MAV_PAYLOAD(msg), &packet, 4);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_WAYPOINT_COUNT;
-    return mavlink_finalize_message(msg, system_id, component_id, 4);
+        
+        int len = 4;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_WAYPOINT_COUNT;
+    //return mavlink_finalize_message(msg, system_id, component_id, 4);
+    return 0;
+}
+
 /**
  * @brief Pack a waypoint_count message on a channel
  * @param system_id ID of this system
@@ -172,17 +177,18 @@ public static UInt16 mavlink_msg_waypoint_count_get_count(byte[] msg)
  */
 public static void mavlink_msg_waypoint_count_decode(byte[] msg, ref mavlink_waypoint_count_t waypoint_count)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	waypoint_count.target_system = mavlink_msg_waypoint_count_get_target_system(msg);
-	waypoint_count.target_component = mavlink_msg_waypoint_count_get_target_component(msg);
-	waypoint_count.count = mavlink_msg_waypoint_count_get_count(msg);
-} else {
-    int len = 4; //Marshal.SizeOf(waypoint_count);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    waypoint_count = (mavlink_waypoint_count_t)Marshal.PtrToStructure(i, ((object)waypoint_count).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	waypoint_count.target_system = mavlink_msg_waypoint_count_get_target_system(msg);
+    	waypoint_count.target_component = mavlink_msg_waypoint_count_get_target_component(msg);
+    	waypoint_count.count = mavlink_msg_waypoint_count_get_count(msg);
+    
+    } else {
+        int len = 4; //Marshal.SizeOf(waypoint_count);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        waypoint_count = (mavlink_waypoint_count_t)Marshal.PtrToStructure(i, ((object)waypoint_count).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

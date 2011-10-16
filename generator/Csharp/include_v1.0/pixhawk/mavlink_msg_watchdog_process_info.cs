@@ -33,34 +33,37 @@ public partial class Mavlink
  * @param timeout Timeout (seconds)
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_watchdog_process_info_pack(byte system_id, byte component_id, ref byte[] msg,
-                               UInt16 public watchdog_id, UInt16 public process_id, const string [MarshalAs(UnmanagedType.ByValArray,SizeConst=100)]
- publicname, const string [MarshalAs(UnmanagedType.ByValArray,SizeConst=147)]
- publicarguments, Int32 public timeout)
+ 
+public static UInt16 mavlink_msg_watchdog_process_info_pack(byte system_id, byte component_id, byte[] msg,
+                               UInt16 watchdog_id, UInt16 process_id, string name, string arguments, Int32 timeout)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[255];
-	_mav_put_Int32(buf, 0, timeout);
-	_mav_put_UInt16(buf, 4, watchdog_id);
-	_mav_put_UInt16(buf, 6, process_id);
-	_mav_put_string_array(buf, 8, name, 100);
-	_mav_put_string_array(buf, 108, arguments, 147);
-        memcpy(_MAV_PAYLOAD(msg), buf, 255);
-#else
-    mavlink_watchdog_process_info_t packet;
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(timeout),0,msg,0,sizeof(Int32));
+	Array.Copy(BitConverter.GetBytes(watchdog_id),0,msg,4,sizeof(UInt16));
+	Array.Copy(BitConverter.GetBytes(process_id),0,msg,6,sizeof(UInt16));
+	//Array.Copy(name,0,msg,8,100);
+	//Array.Copy(arguments,0,msg,108,147);
+} else {
+    mavlink_watchdog_process_info_t packet = new mavlink_watchdog_process_info_t();
 	packet.timeout = timeout;
 	packet.watchdog_id = watchdog_id;
 	packet.process_id = process_id;
-	memcpy(packet.name, name, sizeof(string)*100);
-	memcpy(packet.arguments, arguments, sizeof(string)*147);
-        memcpy(_MAV_PAYLOAD(msg), &packet, 255);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_WATCHDOG_PROCESS_INFO;
-    return mavlink_finalize_message(msg, system_id, component_id, 255, 16);
+	packet.name = name;
+	packet.arguments = arguments;
+        
+        int len = 255;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_WATCHDOG_PROCESS_INFO;
+    //return mavlink_finalize_message(msg, system_id, component_id, 255, 16);
+    return 0;
+}
+
 /**
  * @brief Pack a watchdog_process_info message on a channel
  * @param system_id ID of this system
@@ -214,19 +217,20 @@ public static Int32 mavlink_msg_watchdog_process_info_get_timeout(byte[] msg)
  */
 public static void mavlink_msg_watchdog_process_info_decode(byte[] msg, ref mavlink_watchdog_process_info_t watchdog_process_info)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	watchdog_process_info.timeout = mavlink_msg_watchdog_process_info_get_timeout(msg);
-	watchdog_process_info.watchdog_id = mavlink_msg_watchdog_process_info_get_watchdog_id(msg);
-	watchdog_process_info.process_id = mavlink_msg_watchdog_process_info_get_process_id(msg);
-	watchdog_process_info.name = mavlink_msg_watchdog_process_info_get_name(msg);
-	watchdog_process_info.arguments = mavlink_msg_watchdog_process_info_get_arguments(msg);
-} else {
-    int len = 255; //Marshal.SizeOf(watchdog_process_info);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    watchdog_process_info = (mavlink_watchdog_process_info_t)Marshal.PtrToStructure(i, ((object)watchdog_process_info).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	watchdog_process_info.timeout = mavlink_msg_watchdog_process_info_get_timeout(msg);
+    	watchdog_process_info.watchdog_id = mavlink_msg_watchdog_process_info_get_watchdog_id(msg);
+    	watchdog_process_info.process_id = mavlink_msg_watchdog_process_info_get_process_id(msg);
+    	watchdog_process_info.name = mavlink_msg_watchdog_process_info_get_name(msg);
+    	watchdog_process_info.arguments = mavlink_msg_watchdog_process_info_get_arguments(msg);
+    
+    } else {
+        int len = 255; //Marshal.SizeOf(watchdog_process_info);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        watchdog_process_info = (mavlink_watchdog_process_info_t)Marshal.PtrToStructure(i, ((object)watchdog_process_info).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }

@@ -31,6 +31,17 @@ public partial class Mavlink
 
 // ENUM DEFINITIONS
 
+public struct mavlink_message_t {
+	public byte magic;   ///< protocol magic marker
+	public byte len;     ///< Length of payload
+	public byte seq;     ///< Sequence of packet
+	public byte sysid;   ///< ID of message sender system/aircraft
+	public byte compid;  ///< ID of the message sender component
+	public byte msgid;   ///< ID of message in payload
+	public byte[] payload;
+    public UInt16 checksum; /// sent at end of packet
+};
+
 
 /** @brief Commands to be executed by the MAV. They can be executed on user request,
       or as part of a mission script. If the action is used in a mission, the parameter mapping

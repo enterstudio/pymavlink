@@ -30,31 +30,35 @@ public partial class Mavlink
  * @param passkey Password / Key, depending on version plaintext or encrypted. 25 or less characters, NULL terminated. The characters may involve A-Z, a-z, 0-9, and "!?,.-"
  * @return length of the message in bytes (excluding serial stream start sign)
  */
- /*
-static uint16 mavlink_msg_change_operator_control_pack(byte system_id, byte component_id, ref byte[] msg,
-                               byte public target_system, byte public control_request, byte public version, const string [MarshalAs(UnmanagedType.ByValArray,SizeConst=25)]
- publicpasskey)
+ 
+public static UInt16 mavlink_msg_change_operator_control_pack(byte system_id, byte component_id, byte[] msg,
+                               byte target_system, byte control_request, byte version, string passkey)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    byte buf[28];
-	_mav_put_byte(buf, 0, target_system);
-	_mav_put_byte(buf, 1, control_request);
-	_mav_put_byte(buf, 2, version);
-	_mav_put_string_array(buf, 3, passkey, 25);
-        memcpy(_MAV_PAYLOAD(msg), buf, 28);
-#else
-    mavlink_change_operator_control_t packet;
+if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
+	Array.Copy(BitConverter.GetBytes(target_system),0,msg,0,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(control_request),0,msg,1,sizeof(byte));
+	Array.Copy(BitConverter.GetBytes(version),0,msg,2,sizeof(byte));
+	//Array.Copy(passkey,0,msg,3,25);
+} else {
+    mavlink_change_operator_control_t packet = new mavlink_change_operator_control_t();
 	packet.target_system = target_system;
 	packet.control_request = control_request;
 	packet.version = version;
-	memcpy(packet.passkey, passkey, sizeof(string)*25);
-        memcpy(_MAV_PAYLOAD(msg), &packet, 28);
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL;
-    return mavlink_finalize_message(msg, system_id, component_id, 28);
+	packet.passkey = passkey;
+        
+        int len = 28;
+        msg = new byte[len];
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+        Marshal.StructureToPtr(packet, ptr, true);
+        Marshal.Copy(ptr, msg, 0, len);
+        Marshal.FreeHGlobal(ptr);
 }
-*/
+
+    //msg.msgid = MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL;
+    //return mavlink_finalize_message(msg, system_id, component_id, 28);
+    return 0;
+}
+
 /**
  * @brief Pack a change_operator_control message on a channel
  * @param system_id ID of this system
@@ -190,18 +194,19 @@ public static string mavlink_msg_change_operator_control_get_passkey(byte[] msg)
  */
 public static void mavlink_msg_change_operator_control_decode(byte[] msg, ref mavlink_change_operator_control_t change_operator_control)
 {
-if (MAVLINK_NEED_BYTE_SWAP) {
-	change_operator_control.target_system = mavlink_msg_change_operator_control_get_target_system(msg);
-	change_operator_control.control_request = mavlink_msg_change_operator_control_get_control_request(msg);
-	change_operator_control.version = mavlink_msg_change_operator_control_get_version(msg);
-	change_operator_control.passkey = mavlink_msg_change_operator_control_get_passkey(msg);
-} else {
-    int len = 28; //Marshal.SizeOf(change_operator_control);
-    IntPtr i = Marshal.AllocHGlobal(len);
-    Marshal.Copy(msg, 0, i, len);
-    change_operator_control = (mavlink_change_operator_control_t)Marshal.PtrToStructure(i, ((object)change_operator_control).GetType());
-    Marshal.FreeHGlobal(i);
-}
+    if (MAVLINK_NEED_BYTE_SWAP) {
+    	change_operator_control.target_system = mavlink_msg_change_operator_control_get_target_system(msg);
+    	change_operator_control.control_request = mavlink_msg_change_operator_control_get_control_request(msg);
+    	change_operator_control.version = mavlink_msg_change_operator_control_get_version(msg);
+    	change_operator_control.passkey = mavlink_msg_change_operator_control_get_passkey(msg);
+    
+    } else {
+        int len = 28; //Marshal.SizeOf(change_operator_control);
+        IntPtr i = Marshal.AllocHGlobal(len);
+        Marshal.Copy(msg, 0, i, len);
+        change_operator_control = (mavlink_change_operator_control_t)Marshal.PtrToStructure(i, ((object)change_operator_control).GetType());
+        Marshal.FreeHGlobal(i);
+    }
 }
 
 }
