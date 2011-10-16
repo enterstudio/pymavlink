@@ -1,6 +1,6 @@
 // MESSAGE SET_ROLL_PITCH_YAW_SPEED_THRUST PACKING
 
-#define MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_SPEED_THRUST 56
+#define MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_SPEED_THRUST 57
 
 typedef struct __mavlink_set_roll_pitch_yaw_speed_thrust_t
 {
@@ -13,19 +13,19 @@ typedef struct __mavlink_set_roll_pitch_yaw_speed_thrust_t
 } mavlink_set_roll_pitch_yaw_speed_thrust_t;
 
 #define MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_SPEED_THRUST_LEN 18
-#define MAVLINK_MSG_ID_56_LEN 18
+#define MAVLINK_MSG_ID_57_LEN 18
 
 
 
 #define MAVLINK_MESSAGE_INFO_SET_ROLL_PITCH_YAW_SPEED_THRUST { \
 	"SET_ROLL_PITCH_YAW_SPEED_THRUST", \
 	6, \
-	{  { "roll_speed", MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_set_roll_pitch_yaw_speed_thrust_t, roll_speed) }, \
-         { "pitch_speed", MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_set_roll_pitch_yaw_speed_thrust_t, pitch_speed) }, \
-         { "yaw_speed", MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_set_roll_pitch_yaw_speed_thrust_t, yaw_speed) }, \
-         { "thrust", MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_set_roll_pitch_yaw_speed_thrust_t, thrust) }, \
-         { "target_system", MAVLINK_TYPE_UINT8_T, 0, 16, offsetof(mavlink_set_roll_pitch_yaw_speed_thrust_t, target_system) }, \
-         { "target_component", MAVLINK_TYPE_UINT8_T, 0, 17, offsetof(mavlink_set_roll_pitch_yaw_speed_thrust_t, target_component) }, \
+	{  { "roll_speed", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_set_roll_pitch_yaw_speed_thrust_t, roll_speed) }, \
+         { "pitch_speed", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_set_roll_pitch_yaw_speed_thrust_t, pitch_speed) }, \
+         { "yaw_speed", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_set_roll_pitch_yaw_speed_thrust_t, yaw_speed) }, \
+         { "thrust", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_set_roll_pitch_yaw_speed_thrust_t, thrust) }, \
+         { "target_system", NULL, MAVLINK_TYPE_UINT8_T, 0, 16, offsetof(mavlink_set_roll_pitch_yaw_speed_thrust_t, target_system) }, \
+         { "target_component", NULL, MAVLINK_TYPE_UINT8_T, 0, 17, offsetof(mavlink_set_roll_pitch_yaw_speed_thrust_t, target_component) }, \
          } \
 }
 

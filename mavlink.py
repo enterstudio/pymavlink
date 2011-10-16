@@ -164,6 +164,8 @@ MAV_ROI_ENUM_END = 5 #
 MAVLINK_MSG_ID_BAD_DATA = -1
 MAVLINK_MSG_ID_SENSOR_OFFSETS = 150
 MAVLINK_MSG_ID_SET_MAG_OFFSETS = 151
+MAVLINK_MSG_ID_MEMINFO = 152
+MAVLINK_MSG_ID_AP_ADC = 153
 MAVLINK_MSG_ID_HEARTBEAT = 0
 MAVLINK_MSG_ID_BOOT = 1
 MAVLINK_MSG_ID_SYSTEM_TIME = 2
@@ -274,6 +276,36 @@ class MAVLink_set_mag_offsets_message(MAVLink_message):
 
         def pack(self, mav):
                 return MAVLink_message.pack(self, mav, 29, struct.pack('>BBhhh', self.target_system, self.target_component, self.mag_ofs_x, self.mag_ofs_y, self.mag_ofs_z))
+
+class MAVLink_meminfo_message(MAVLink_message):
+        '''
+        state of APM memory
+        '''
+        def __init__(self, brkval, freemem):
+                MAVLink_message.__init__(self, MAVLINK_MSG_ID_MEMINFO, 'MEMINFO')
+                self._fieldnames = ['brkval', 'freemem']
+                self.brkval = brkval
+                self.freemem = freemem
+
+        def pack(self, mav):
+                return MAVLink_message.pack(self, mav, 208, struct.pack('>HH', self.brkval, self.freemem))
+
+class MAVLink_ap_adc_message(MAVLink_message):
+        '''
+        raw ADC output
+        '''
+        def __init__(self, adc1, adc2, adc3, adc4, adc5, adc6):
+                MAVLink_message.__init__(self, MAVLINK_MSG_ID_AP_ADC, 'AP_ADC')
+                self._fieldnames = ['adc1', 'adc2', 'adc3', 'adc4', 'adc5', 'adc6']
+                self.adc1 = adc1
+                self.adc2 = adc2
+                self.adc3 = adc3
+                self.adc4 = adc4
+                self.adc5 = adc5
+                self.adc6 = adc6
+
+        def pack(self, mav):
+                return MAVLink_message.pack(self, mav, 188, struct.pack('>HHHHHH', self.adc1, self.adc2, self.adc3, self.adc4, self.adc5, self.adc6))
 
 class MAVLink_heartbeat_message(MAVLink_message):
         '''
@@ -1563,6 +1595,8 @@ class MAVLink_debug_message(MAVLink_message):
 mavlink_map = {
         MAVLINK_MSG_ID_SENSOR_OFFSETS : ( '>hhhfiiffffff', MAVLink_sensor_offsets_message, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 143 ),
         MAVLINK_MSG_ID_SET_MAG_OFFSETS : ( '>BBhhh', MAVLink_set_mag_offsets_message, [0, 1, 2, 3, 4], 29 ),
+        MAVLINK_MSG_ID_MEMINFO : ( '>HH', MAVLink_meminfo_message, [0, 1], 208 ),
+        MAVLINK_MSG_ID_AP_ADC : ( '>HHHHHH', MAVLink_ap_adc_message, [0, 1, 2, 3, 4, 5], 188 ),
         MAVLINK_MSG_ID_HEARTBEAT : ( '>BBB', MAVLink_heartbeat_message, [0, 1, 2], 72 ),
         MAVLINK_MSG_ID_BOOT : ( '>I', MAVLink_boot_message, [0], 39 ),
         MAVLINK_MSG_ID_SYSTEM_TIME : ( '>Q', MAVLink_system_time_message, [0], 190 ),
@@ -1881,7 +1915,59 @@ class MAVLink(object):
                 '''
                 return self.send(self.set_mag_offsets_encode(target_system, target_component, mag_ofs_x, mag_ofs_y, mag_ofs_z))
             
-        def heartbeat_encode(self, type, autopilot, mavlink_version):
+        def meminfo_encode(self, brkval, freemem):
+                '''
+                state of APM memory
+
+                brkval                    : heap top (uint16_t)
+                freemem                   : free memory (uint16_t)
+
+                '''
+                msg = MAVLink_meminfo_message(brkval, freemem)
+                msg.pack(self)
+                return msg
+            
+        def meminfo_send(self, brkval, freemem):
+                '''
+                state of APM memory
+
+                brkval                    : heap top (uint16_t)
+                freemem                   : free memory (uint16_t)
+
+                '''
+                return self.send(self.meminfo_encode(brkval, freemem))
+            
+        def ap_adc_encode(self, adc1, adc2, adc3, adc4, adc5, adc6):
+                '''
+                raw ADC output
+
+                adc1                      : ADC output 1 (uint16_t)
+                adc2                      : ADC output 2 (uint16_t)
+                adc3                      : ADC output 3 (uint16_t)
+                adc4                      : ADC output 4 (uint16_t)
+                adc5                      : ADC output 5 (uint16_t)
+                adc6                      : ADC output 6 (uint16_t)
+
+                '''
+                msg = MAVLink_ap_adc_message(adc1, adc2, adc3, adc4, adc5, adc6)
+                msg.pack(self)
+                return msg
+            
+        def ap_adc_send(self, adc1, adc2, adc3, adc4, adc5, adc6):
+                '''
+                raw ADC output
+
+                adc1                      : ADC output 1 (uint16_t)
+                adc2                      : ADC output 2 (uint16_t)
+                adc3                      : ADC output 3 (uint16_t)
+                adc4                      : ADC output 4 (uint16_t)
+                adc5                      : ADC output 5 (uint16_t)
+                adc6                      : ADC output 6 (uint16_t)
+
+                '''
+                return self.send(self.ap_adc_encode(adc1, adc2, adc3, adc4, adc5, adc6))
+            
+        def heartbeat_encode(self, type, autopilot, mavlink_version=2):
                 '''
                 The heartbeat message shows that a system is present and responding.
                 The type of the MAV and Autopilot hardware allow the
@@ -1898,7 +1984,7 @@ class MAVLink(object):
                 msg.pack(self)
                 return msg
             
-        def heartbeat_send(self, type, autopilot, mavlink_version):
+        def heartbeat_send(self, type, autopilot, mavlink_version=2):
                 '''
                 The heartbeat message shows that a system is present and responding.
                 The type of the MAV and Autopilot hardware allow the

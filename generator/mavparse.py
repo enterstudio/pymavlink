@@ -20,13 +20,14 @@ class MAVParseError(Exception):
         return self.message
 
 class MAVField(object):
-    def __init__(self, name, type, xml, description=''):
+    def __init__(self, name, type, print_format, xml, description=''):
         self.name = name
         self.name_upper = name.upper()
         self.description = description
         self.array_length = 0
         self.omit_arg = False
         self.const_value = None
+        self.print_format = print_format
         lengths = {
         'float'    : 4,
         'double'   : 8,
@@ -180,7 +181,12 @@ class MAVXML(object):
                 self.message.append(MAVType(attrs['name'], attrs['id'], p.CurrentLineNumber))
             elif in_element == "mavlink.messages.message.field":
                 check_attrs(attrs, ['name', 'type'], 'field')
-                self.message[-1].fields.append(MAVField(attrs['name'], attrs['type'], self))
+                if 'print_format' in attrs:
+                    print_format = attrs['print_format']
+                else:
+                    print_format = None
+                self.message[-1].fields.append(MAVField(attrs['name'], attrs['type'],
+                                                        print_format, self))
             elif in_element == "mavlink.enums.enum":
                 check_attrs(attrs, ['name'], 'enum')
                 self.enum.append(MAVEnum(attrs['name']))
@@ -231,6 +237,7 @@ class MAVXML(object):
         self.message_lengths = [ 0 ] * 256
         self.message_crcs = [ 0 ] * 256
         self.message_names = [ None ] * 256
+        self.largest_payload = 0
 
         for m in self.message:
             m.wire_length = 0
@@ -257,6 +264,8 @@ class MAVXML(object):
             self.message_lengths[m.id] = m.wire_length
             self.message_names[m.id] = m.name
             self.message_crcs[m.id] = m.crc_extra
+            if m.wire_length > self.largest_payload:
+                self.largest_payload = m.wire_length
 
             if m.wire_length+8 > 64:
                 print("Warning: message %s is longer than 64 bytes long (%u bytes)" % (m.name, m.wire_length+8))
@@ -289,6 +298,14 @@ def check_duplicates(xml):
                     x.filename, m.linenumber,
                     msgmap[m.id]))
                 return True
+            fieldset = set()
+            for f in m.fields:
+                if f.name in fieldset:
+                    print("ERROR: Duplicate field %s in message %s (%s:%u)" % (
+                        f.name, m.name,
+                        x.filename, m.linenumber))
+                    return True
+                fieldset.add(f.name)
             msgmap[m.id] = '%s (%s:%u)' % (m.name, x.filename, m.linenumber)
     return False
 

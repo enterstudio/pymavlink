@@ -1,6 +1,6 @@
 // MESSAGE SAFETY_SET_ALLOWED_AREA PACKING
 
-#define MAVLINK_MSG_ID_SAFETY_SET_ALLOWED_AREA 53
+#define MAVLINK_MSG_ID_SAFETY_SET_ALLOWED_AREA 54
 
 typedef struct __mavlink_safety_set_allowed_area_t
 {
@@ -16,22 +16,22 @@ typedef struct __mavlink_safety_set_allowed_area_t
 } mavlink_safety_set_allowed_area_t;
 
 #define MAVLINK_MSG_ID_SAFETY_SET_ALLOWED_AREA_LEN 27
-#define MAVLINK_MSG_ID_53_LEN 27
+#define MAVLINK_MSG_ID_54_LEN 27
 
 
 
 #define MAVLINK_MESSAGE_INFO_SAFETY_SET_ALLOWED_AREA { \
 	"SAFETY_SET_ALLOWED_AREA", \
 	9, \
-	{  { "p1x", MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_safety_set_allowed_area_t, p1x) }, \
-         { "p1y", MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_safety_set_allowed_area_t, p1y) }, \
-         { "p1z", MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_safety_set_allowed_area_t, p1z) }, \
-         { "p2x", MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_safety_set_allowed_area_t, p2x) }, \
-         { "p2y", MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_safety_set_allowed_area_t, p2y) }, \
-         { "p2z", MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_safety_set_allowed_area_t, p2z) }, \
-         { "target_system", MAVLINK_TYPE_UINT8_T, 0, 24, offsetof(mavlink_safety_set_allowed_area_t, target_system) }, \
-         { "target_component", MAVLINK_TYPE_UINT8_T, 0, 25, offsetof(mavlink_safety_set_allowed_area_t, target_component) }, \
-         { "frame", MAVLINK_TYPE_UINT8_T, 0, 26, offsetof(mavlink_safety_set_allowed_area_t, frame) }, \
+	{  { "p1x", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_safety_set_allowed_area_t, p1x) }, \
+         { "p1y", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_safety_set_allowed_area_t, p1y) }, \
+         { "p1z", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_safety_set_allowed_area_t, p1z) }, \
+         { "p2x", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_safety_set_allowed_area_t, p2x) }, \
+         { "p2y", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_safety_set_allowed_area_t, p2y) }, \
+         { "p2z", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_safety_set_allowed_area_t, p2z) }, \
+         { "target_system", NULL, MAVLINK_TYPE_UINT8_T, 0, 24, offsetof(mavlink_safety_set_allowed_area_t, target_system) }, \
+         { "target_component", NULL, MAVLINK_TYPE_UINT8_T, 0, 25, offsetof(mavlink_safety_set_allowed_area_t, target_component) }, \
+         { "frame", NULL, MAVLINK_TYPE_UINT8_T, 0, 26, offsetof(mavlink_safety_set_allowed_area_t, frame) }, \
          } \
 }
 

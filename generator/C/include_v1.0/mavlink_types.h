@@ -1,7 +1,7 @@
 #ifndef MAVLINK_TYPES_H_
 #define MAVLINK_TYPES_H_
 
-#include "inttypes.h"
+#include <inttypes.h>
 
 enum MAV_ACTION
 {
@@ -51,7 +51,10 @@ enum MAV_ACTION
     MAV_ACTION_NB        ///< Number of MAV actions
 };
 
+#ifndef MAVLINK_MAX_PAYLOAD_LEN
+// it is possible to override this, but be careful!
 #define MAVLINK_MAX_PAYLOAD_LEN 255 ///< Maximum payload length
+#endif
 
 #define MAVLINK_CORE_HEADER_LEN 5 ///< Length of core header (of the comm. layer): message length (1 byte) + message sequence (1 byte) + message system id (1 byte) + message component id (1 byte) + message type id (1 byte)
 #define MAVLINK_NUM_HEADER_BYTES (MAVLINK_CORE_HEADER_LEN + 1) ///< Length of all header bytes, including core and checksum
@@ -61,10 +64,10 @@ enum MAV_ACTION
 #define MAVLINK_MAX_PACKET_LEN (MAVLINK_MAX_PAYLOAD_LEN + MAVLINK_NUM_NON_PAYLOAD_BYTES) ///< Maximum packet length
 
 typedef struct param_union {
-	struct {
-    float param_float;
-    int32_t param_int32;
-    uint32_t param_uint32;
+	union {
+		float param_float;
+		int32_t param_int32;
+		uint32_t param_uint32;
 	};
 	uint8_t type;
 } mavlink_param_union_t;
@@ -107,6 +110,7 @@ typedef enum {
 
 typedef struct __mavlink_field_info {
 	const char *name;             // name of this field
+	const char *print_format;     // printing format hint, or NULL
 	mavlink_message_type_t type;  // type of this field
 	unsigned array_length;        // if non-zero, field is an array
 	unsigned wire_offset;         // offset of each field in the payload
@@ -118,7 +122,7 @@ typedef struct __mavlink_field_info {
 typedef struct __mavlink_message_info {
 	const char *name;                                      // name of the message
 	unsigned num_fields;                                   // how many fields in this message
-	const mavlink_field_info_t fields[MAVLINK_MAX_FIELDS]; // field information
+	mavlink_field_info_t fields[MAVLINK_MAX_FIELDS];       // field information
 } mavlink_message_info_t;
 
 #define _MAV_PAYLOAD(msg) ((char *)(&(msg)->payload64[0]))
