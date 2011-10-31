@@ -10,27 +10,42 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_set_global_position_setpoint_int_t
     {
-         public  Int32 latitude; /// WGS84 Latitude position in degrees * 1E7
-     public  Int32 longitude; /// WGS84 Longitude position in degrees * 1E7
-     public  Int32 altitude; /// WGS84 Altitude in meters * 1000 (positive for up)
-     public  Int16 yaw; /// Desired yaw angle in degrees * 100
-     public  byte coordinate_frame; /// Coordinate frame - valid values are only MAV_FRAME_GLOBAL or MAV_FRAME_GLOBAL_RELATIVE_ALT
+        /// <summary>
+        /// WGS84 Latitude position in degrees * 1E7
+        /// </summary>
+        public  Int32 latitude;
+            /// <summary>
+        /// WGS84 Longitude position in degrees * 1E7
+        /// </summary>
+        public  Int32 longitude;
+            /// <summary>
+        /// WGS84 Altitude in meters * 1000 (positive for up)
+        /// </summary>
+        public  Int32 altitude;
+            /// <summary>
+        /// Desired yaw angle in degrees * 100
+        /// </summary>
+        public  Int16 yaw;
+            /// <summary>
+        /// Coordinate frame - valid values are only MAV_FRAME_GLOBAL or MAV_FRAME_GLOBAL_RELATIVE_ALT
+        /// </summary>
+        public  byte coordinate_frame;
     
     };
 
-/**
- * @brief Pack a set_global_position_setpoint_int message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param coordinate_frame Coordinate frame - valid values are only MAV_FRAME_GLOBAL or MAV_FRAME_GLOBAL_RELATIVE_ALT
- * @param latitude WGS84 Latitude position in degrees * 1E7
- * @param longitude WGS84 Longitude position in degrees * 1E7
- * @param altitude WGS84 Altitude in meters * 1000 (positive for up)
- * @param yaw Desired yaw angle in degrees * 100
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a set_global_position_setpoint_int message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param coordinate_frame Coordinate frame - valid values are only MAV_FRAME_GLOBAL or MAV_FRAME_GLOBAL_RELATIVE_ALT
+/// * @param latitude WGS84 Latitude position in degrees * 1E7
+/// * @param longitude WGS84 Longitude position in degrees * 1E7
+/// * @param altitude WGS84 Altitude in meters * 1000 (positive for up)
+/// * @param yaw Desired yaw angle in degrees * 100
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_set_global_position_setpoint_int_pack(byte system_id, byte component_id, byte[] msg,
                                byte coordinate_frame, Int32 latitude, Int32 longitude, Int32 altitude, Int16 yaw)

@@ -10,33 +10,57 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_attitude_quaternion_t
     {
-         public  UInt32 time_boot_ms; /// Timestamp (milliseconds since system boot)
-     public  Single q1; /// Quaternion component 1
-     public  Single q2; /// Quaternion component 2
-     public  Single q3; /// Quaternion component 3
-     public  Single q4; /// Quaternion component 4
-     public  Single rollspeed; /// Roll angular speed (rad/s)
-     public  Single pitchspeed; /// Pitch angular speed (rad/s)
-     public  Single yawspeed; /// Yaw angular speed (rad/s)
+        /// <summary>
+        /// Timestamp (milliseconds since system boot)
+        /// </summary>
+        public  UInt32 time_boot_ms;
+            /// <summary>
+        /// Quaternion component 1
+        /// </summary>
+        public  Single q1;
+            /// <summary>
+        /// Quaternion component 2
+        /// </summary>
+        public  Single q2;
+            /// <summary>
+        /// Quaternion component 3
+        /// </summary>
+        public  Single q3;
+            /// <summary>
+        /// Quaternion component 4
+        /// </summary>
+        public  Single q4;
+            /// <summary>
+        /// Roll angular speed (rad/s)
+        /// </summary>
+        public  Single rollspeed;
+            /// <summary>
+        /// Pitch angular speed (rad/s)
+        /// </summary>
+        public  Single pitchspeed;
+            /// <summary>
+        /// Yaw angular speed (rad/s)
+        /// </summary>
+        public  Single yawspeed;
     
     };
 
-/**
- * @brief Pack a attitude_quaternion message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time_boot_ms Timestamp (milliseconds since system boot)
- * @param q1 Quaternion component 1
- * @param q2 Quaternion component 2
- * @param q3 Quaternion component 3
- * @param q4 Quaternion component 4
- * @param rollspeed Roll angular speed (rad/s)
- * @param pitchspeed Pitch angular speed (rad/s)
- * @param yawspeed Yaw angular speed (rad/s)
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a attitude_quaternion message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time_boot_ms Timestamp (milliseconds since system boot)
+/// * @param q1 Quaternion component 1
+/// * @param q2 Quaternion component 2
+/// * @param q3 Quaternion component 3
+/// * @param q4 Quaternion component 4
+/// * @param rollspeed Roll angular speed (rad/s)
+/// * @param pitchspeed Pitch angular speed (rad/s)
+/// * @param yawspeed Yaw angular speed (rad/s)
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_attitude_quaternion_pack(byte system_id, byte component_id, byte[] msg,
                                UInt32 time_boot_ms, Single q1, Single q2, Single q3, Single q4, Single rollspeed, Single pitchspeed, Single yawspeed)

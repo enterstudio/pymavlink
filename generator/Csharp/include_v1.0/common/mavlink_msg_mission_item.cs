@@ -10,45 +10,87 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_mission_item_t
     {
-         public  Single param1; /// PARAM1 / For NAV command MISSIONs: Radius in which the MISSION is accepted as reached, in meters
-     public  Single param2; /// PARAM2 / For NAV command MISSIONs: Time that the MAV should stay inside the PARAM1 radius before advancing, in milliseconds
-     public  Single param3; /// PARAM3 / For LOITER command MISSIONs: Orbit to circle around the MISSION, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
-     public  Single param4; /// PARAM4 / For NAV and LOITER command MISSIONs: Yaw orientation in degrees, [0..360] 0 = NORTH
-     public  Single x; /// PARAM5 / local: x position, global: latitude
-     public  Single y; /// PARAM6 / y position: global: longitude
-     public  Single z; /// PARAM7 / z position: global: altitude
-     public  UInt16 seq; /// Sequence
-     public  byte target_system; /// System ID
-     public  byte target_component; /// Component ID
-     public  byte frame; /// The coordinate system of the MISSION. see MAV_FRAME in mavlink_types.h
-     public  byte command; /// The scheduled action for the MISSION. see MAV_CMD in common.xml MAVLink specs
-     public  byte current; /// false:0, true:1
-     public  byte autocontinue; /// autocontinue to next wp
+        /// <summary>
+        /// PARAM1 / For NAV command MISSIONs: Radius in which the MISSION is accepted as reached, in meters
+        /// </summary>
+        public  Single param1;
+            /// <summary>
+        /// PARAM2 / For NAV command MISSIONs: Time that the MAV should stay inside the PARAM1 radius before advancing, in milliseconds
+        /// </summary>
+        public  Single param2;
+            /// <summary>
+        /// PARAM3 / For LOITER command MISSIONs: Orbit to circle around the MISSION, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
+        /// </summary>
+        public  Single param3;
+            /// <summary>
+        /// PARAM4 / For NAV and LOITER command MISSIONs: Yaw orientation in degrees, [0..360] 0 = NORTH
+        /// </summary>
+        public  Single param4;
+            /// <summary>
+        /// PARAM5 / local: x position, global: latitude
+        /// </summary>
+        public  Single x;
+            /// <summary>
+        /// PARAM6 / y position: global: longitude
+        /// </summary>
+        public  Single y;
+            /// <summary>
+        /// PARAM7 / z position: global: altitude
+        /// </summary>
+        public  Single z;
+            /// <summary>
+        /// Sequence
+        /// </summary>
+        public  UInt16 seq;
+            /// <summary>
+        /// System ID
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// Component ID
+        /// </summary>
+        public  byte target_component;
+            /// <summary>
+        /// The coordinate system of the MISSION. see MAV_FRAME in mavlink_types.h
+        /// </summary>
+        public  byte frame;
+            /// <summary>
+        /// The scheduled action for the MISSION. see MAV_CMD in common.xml MAVLink specs
+        /// </summary>
+        public  byte command;
+            /// <summary>
+        /// false:0, true:1
+        /// </summary>
+        public  byte current;
+            /// <summary>
+        /// autocontinue to next wp
+        /// </summary>
+        public  byte autocontinue;
     
     };
 
-/**
- * @brief Pack a mission_item message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system System ID
- * @param target_component Component ID
- * @param seq Sequence
- * @param frame The coordinate system of the MISSION. see MAV_FRAME in mavlink_types.h
- * @param command The scheduled action for the MISSION. see MAV_CMD in common.xml MAVLink specs
- * @param current false:0, true:1
- * @param autocontinue autocontinue to next wp
- * @param param1 PARAM1 / For NAV command MISSIONs: Radius in which the MISSION is accepted as reached, in meters
- * @param param2 PARAM2 / For NAV command MISSIONs: Time that the MAV should stay inside the PARAM1 radius before advancing, in milliseconds
- * @param param3 PARAM3 / For LOITER command MISSIONs: Orbit to circle around the MISSION, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
- * @param param4 PARAM4 / For NAV and LOITER command MISSIONs: Yaw orientation in degrees, [0..360] 0 = NORTH
- * @param x PARAM5 / local: x position, global: latitude
- * @param y PARAM6 / y position: global: longitude
- * @param z PARAM7 / z position: global: altitude
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a mission_item message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system System ID
+/// * @param target_component Component ID
+/// * @param seq Sequence
+/// * @param frame The coordinate system of the MISSION. see MAV_FRAME in mavlink_types.h
+/// * @param command The scheduled action for the MISSION. see MAV_CMD in common.xml MAVLink specs
+/// * @param current false:0, true:1
+/// * @param autocontinue autocontinue to next wp
+/// * @param param1 PARAM1 / For NAV command MISSIONs: Radius in which the MISSION is accepted as reached, in meters
+/// * @param param2 PARAM2 / For NAV command MISSIONs: Time that the MAV should stay inside the PARAM1 radius before advancing, in milliseconds
+/// * @param param3 PARAM3 / For LOITER command MISSIONs: Orbit to circle around the MISSION, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
+/// * @param param4 PARAM4 / For NAV and LOITER command MISSIONs: Yaw orientation in degrees, [0..360] 0 = NORTH
+/// * @param x PARAM5 / local: x position, global: latitude
+/// * @param y PARAM6 / y position: global: longitude
+/// * @param z PARAM7 / z position: global: altitude
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_mission_item_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system, byte target_component, UInt16 seq, byte frame, byte command, byte current, byte autocontinue, Single param1, Single param2, Single param3, Single param4, Single x, Single y, Single z)

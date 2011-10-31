@@ -10,27 +10,42 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_roll_pitch_yaw_speed_thrust_setpoint_t
     {
-         public  UInt32 time_boot_ms; /// Timestamp in milliseconds since system boot
-     public  Single roll_speed; /// Desired roll angular speed in rad/s
-     public  Single pitch_speed; /// Desired pitch angular speed in rad/s
-     public  Single yaw_speed; /// Desired yaw angular speed in rad/s
-     public  Single thrust; /// Collective thrust, normalized to 0 .. 1
+        /// <summary>
+        /// Timestamp in milliseconds since system boot
+        /// </summary>
+        public  UInt32 time_boot_ms;
+            /// <summary>
+        /// Desired roll angular speed in rad/s
+        /// </summary>
+        public  Single roll_speed;
+            /// <summary>
+        /// Desired pitch angular speed in rad/s
+        /// </summary>
+        public  Single pitch_speed;
+            /// <summary>
+        /// Desired yaw angular speed in rad/s
+        /// </summary>
+        public  Single yaw_speed;
+            /// <summary>
+        /// Collective thrust, normalized to 0 .. 1
+        /// </summary>
+        public  Single thrust;
     
     };
 
-/**
- * @brief Pack a roll_pitch_yaw_speed_thrust_setpoint message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time_boot_ms Timestamp in milliseconds since system boot
- * @param roll_speed Desired roll angular speed in rad/s
- * @param pitch_speed Desired pitch angular speed in rad/s
- * @param yaw_speed Desired yaw angular speed in rad/s
- * @param thrust Collective thrust, normalized to 0 .. 1
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a roll_pitch_yaw_speed_thrust_setpoint message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time_boot_ms Timestamp in milliseconds since system boot
+/// * @param roll_speed Desired roll angular speed in rad/s
+/// * @param pitch_speed Desired pitch angular speed in rad/s
+/// * @param yaw_speed Desired yaw angular speed in rad/s
+/// * @param thrust Collective thrust, normalized to 0 .. 1
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_roll_pitch_yaw_speed_thrust_setpoint_pack(byte system_id, byte component_id, byte[] msg,
                                UInt32 time_boot_ms, Single roll_speed, Single pitch_speed, Single yaw_speed, Single thrust)

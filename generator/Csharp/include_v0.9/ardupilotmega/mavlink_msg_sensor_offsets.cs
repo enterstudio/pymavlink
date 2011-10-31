@@ -10,41 +10,77 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_sensor_offsets_t
     {
-         public  Int16 mag_ofs_x; /// magnetometer X offset
-     public  Int16 mag_ofs_y; /// magnetometer Y offset
-     public  Int16 mag_ofs_z; /// magnetometer Z offset
-     public  Single mag_declination; /// magnetic declination (radians)
-     public  Int32 raw_press; /// raw pressure from barometer
-     public  Int32 raw_temp; /// raw temperature from barometer
-     public  Single gyro_cal_x; /// gyro X calibration
-     public  Single gyro_cal_y; /// gyro Y calibration
-     public  Single gyro_cal_z; /// gyro Z calibration
-     public  Single accel_cal_x; /// accel X calibration
-     public  Single accel_cal_y; /// accel Y calibration
-     public  Single accel_cal_z; /// accel Z calibration
+        /// <summary>
+        /// magnetometer X offset
+        /// </summary>
+        public  Int16 mag_ofs_x;
+            /// <summary>
+        /// magnetometer Y offset
+        /// </summary>
+        public  Int16 mag_ofs_y;
+            /// <summary>
+        /// magnetometer Z offset
+        /// </summary>
+        public  Int16 mag_ofs_z;
+            /// <summary>
+        /// magnetic declination (radians)
+        /// </summary>
+        public  Single mag_declination;
+            /// <summary>
+        /// raw pressure from barometer
+        /// </summary>
+        public  Int32 raw_press;
+            /// <summary>
+        /// raw temperature from barometer
+        /// </summary>
+        public  Int32 raw_temp;
+            /// <summary>
+        /// gyro X calibration
+        /// </summary>
+        public  Single gyro_cal_x;
+            /// <summary>
+        /// gyro Y calibration
+        /// </summary>
+        public  Single gyro_cal_y;
+            /// <summary>
+        /// gyro Z calibration
+        /// </summary>
+        public  Single gyro_cal_z;
+            /// <summary>
+        /// accel X calibration
+        /// </summary>
+        public  Single accel_cal_x;
+            /// <summary>
+        /// accel Y calibration
+        /// </summary>
+        public  Single accel_cal_y;
+            /// <summary>
+        /// accel Z calibration
+        /// </summary>
+        public  Single accel_cal_z;
     
     };
 
-/**
- * @brief Pack a sensor_offsets message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param mag_ofs_x magnetometer X offset
- * @param mag_ofs_y magnetometer Y offset
- * @param mag_ofs_z magnetometer Z offset
- * @param mag_declination magnetic declination (radians)
- * @param raw_press raw pressure from barometer
- * @param raw_temp raw temperature from barometer
- * @param gyro_cal_x gyro X calibration
- * @param gyro_cal_y gyro Y calibration
- * @param gyro_cal_z gyro Z calibration
- * @param accel_cal_x accel X calibration
- * @param accel_cal_y accel Y calibration
- * @param accel_cal_z accel Z calibration
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a sensor_offsets message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param mag_ofs_x magnetometer X offset
+/// * @param mag_ofs_y magnetometer Y offset
+/// * @param mag_ofs_z magnetometer Z offset
+/// * @param mag_declination magnetic declination (radians)
+/// * @param raw_press raw pressure from barometer
+/// * @param raw_temp raw temperature from barometer
+/// * @param gyro_cal_x gyro X calibration
+/// * @param gyro_cal_y gyro Y calibration
+/// * @param gyro_cal_z gyro Z calibration
+/// * @param accel_cal_x accel X calibration
+/// * @param accel_cal_y accel Y calibration
+/// * @param accel_cal_z accel Z calibration
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_sensor_offsets_pack(byte system_id, byte component_id, byte[] msg,
                                Int16 mag_ofs_x, Int16 mag_ofs_y, Int16 mag_ofs_z, Single mag_declination, Int32 raw_press, Int32 raw_temp, Single gyro_cal_x, Single gyro_cal_y, Single gyro_cal_z, Single accel_cal_x, Single accel_cal_y, Single accel_cal_z)

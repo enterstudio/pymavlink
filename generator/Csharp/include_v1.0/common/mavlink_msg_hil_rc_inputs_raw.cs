@@ -10,45 +10,87 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_hil_rc_inputs_raw_t
     {
-         public  UInt64 time_usec; /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
-     public  UInt16 chan1_raw; /// RC channel 1 value, in microseconds
-     public  UInt16 chan2_raw; /// RC channel 2 value, in microseconds
-     public  UInt16 chan3_raw; /// RC channel 3 value, in microseconds
-     public  UInt16 chan4_raw; /// RC channel 4 value, in microseconds
-     public  UInt16 chan5_raw; /// RC channel 5 value, in microseconds
-     public  UInt16 chan6_raw; /// RC channel 6 value, in microseconds
-     public  UInt16 chan7_raw; /// RC channel 7 value, in microseconds
-     public  UInt16 chan8_raw; /// RC channel 8 value, in microseconds
-     public  UInt16 chan9_raw; /// RC channel 9 value, in microseconds
-     public  UInt16 chan10_raw; /// RC channel 10 value, in microseconds
-     public  UInt16 chan11_raw; /// RC channel 11 value, in microseconds
-     public  UInt16 chan12_raw; /// RC channel 12 value, in microseconds
-     public  byte rssi; /// Receive signal strength indicator, 0: 0%, 255: 100%
+        /// <summary>
+        /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+        /// </summary>
+        public  UInt64 time_usec;
+            /// <summary>
+        /// RC channel 1 value, in microseconds
+        /// </summary>
+        public  UInt16 chan1_raw;
+            /// <summary>
+        /// RC channel 2 value, in microseconds
+        /// </summary>
+        public  UInt16 chan2_raw;
+            /// <summary>
+        /// RC channel 3 value, in microseconds
+        /// </summary>
+        public  UInt16 chan3_raw;
+            /// <summary>
+        /// RC channel 4 value, in microseconds
+        /// </summary>
+        public  UInt16 chan4_raw;
+            /// <summary>
+        /// RC channel 5 value, in microseconds
+        /// </summary>
+        public  UInt16 chan5_raw;
+            /// <summary>
+        /// RC channel 6 value, in microseconds
+        /// </summary>
+        public  UInt16 chan6_raw;
+            /// <summary>
+        /// RC channel 7 value, in microseconds
+        /// </summary>
+        public  UInt16 chan7_raw;
+            /// <summary>
+        /// RC channel 8 value, in microseconds
+        /// </summary>
+        public  UInt16 chan8_raw;
+            /// <summary>
+        /// RC channel 9 value, in microseconds
+        /// </summary>
+        public  UInt16 chan9_raw;
+            /// <summary>
+        /// RC channel 10 value, in microseconds
+        /// </summary>
+        public  UInt16 chan10_raw;
+            /// <summary>
+        /// RC channel 11 value, in microseconds
+        /// </summary>
+        public  UInt16 chan11_raw;
+            /// <summary>
+        /// RC channel 12 value, in microseconds
+        /// </summary>
+        public  UInt16 chan12_raw;
+            /// <summary>
+        /// Receive signal strength indicator, 0: 0%, 255: 100%
+        /// </summary>
+        public  byte rssi;
     
     };
 
-/**
- * @brief Pack a hil_rc_inputs_raw message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
- * @param chan1_raw RC channel 1 value, in microseconds
- * @param chan2_raw RC channel 2 value, in microseconds
- * @param chan3_raw RC channel 3 value, in microseconds
- * @param chan4_raw RC channel 4 value, in microseconds
- * @param chan5_raw RC channel 5 value, in microseconds
- * @param chan6_raw RC channel 6 value, in microseconds
- * @param chan7_raw RC channel 7 value, in microseconds
- * @param chan8_raw RC channel 8 value, in microseconds
- * @param chan9_raw RC channel 9 value, in microseconds
- * @param chan10_raw RC channel 10 value, in microseconds
- * @param chan11_raw RC channel 11 value, in microseconds
- * @param chan12_raw RC channel 12 value, in microseconds
- * @param rssi Receive signal strength indicator, 0: 0%, 255: 100%
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a hil_rc_inputs_raw message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+/// * @param chan1_raw RC channel 1 value, in microseconds
+/// * @param chan2_raw RC channel 2 value, in microseconds
+/// * @param chan3_raw RC channel 3 value, in microseconds
+/// * @param chan4_raw RC channel 4 value, in microseconds
+/// * @param chan5_raw RC channel 5 value, in microseconds
+/// * @param chan6_raw RC channel 6 value, in microseconds
+/// * @param chan7_raw RC channel 7 value, in microseconds
+/// * @param chan8_raw RC channel 8 value, in microseconds
+/// * @param chan9_raw RC channel 9 value, in microseconds
+/// * @param chan10_raw RC channel 10 value, in microseconds
+/// * @param chan11_raw RC channel 11 value, in microseconds
+/// * @param chan12_raw RC channel 12 value, in microseconds
+/// * @param rssi Receive signal strength indicator, 0: 0%, 255: 100%
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_hil_rc_inputs_raw_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 time_usec, UInt16 chan1_raw, UInt16 chan2_raw, UInt16 chan3_raw, UInt16 chan4_raw, UInt16 chan5_raw, UInt16 chan6_raw, UInt16 chan7_raw, UInt16 chan8_raw, UInt16 chan9_raw, UInt16 chan10_raw, UInt16 chan11_raw, UInt16 chan12_raw, byte rssi)

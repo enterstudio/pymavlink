@@ -10,28 +10,43 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_param_set_t
     {
-         public  Single param_value; /// Onboard parameter value
-     public  byte target_system; /// System ID
-     public  byte target_component; /// Component ID
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=16)]
- public string param_id; /// Onboard parameter id
-     public  byte param_type; /// Onboard parameter type: 0: float, 1: uint8_t, 2: int8_t, 3: uint16_t, 4: int16_t, 5: uint32_t, 6: int32_t
+        /// <summary>
+        /// Onboard parameter value
+        /// </summary>
+        public  Single param_value;
+            /// <summary>
+        /// System ID
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// Component ID
+        /// </summary>
+        public  byte target_component;
+            /// <summary>
+        /// Onboard parameter id
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=16)]
+ public string param_id;
+            /// <summary>
+        /// Onboard parameter type: see MAV_VAR enum
+        /// </summary>
+        public  byte param_type;
     
     };
 
-/**
- * @brief Pack a param_set message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system System ID
- * @param target_component Component ID
- * @param param_id Onboard parameter id
- * @param param_value Onboard parameter value
- * @param param_type Onboard parameter type: 0: float, 1: uint8_t, 2: int8_t, 3: uint16_t, 4: int16_t, 5: uint32_t, 6: int32_t
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a param_set message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system System ID
+/// * @param target_component Component ID
+/// * @param param_id Onboard parameter id
+/// * @param param_value Onboard parameter value
+/// * @param param_type Onboard parameter type: see MAV_VAR enum
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_param_set_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system, byte target_component, string param_id, Single param_value, byte param_type)
@@ -41,7 +56,7 @@ if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(target_system),0,msg,4,sizeof(byte));
 	Array.Copy(BitConverter.GetBytes(target_component),0,msg,5,sizeof(byte));
 	Array.Copy(BitConverter.GetBytes(param_type),0,msg,22,sizeof(byte));
-	//Array.Copy(param_id,0,msg,6,16);
+	Array.Copy(toArray(param_id),0,msg,6,16);
 } else {
     mavlink_param_set_t packet = new mavlink_param_set_t();
 	packet.param_value = param_value;
@@ -73,7 +88,7 @@ if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
  * @param target_component Component ID
  * @param param_id Onboard parameter id
  * @param param_value Onboard parameter value
- * @param param_type Onboard parameter type: 0: float, 1: uint8_t, 2: int8_t, 3: uint16_t, 4: int16_t, 5: uint32_t, 6: int32_t
+ * @param param_type Onboard parameter type: see MAV_VAR enum
  * @return length of the message in bytes (excluding serial stream start sign)
  */
  /*
@@ -125,7 +140,7 @@ static inline uint16_t mavlink_msg_param_set_encode(uint8_t system_id, uint8_t c
  * @param target_component Component ID
  * @param param_id Onboard parameter id
  * @param param_value Onboard parameter value
- * @param param_type Onboard parameter type: 0: float, 1: uint8_t, 2: int8_t, 3: uint16_t, 4: int16_t, 5: uint32_t, 6: int32_t
+ * @param param_type Onboard parameter type: see MAV_VAR enum
  *//*
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
@@ -199,7 +214,7 @@ public static Single mavlink_msg_param_set_get_param_value(byte[] msg)
 /**
  * @brief Get field param_type from param_set message
  *
- * @return Onboard parameter type: 0: float, 1: uint8_t, 2: int8_t, 3: uint16_t, 4: int16_t, 5: uint32_t, 6: int32_t
+ * @return Onboard parameter type: see MAV_VAR enum
  */
 public static byte mavlink_msg_param_set_get_param_type(byte[] msg)
 {

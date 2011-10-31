@@ -10,31 +10,52 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_marker_t
     {
-         public  Single x; /// x position
-     public  Single y; /// y position
-     public  Single z; /// z position
-     public  Single roll; /// roll orientation
-     public  Single pitch; /// pitch orientation
-     public  Single yaw; /// yaw orientation
-     public  UInt16 id; /// ID
+        /// <summary>
+        /// x position
+        /// </summary>
+        public  Single x;
+            /// <summary>
+        /// y position
+        /// </summary>
+        public  Single y;
+            /// <summary>
+        /// z position
+        /// </summary>
+        public  Single z;
+            /// <summary>
+        /// roll orientation
+        /// </summary>
+        public  Single roll;
+            /// <summary>
+        /// pitch orientation
+        /// </summary>
+        public  Single pitch;
+            /// <summary>
+        /// yaw orientation
+        /// </summary>
+        public  Single yaw;
+            /// <summary>
+        /// ID
+        /// </summary>
+        public  UInt16 id;
     
     };
 
-/**
- * @brief Pack a marker message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param id ID
- * @param x x position
- * @param y y position
- * @param z z position
- * @param roll roll orientation
- * @param pitch pitch orientation
- * @param yaw yaw orientation
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a marker message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param id ID
+/// * @param x x position
+/// * @param y y position
+/// * @param z z position
+/// * @param roll roll orientation
+/// * @param pitch pitch orientation
+/// * @param yaw yaw orientation
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_marker_pack(byte system_id, byte component_id, byte[] msg,
                                UInt16 id, Single x, Single y, Single z, Single roll, Single pitch, Single yaw)

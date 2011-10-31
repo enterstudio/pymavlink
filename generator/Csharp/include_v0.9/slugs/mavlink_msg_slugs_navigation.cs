@@ -10,35 +10,62 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_slugs_navigation_t
     {
-         public  Single u_m; /// Measured Airspeed prior to the Nav Filter
-     public  Single phi_c; /// Commanded Roll
-     public  Single theta_c; /// Commanded Pitch
-     public  Single psiDot_c; /// Commanded Turn rate
-     public  Single ay_body; /// Y component of the body acceleration
-     public  Single totalDist; /// Total Distance to Run on this leg of Navigation
-     public  Single dist2Go; /// Remaining distance to Run on this leg of Navigation
-     public  byte fromWP; /// Origin WP
-     public  byte toWP; /// Destination WP
+        /// <summary>
+        /// Measured Airspeed prior to the Nav Filter
+        /// </summary>
+        public  Single u_m;
+            /// <summary>
+        /// Commanded Roll
+        /// </summary>
+        public  Single phi_c;
+            /// <summary>
+        /// Commanded Pitch
+        /// </summary>
+        public  Single theta_c;
+            /// <summary>
+        /// Commanded Turn rate
+        /// </summary>
+        public  Single psiDot_c;
+            /// <summary>
+        /// Y component of the body acceleration
+        /// </summary>
+        public  Single ay_body;
+            /// <summary>
+        /// Total Distance to Run on this leg of Navigation
+        /// </summary>
+        public  Single totalDist;
+            /// <summary>
+        /// Remaining distance to Run on this leg of Navigation
+        /// </summary>
+        public  Single dist2Go;
+            /// <summary>
+        /// Origin WP
+        /// </summary>
+        public  byte fromWP;
+            /// <summary>
+        /// Destination WP
+        /// </summary>
+        public  byte toWP;
     
     };
 
-/**
- * @brief Pack a slugs_navigation message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param u_m Measured Airspeed prior to the Nav Filter
- * @param phi_c Commanded Roll
- * @param theta_c Commanded Pitch
- * @param psiDot_c Commanded Turn rate
- * @param ay_body Y component of the body acceleration
- * @param totalDist Total Distance to Run on this leg of Navigation
- * @param dist2Go Remaining distance to Run on this leg of Navigation
- * @param fromWP Origin WP
- * @param toWP Destination WP
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a slugs_navigation message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param u_m Measured Airspeed prior to the Nav Filter
+/// * @param phi_c Commanded Roll
+/// * @param theta_c Commanded Pitch
+/// * @param psiDot_c Commanded Turn rate
+/// * @param ay_body Y component of the body acceleration
+/// * @param totalDist Total Distance to Run on this leg of Navigation
+/// * @param dist2Go Remaining distance to Run on this leg of Navigation
+/// * @param fromWP Origin WP
+/// * @param toWP Destination WP
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_slugs_navigation_pack(byte system_id, byte component_id, byte[] msg,
                                Single u_m, Single phi_c, Single theta_c, Single psiDot_c, Single ay_body, Single totalDist, Single dist2Go, byte fromWP, byte toWP)

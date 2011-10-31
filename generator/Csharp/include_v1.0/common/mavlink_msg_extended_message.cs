@@ -10,23 +10,32 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_extended_message_t
     {
-         public  byte target_system; /// System which should execute the command
-     public  byte target_component; /// Component which should execute the command, 0 for all components
-     public  byte protocol_flags; /// Retransmission / ACK flags
+        /// <summary>
+        /// System which should execute the command
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// Component which should execute the command, 0 for all components
+        /// </summary>
+        public  byte target_component;
+            /// <summary>
+        /// Retransmission / ACK flags
+        /// </summary>
+        public  byte protocol_flags;
     
     };
 
-/**
- * @brief Pack a extended_message message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system System which should execute the command
- * @param target_component Component which should execute the command, 0 for all components
- * @param protocol_flags Retransmission / ACK flags
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a extended_message message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system System which should execute the command
+/// * @param target_component Component which should execute the command, 0 for all components
+/// * @param protocol_flags Retransmission / ACK flags
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_extended_message_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system, byte target_component, byte protocol_flags)

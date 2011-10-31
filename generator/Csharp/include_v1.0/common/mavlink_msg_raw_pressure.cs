@@ -10,27 +10,42 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_raw_pressure_t
     {
-         public  UInt64 time_usec; /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
-     public  Int16 press_abs; /// Absolute pressure (raw)
-     public  Int16 press_diff1; /// Differential pressure 1 (raw)
-     public  Int16 press_diff2; /// Differential pressure 2 (raw)
-     public  Int16 temperature; /// Raw Temperature measurement (raw)
+        /// <summary>
+        /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+        /// </summary>
+        public  UInt64 time_usec;
+            /// <summary>
+        /// Absolute pressure (raw)
+        /// </summary>
+        public  Int16 press_abs;
+            /// <summary>
+        /// Differential pressure 1 (raw)
+        /// </summary>
+        public  Int16 press_diff1;
+            /// <summary>
+        /// Differential pressure 2 (raw)
+        /// </summary>
+        public  Int16 press_diff2;
+            /// <summary>
+        /// Raw Temperature measurement (raw)
+        /// </summary>
+        public  Int16 temperature;
     
     };
 
-/**
- * @brief Pack a raw_pressure message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
- * @param press_abs Absolute pressure (raw)
- * @param press_diff1 Differential pressure 1 (raw)
- * @param press_diff2 Differential pressure 2 (raw)
- * @param temperature Raw Temperature measurement (raw)
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a raw_pressure message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+/// * @param press_abs Absolute pressure (raw)
+/// * @param press_diff1 Differential pressure 1 (raw)
+/// * @param press_diff2 Differential pressure 2 (raw)
+/// * @param temperature Raw Temperature measurement (raw)
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_raw_pressure_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 time_usec, Int16 press_abs, Int16 press_diff1, Int16 press_diff2, Int16 temperature)

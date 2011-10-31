@@ -10,23 +10,32 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_waypoint_request_t
     {
-         public  byte target_system; /// System ID
-     public  byte target_component; /// Component ID
-     public  UInt16 seq; /// Sequence
+        /// <summary>
+        /// System ID
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// Component ID
+        /// </summary>
+        public  byte target_component;
+            /// <summary>
+        /// Sequence
+        /// </summary>
+        public  UInt16 seq;
     
     };
 
-/**
- * @brief Pack a waypoint_request message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system System ID
- * @param target_component Component ID
- * @param seq Sequence
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a waypoint_request message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system System ID
+/// * @param target_component Component ID
+/// * @param seq Sequence
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_waypoint_request_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system, byte target_component, UInt16 seq)

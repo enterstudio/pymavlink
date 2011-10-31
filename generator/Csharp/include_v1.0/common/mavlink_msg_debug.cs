@@ -10,23 +10,32 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_debug_t
     {
-         public  UInt32 time_boot_ms; /// Timestamp (milliseconds since system boot)
-     public  Single value; /// DEBUG value
-     public  byte ind; /// index of debug variable
+        /// <summary>
+        /// Timestamp (milliseconds since system boot)
+        /// </summary>
+        public  UInt32 time_boot_ms;
+            /// <summary>
+        /// DEBUG value
+        /// </summary>
+        public  Single value;
+            /// <summary>
+        /// index of debug variable
+        /// </summary>
+        public  byte ind;
     
     };
 
-/**
- * @brief Pack a debug message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time_boot_ms Timestamp (milliseconds since system boot)
- * @param ind index of debug variable
- * @param value DEBUG value
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a debug message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time_boot_ms Timestamp (milliseconds since system boot)
+/// * @param ind index of debug variable
+/// * @param value DEBUG value
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_debug_pack(byte system_id, byte component_id, byte[] msg,
                                UInt32 time_boot_ms, byte ind, Single value)

@@ -10,31 +10,52 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_nav_filter_bias_t
     {
-         public  UInt64 usec; /// Timestamp (microseconds)
-     public  Single accel_0; /// b_f[0]
-     public  Single accel_1; /// b_f[1]
-     public  Single accel_2; /// b_f[2]
-     public  Single gyro_0; /// b_f[0]
-     public  Single gyro_1; /// b_f[1]
-     public  Single gyro_2; /// b_f[2]
+        /// <summary>
+        /// Timestamp (microseconds)
+        /// </summary>
+        public  UInt64 usec;
+            /// <summary>
+        /// b_f[0]
+        /// </summary>
+        public  Single accel_0;
+            /// <summary>
+        /// b_f[1]
+        /// </summary>
+        public  Single accel_1;
+            /// <summary>
+        /// b_f[2]
+        /// </summary>
+        public  Single accel_2;
+            /// <summary>
+        /// b_f[0]
+        /// </summary>
+        public  Single gyro_0;
+            /// <summary>
+        /// b_f[1]
+        /// </summary>
+        public  Single gyro_1;
+            /// <summary>
+        /// b_f[2]
+        /// </summary>
+        public  Single gyro_2;
     
     };
 
-/**
- * @brief Pack a nav_filter_bias message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param usec Timestamp (microseconds)
- * @param accel_0 b_f[0]
- * @param accel_1 b_f[1]
- * @param accel_2 b_f[2]
- * @param gyro_0 b_f[0]
- * @param gyro_1 b_f[1]
- * @param gyro_2 b_f[2]
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a nav_filter_bias message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param usec Timestamp (microseconds)
+/// * @param accel_0 b_f[0]
+/// * @param accel_1 b_f[1]
+/// * @param accel_2 b_f[2]
+/// * @param gyro_0 b_f[0]
+/// * @param gyro_1 b_f[1]
+/// * @param gyro_2 b_f[2]
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_nav_filter_bias_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 usec, Single accel_0, Single accel_1, Single accel_2, Single gyro_0, Single gyro_1, Single gyro_2)

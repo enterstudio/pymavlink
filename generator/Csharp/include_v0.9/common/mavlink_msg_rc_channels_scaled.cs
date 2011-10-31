@@ -10,35 +10,62 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_rc_channels_scaled_t
     {
-         public  Int16 chan1_scaled; /// RC channel 1 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
-     public  Int16 chan2_scaled; /// RC channel 2 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
-     public  Int16 chan3_scaled; /// RC channel 3 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
-     public  Int16 chan4_scaled; /// RC channel 4 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
-     public  Int16 chan5_scaled; /// RC channel 5 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
-     public  Int16 chan6_scaled; /// RC channel 6 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
-     public  Int16 chan7_scaled; /// RC channel 7 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
-     public  Int16 chan8_scaled; /// RC channel 8 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
-     public  byte rssi; /// Receive signal strength indicator, 0: 0%, 255: 100%
+        /// <summary>
+        /// RC channel 1 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+        /// </summary>
+        public  Int16 chan1_scaled;
+            /// <summary>
+        /// RC channel 2 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+        /// </summary>
+        public  Int16 chan2_scaled;
+            /// <summary>
+        /// RC channel 3 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+        /// </summary>
+        public  Int16 chan3_scaled;
+            /// <summary>
+        /// RC channel 4 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+        /// </summary>
+        public  Int16 chan4_scaled;
+            /// <summary>
+        /// RC channel 5 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+        /// </summary>
+        public  Int16 chan5_scaled;
+            /// <summary>
+        /// RC channel 6 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+        /// </summary>
+        public  Int16 chan6_scaled;
+            /// <summary>
+        /// RC channel 7 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+        /// </summary>
+        public  Int16 chan7_scaled;
+            /// <summary>
+        /// RC channel 8 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+        /// </summary>
+        public  Int16 chan8_scaled;
+            /// <summary>
+        /// Receive signal strength indicator, 0: 0%, 255: 100%
+        /// </summary>
+        public  byte rssi;
     
     };
 
-/**
- * @brief Pack a rc_channels_scaled message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param chan1_scaled RC channel 1 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
- * @param chan2_scaled RC channel 2 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
- * @param chan3_scaled RC channel 3 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
- * @param chan4_scaled RC channel 4 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
- * @param chan5_scaled RC channel 5 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
- * @param chan6_scaled RC channel 6 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
- * @param chan7_scaled RC channel 7 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
- * @param chan8_scaled RC channel 8 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
- * @param rssi Receive signal strength indicator, 0: 0%, 255: 100%
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a rc_channels_scaled message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param chan1_scaled RC channel 1 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+/// * @param chan2_scaled RC channel 2 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+/// * @param chan3_scaled RC channel 3 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+/// * @param chan4_scaled RC channel 4 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+/// * @param chan5_scaled RC channel 5 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+/// * @param chan6_scaled RC channel 6 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+/// * @param chan7_scaled RC channel 7 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+/// * @param chan8_scaled RC channel 8 value scaled, (-100%) -10000, (0%) 0, (100%) 10000
+/// * @param rssi Receive signal strength indicator, 0: 0%, 255: 100%
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_rc_channels_scaled_pack(byte system_id, byte component_id, byte[] msg,
                                Int16 chan1_scaled, Int16 chan2_scaled, Int16 chan3_scaled, Int16 chan4_scaled, Int16 chan5_scaled, Int16 chan6_scaled, Int16 chan7_scaled, Int16 chan8_scaled, byte rssi)

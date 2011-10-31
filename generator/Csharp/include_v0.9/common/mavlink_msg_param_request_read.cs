@@ -10,26 +10,38 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_param_request_read_t
     {
-         public  byte target_system; /// System ID
-     public  byte target_component; /// Component ID
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=15)]
- public byte[] param_id; /// Onboard parameter id
-     public  Int16 param_index; /// Parameter index. Send -1 to use the param ID field as identifier
+        /// <summary>
+        /// System ID
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// Component ID
+        /// </summary>
+        public  byte target_component;
+            /// <summary>
+        /// Onboard parameter id
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=15)]
+ public byte[] param_id;
+            /// <summary>
+        /// Parameter index. Send -1 to use the param ID field as identifier
+        /// </summary>
+        public  Int16 param_index;
     
     };
 
-/**
- * @brief Pack a param_request_read message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system System ID
- * @param target_component Component ID
- * @param param_id Onboard parameter id
- * @param param_index Parameter index. Send -1 to use the param ID field as identifier
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a param_request_read message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system System ID
+/// * @param target_component Component ID
+/// * @param param_id Onboard parameter id
+/// * @param param_index Parameter index. Send -1 to use the param ID field as identifier
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_param_request_read_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system, byte target_component, byte[] param_id, Int16 param_index)
@@ -38,7 +50,7 @@ if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(target_system),0,msg,0,sizeof(byte));
 	Array.Copy(BitConverter.GetBytes(target_component),0,msg,1,sizeof(byte));
 	Array.Copy(BitConverter.GetBytes(param_index),0,msg,17,sizeof(Int16));
-	//Array.Copy(param_id,0,msg,2,15);
+	Array.Copy(toArray(param_id),0,msg,2,15);
 } else {
     mavlink_param_request_read_t packet = new mavlink_param_request_read_t();
 	packet.target_system = target_system;

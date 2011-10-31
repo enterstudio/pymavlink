@@ -10,34 +10,58 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_brief_feature_t
     {
-         public  Single x; /// x position in m
-     public  Single y; /// y position in m
-     public  Single z; /// z position in m
-     public  Single response; /// Harris operator response at this location
-     public  UInt16 size; /// Size in pixels
-     public  UInt16 orientation; /// Orientation
-     public  byte orientation_assignment; /// Orientation assignment 0: false, 1:true
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=32)]
- public byte[] descriptor; /// Descriptor
+        /// <summary>
+        /// x position in m
+        /// </summary>
+        public  Single x;
+            /// <summary>
+        /// y position in m
+        /// </summary>
+        public  Single y;
+            /// <summary>
+        /// z position in m
+        /// </summary>
+        public  Single z;
+            /// <summary>
+        /// Harris operator response at this location
+        /// </summary>
+        public  Single response;
+            /// <summary>
+        /// Size in pixels
+        /// </summary>
+        public  UInt16 size;
+            /// <summary>
+        /// Orientation
+        /// </summary>
+        public  UInt16 orientation;
+            /// <summary>
+        /// Orientation assignment 0: false, 1:true
+        /// </summary>
+        public  byte orientation_assignment;
+            /// <summary>
+        /// Descriptor
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=32)]
+ public byte[] descriptor;
     
     };
 
-/**
- * @brief Pack a brief_feature message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param x x position in m
- * @param y y position in m
- * @param z z position in m
- * @param orientation_assignment Orientation assignment 0: false, 1:true
- * @param size Size in pixels
- * @param orientation Orientation
- * @param descriptor Descriptor
- * @param response Harris operator response at this location
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a brief_feature message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param x x position in m
+/// * @param y y position in m
+/// * @param z z position in m
+/// * @param orientation_assignment Orientation assignment 0: false, 1:true
+/// * @param size Size in pixels
+/// * @param orientation Orientation
+/// * @param descriptor Descriptor
+/// * @param response Harris operator response at this location
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_brief_feature_pack(byte system_id, byte component_id, byte[] msg,
                                Single x, Single y, Single z, byte orientation_assignment, UInt16 size, UInt16 orientation, byte[] descriptor, Single response)
@@ -50,7 +74,7 @@ if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(size),0,msg,16,sizeof(UInt16));
 	Array.Copy(BitConverter.GetBytes(orientation),0,msg,18,sizeof(UInt16));
 	Array.Copy(BitConverter.GetBytes(orientation_assignment),0,msg,20,sizeof(byte));
-	//Array.Copy(descriptor,0,msg,21,32);
+	Array.Copy(toArray(descriptor),0,msg,21,32);
 } else {
     mavlink_brief_feature_t packet = new mavlink_brief_feature_t();
 	packet.x = x;

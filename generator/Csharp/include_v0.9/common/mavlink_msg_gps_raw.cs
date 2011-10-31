@@ -10,35 +10,62 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_gps_raw_t
     {
-         public  UInt64 usec; /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
-     public  byte fix_type; /// 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
-     public  Single lat; /// Latitude in degrees
-     public  Single lon; /// Longitude in degrees
-     public  Single alt; /// Altitude in meters
-     public  Single eph; /// GPS HDOP
-     public  Single epv; /// GPS VDOP
-     public  Single v; /// GPS ground speed
-     public  Single hdg; /// Compass heading in degrees, 0..360 degrees
+        /// <summary>
+        /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+        /// </summary>
+        public  UInt64 usec;
+            /// <summary>
+        /// 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
+        /// </summary>
+        public  byte fix_type;
+            /// <summary>
+        /// Latitude in degrees
+        /// </summary>
+        public  Single lat;
+            /// <summary>
+        /// Longitude in degrees
+        /// </summary>
+        public  Single lon;
+            /// <summary>
+        /// Altitude in meters
+        /// </summary>
+        public  Single alt;
+            /// <summary>
+        /// GPS HDOP
+        /// </summary>
+        public  Single eph;
+            /// <summary>
+        /// GPS VDOP
+        /// </summary>
+        public  Single epv;
+            /// <summary>
+        /// GPS ground speed
+        /// </summary>
+        public  Single v;
+            /// <summary>
+        /// Compass heading in degrees, 0..360 degrees
+        /// </summary>
+        public  Single hdg;
     
     };
 
-/**
- * @brief Pack a gps_raw message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
- * @param fix_type 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
- * @param lat Latitude in degrees
- * @param lon Longitude in degrees
- * @param alt Altitude in meters
- * @param eph GPS HDOP
- * @param epv GPS VDOP
- * @param v GPS ground speed
- * @param hdg Compass heading in degrees, 0..360 degrees
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a gps_raw message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+/// * @param fix_type 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
+/// * @param lat Latitude in degrees
+/// * @param lon Longitude in degrees
+/// * @param alt Altitude in meters
+/// * @param eph GPS HDOP
+/// * @param epv GPS VDOP
+/// * @param v GPS ground speed
+/// * @param hdg Compass heading in degrees, 0..360 degrees
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_gps_raw_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 usec, byte fix_type, Single lat, Single lon, Single alt, Single eph, Single epv, Single v, Single hdg)

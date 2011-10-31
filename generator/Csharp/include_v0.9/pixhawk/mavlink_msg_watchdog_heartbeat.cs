@@ -10,21 +10,27 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_watchdog_heartbeat_t
     {
-         public  UInt16 watchdog_id; /// Watchdog ID
-     public  UInt16 process_count; /// Number of processes
+        /// <summary>
+        /// Watchdog ID
+        /// </summary>
+        public  UInt16 watchdog_id;
+            /// <summary>
+        /// Number of processes
+        /// </summary>
+        public  UInt16 process_count;
     
     };
 
-/**
- * @brief Pack a watchdog_heartbeat message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param watchdog_id Watchdog ID
- * @param process_count Number of processes
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a watchdog_heartbeat message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param watchdog_id Watchdog ID
+/// * @param process_count Number of processes
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_watchdog_heartbeat_pack(byte system_id, byte component_id, byte[] msg,
                                UInt16 watchdog_id, UInt16 process_count)

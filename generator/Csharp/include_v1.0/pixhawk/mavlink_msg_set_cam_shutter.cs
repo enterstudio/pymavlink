@@ -10,29 +10,47 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_set_cam_shutter_t
     {
-         public  Single gain; /// Camera gain
-     public  UInt16 interval; /// Shutter interval, in microseconds
-     public  UInt16 exposure; /// Exposure time, in microseconds
-     public  byte cam_no; /// Camera id
-     public  byte cam_mode; /// Camera mode: 0 = auto, 1 = manual
-     public  byte trigger_pin; /// Trigger pin, 0-3 for PtGrey FireFly
+        /// <summary>
+        /// Camera gain
+        /// </summary>
+        public  Single gain;
+            /// <summary>
+        /// Shutter interval, in microseconds
+        /// </summary>
+        public  UInt16 interval;
+            /// <summary>
+        /// Exposure time, in microseconds
+        /// </summary>
+        public  UInt16 exposure;
+            /// <summary>
+        /// Camera id
+        /// </summary>
+        public  byte cam_no;
+            /// <summary>
+        /// Camera mode: 0 = auto, 1 = manual
+        /// </summary>
+        public  byte cam_mode;
+            /// <summary>
+        /// Trigger pin, 0-3 for PtGrey FireFly
+        /// </summary>
+        public  byte trigger_pin;
     
     };
 
-/**
- * @brief Pack a set_cam_shutter message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param cam_no Camera id
- * @param cam_mode Camera mode: 0 = auto, 1 = manual
- * @param trigger_pin Trigger pin, 0-3 for PtGrey FireFly
- * @param interval Shutter interval, in microseconds
- * @param exposure Exposure time, in microseconds
- * @param gain Camera gain
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a set_cam_shutter message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param cam_no Camera id
+/// * @param cam_mode Camera mode: 0 = auto, 1 = manual
+/// * @param trigger_pin Trigger pin, 0-3 for PtGrey FireFly
+/// * @param interval Shutter interval, in microseconds
+/// * @param exposure Exposure time, in microseconds
+/// * @param gain Camera gain
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_set_cam_shutter_pack(byte system_id, byte component_id, byte[] msg,
                                byte cam_no, byte cam_mode, byte trigger_pin, UInt16 interval, UInt16 exposure, Single gain)

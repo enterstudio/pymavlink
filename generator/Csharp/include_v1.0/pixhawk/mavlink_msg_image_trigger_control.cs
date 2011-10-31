@@ -10,19 +10,22 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_image_trigger_control_t
     {
-         public  byte enable; /// 0 to disable, 1 to enable
+        /// <summary>
+        /// 0 to disable, 1 to enable
+        /// </summary>
+        public  byte enable;
     
     };
 
-/**
- * @brief Pack a image_trigger_control message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param enable 0 to disable, 1 to enable
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a image_trigger_control message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param enable 0 to disable, 1 to enable
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_image_trigger_control_pack(byte system_id, byte component_id, byte[] msg,
                                byte enable)

@@ -10,29 +10,47 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_vfr_hud_t
     {
-         public  Single airspeed; /// Current airspeed in m/s
-     public  Single groundspeed; /// Current ground speed in m/s
-     public  Int16 heading; /// Current heading in degrees, in compass units (0..360, 0=north)
-     public  UInt16 throttle; /// Current throttle setting in integer percent, 0 to 100
-     public  Single alt; /// Current altitude (MSL), in meters
-     public  Single climb; /// Current climb rate in meters/second
+        /// <summary>
+        /// Current airspeed in m/s
+        /// </summary>
+        public  Single airspeed;
+            /// <summary>
+        /// Current ground speed in m/s
+        /// </summary>
+        public  Single groundspeed;
+            /// <summary>
+        /// Current heading in degrees, in compass units (0..360, 0=north)
+        /// </summary>
+        public  Int16 heading;
+            /// <summary>
+        /// Current throttle setting in integer percent, 0 to 100
+        /// </summary>
+        public  UInt16 throttle;
+            /// <summary>
+        /// Current altitude (MSL), in meters
+        /// </summary>
+        public  Single alt;
+            /// <summary>
+        /// Current climb rate in meters/second
+        /// </summary>
+        public  Single climb;
     
     };
 
-/**
- * @brief Pack a vfr_hud message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param airspeed Current airspeed in m/s
- * @param groundspeed Current ground speed in m/s
- * @param heading Current heading in degrees, in compass units (0..360, 0=north)
- * @param throttle Current throttle setting in integer percent, 0 to 100
- * @param alt Current altitude (MSL), in meters
- * @param climb Current climb rate in meters/second
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a vfr_hud message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param airspeed Current airspeed in m/s
+/// * @param groundspeed Current ground speed in m/s
+/// * @param heading Current heading in degrees, in compass units (0..360, 0=north)
+/// * @param throttle Current throttle setting in integer percent, 0 to 100
+/// * @param alt Current altitude (MSL), in meters
+/// * @param climb Current climb rate in meters/second
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_vfr_hud_pack(byte system_id, byte component_id, byte[] msg,
                                Single airspeed, Single groundspeed, Int16 heading, UInt16 throttle, Single alt, Single climb)

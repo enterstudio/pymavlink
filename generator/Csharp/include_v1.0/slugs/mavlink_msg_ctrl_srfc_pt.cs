@@ -10,21 +10,27 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_ctrl_srfc_pt_t
     {
-         public  UInt16 bitfieldPt; /// Bitfield containing the PT configuration
-     public  byte target; /// The system setting the commands
+        /// <summary>
+        /// Bitfield containing the PT configuration
+        /// </summary>
+        public  UInt16 bitfieldPt;
+            /// <summary>
+        /// The system setting the commands
+        /// </summary>
+        public  byte target;
     
     };
 
-/**
- * @brief Pack a ctrl_srfc_pt message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target The system setting the commands
- * @param bitfieldPt Bitfield containing the PT configuration
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a ctrl_srfc_pt message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target The system setting the commands
+/// * @param bitfieldPt Bitfield containing the PT configuration
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_ctrl_srfc_pt_pack(byte system_id, byte component_id, byte[] msg,
                                byte target, UInt16 bitfieldPt)

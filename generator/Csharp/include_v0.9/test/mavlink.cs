@@ -6,15 +6,17 @@
  
 public partial class Mavlink
 {
-    const int MAVLINK_LITTLE_ENDIAN = 1;
+    public const int MAVLINK_LITTLE_ENDIAN = 1;
 
-    const byte MAVLINK_STX = 85;
+    public const byte MAVLINK_STX = 85;
 
-    const byte MAVLINK_ENDIAN = MAVLINK_BIG_ENDIAN;
+    public const byte MAVLINK_ENDIAN = MAVLINK_BIG_ENDIAN;
 
-    const bool MAVLINK_ALIGNED_FIELDS = (0 == 1);
+    public const bool MAVLINK_ALIGNED_FIELDS = (0 == 1);
 
-    const byte MAVLINK_CRC_EXTRA = 0;
+    public const byte MAVLINK_CRC_EXTRA = 0;
     
-    const bool MAVLINK_NEED_BYTE_SWAP = (MAVLINK_ENDIAN == MAVLINK_LITTLE_ENDIAN);
+    public const bool MAVLINK_NEED_BYTE_SWAP = (MAVLINK_ENDIAN == MAVLINK_LITTLE_ENDIAN);
+    
+    public byte packetcount = 0;
 }

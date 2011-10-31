@@ -10,27 +10,42 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_request_data_stream_t
     {
-         public  byte target_system; /// The target requested to send the message stream.
-     public  byte target_component; /// The target requested to send the message stream.
-     public  byte req_stream_id; /// The ID of the requested message type
-     public  UInt16 req_message_rate; /// Update rate in Hertz
-     public  byte start_stop; /// 1 to start sending, 0 to stop sending.
+        /// <summary>
+        /// The target requested to send the message stream.
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// The target requested to send the message stream.
+        /// </summary>
+        public  byte target_component;
+            /// <summary>
+        /// The ID of the requested message type
+        /// </summary>
+        public  byte req_stream_id;
+            /// <summary>
+        /// Update rate in Hertz
+        /// </summary>
+        public  UInt16 req_message_rate;
+            /// <summary>
+        /// 1 to start sending, 0 to stop sending.
+        /// </summary>
+        public  byte start_stop;
     
     };
 
-/**
- * @brief Pack a request_data_stream message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system The target requested to send the message stream.
- * @param target_component The target requested to send the message stream.
- * @param req_stream_id The ID of the requested message type
- * @param req_message_rate Update rate in Hertz
- * @param start_stop 1 to start sending, 0 to stop sending.
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a request_data_stream message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system The target requested to send the message stream.
+/// * @param target_component The target requested to send the message stream.
+/// * @param req_stream_id The ID of the requested message type
+/// * @param req_message_rate Update rate in Hertz
+/// * @param start_stop 1 to start sending, 0 to stop sending.
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_request_data_stream_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system, byte target_component, byte req_stream_id, UInt16 req_message_rate, byte start_stop)

@@ -10,33 +10,57 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_nav_controller_output_t
     {
-         public  Single nav_roll; /// Current desired roll in degrees
-     public  Single nav_pitch; /// Current desired pitch in degrees
-     public  Int16 nav_bearing; /// Current desired heading in degrees
-     public  Int16 target_bearing; /// Bearing to current waypoint/target in degrees
-     public  UInt16 wp_dist; /// Distance to active waypoint in meters
-     public  Single alt_error; /// Current altitude error in meters
-     public  Single aspd_error; /// Current airspeed error in meters/second
-     public  Single xtrack_error; /// Current crosstrack error on x-y plane in meters
+        /// <summary>
+        /// Current desired roll in degrees
+        /// </summary>
+        public  Single nav_roll;
+            /// <summary>
+        /// Current desired pitch in degrees
+        /// </summary>
+        public  Single nav_pitch;
+            /// <summary>
+        /// Current desired heading in degrees
+        /// </summary>
+        public  Int16 nav_bearing;
+            /// <summary>
+        /// Bearing to current waypoint/target in degrees
+        /// </summary>
+        public  Int16 target_bearing;
+            /// <summary>
+        /// Distance to active waypoint in meters
+        /// </summary>
+        public  UInt16 wp_dist;
+            /// <summary>
+        /// Current altitude error in meters
+        /// </summary>
+        public  Single alt_error;
+            /// <summary>
+        /// Current airspeed error in meters/second
+        /// </summary>
+        public  Single aspd_error;
+            /// <summary>
+        /// Current crosstrack error on x-y plane in meters
+        /// </summary>
+        public  Single xtrack_error;
     
     };
 
-/**
- * @brief Pack a nav_controller_output message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param nav_roll Current desired roll in degrees
- * @param nav_pitch Current desired pitch in degrees
- * @param nav_bearing Current desired heading in degrees
- * @param target_bearing Bearing to current waypoint/target in degrees
- * @param wp_dist Distance to active waypoint in meters
- * @param alt_error Current altitude error in meters
- * @param aspd_error Current airspeed error in meters/second
- * @param xtrack_error Current crosstrack error on x-y plane in meters
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a nav_controller_output message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param nav_roll Current desired roll in degrees
+/// * @param nav_pitch Current desired pitch in degrees
+/// * @param nav_bearing Current desired heading in degrees
+/// * @param target_bearing Bearing to current waypoint/target in degrees
+/// * @param wp_dist Distance to active waypoint in meters
+/// * @param alt_error Current altitude error in meters
+/// * @param aspd_error Current airspeed error in meters/second
+/// * @param xtrack_error Current crosstrack error on x-y plane in meters
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_nav_controller_output_pack(byte system_id, byte component_id, byte[] msg,
                                Single nav_roll, Single nav_pitch, Int16 nav_bearing, Int16 target_bearing, UInt16 wp_dist, Single alt_error, Single aspd_error, Single xtrack_error)

@@ -10,26 +10,38 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_change_operator_control_t
     {
-         public  byte target_system; /// System the GCS requests control for
-     public  byte control_request; /// 0: request control of this MAV, 1: Release control of this MAV
-     public  byte version; /// 0: key as plaintext, 1-255: future, different hashing/encryption variants. The GCS should in general use the safest mode possible initially and then gradually move down the encryption level if it gets a NACK message indicating an encryption mismatch.
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=25)]
- public string passkey; /// Password / Key, depending on version plaintext or encrypted. 25 or less characters, NULL terminated. The characters may involve A-Z, a-z, 0-9, and "!?,.-"
+        /// <summary>
+        /// System the GCS requests control for
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// 0: request control of this MAV, 1: Release control of this MAV
+        /// </summary>
+        public  byte control_request;
+            /// <summary>
+        /// 0: key as plaintext, 1-255: future, different hashing/encryption variants. The GCS should in general use the safest mode possible initially and then gradually move down the encryption level if it gets a NACK message indicating an encryption mismatch.
+        /// </summary>
+        public  byte version;
+            /// <summary>
+        /// Password / Key, depending on version plaintext or encrypted. 25 or less characters, NULL terminated. The characters may involve A-Z, a-z, 0-9, and "!?,.-"
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=25)]
+ public string passkey;
     
     };
 
-/**
- * @brief Pack a change_operator_control message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system System the GCS requests control for
- * @param control_request 0: request control of this MAV, 1: Release control of this MAV
- * @param version 0: key as plaintext, 1-255: future, different hashing/encryption variants. The GCS should in general use the safest mode possible initially and then gradually move down the encryption level if it gets a NACK message indicating an encryption mismatch.
- * @param passkey Password / Key, depending on version plaintext or encrypted. 25 or less characters, NULL terminated. The characters may involve A-Z, a-z, 0-9, and "!?,.-"
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a change_operator_control message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system System the GCS requests control for
+/// * @param control_request 0: request control of this MAV, 1: Release control of this MAV
+/// * @param version 0: key as plaintext, 1-255: future, different hashing/encryption variants. The GCS should in general use the safest mode possible initially and then gradually move down the encryption level if it gets a NACK message indicating an encryption mismatch.
+/// * @param passkey Password / Key, depending on version plaintext or encrypted. 25 or less characters, NULL terminated. The characters may involve A-Z, a-z, 0-9, and "!?,.-"
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_change_operator_control_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system, byte control_request, byte version, string passkey)
@@ -38,7 +50,7 @@ if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(target_system),0,msg,0,sizeof(byte));
 	Array.Copy(BitConverter.GetBytes(control_request),0,msg,1,sizeof(byte));
 	Array.Copy(BitConverter.GetBytes(version),0,msg,2,sizeof(byte));
-	//Array.Copy(passkey,0,msg,3,25);
+	Array.Copy(toArray(passkey),0,msg,3,25);
 } else {
     mavlink_change_operator_control_t packet = new mavlink_change_operator_control_t();
 	packet.target_system = target_system;

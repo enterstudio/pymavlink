@@ -10,21 +10,27 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_debug_t
     {
-         public  byte ind; /// index of debug variable
-     public  Single value; /// DEBUG value
+        /// <summary>
+        /// index of debug variable
+        /// </summary>
+        public  byte ind;
+            /// <summary>
+        /// DEBUG value
+        /// </summary>
+        public  Single value;
     
     };
 
-/**
- * @brief Pack a debug message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param ind index of debug variable
- * @param value DEBUG value
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a debug message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param ind index of debug variable
+/// * @param value DEBUG value
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_debug_pack(byte system_id, byte component_id, byte[] msg,
                                byte ind, Single value)

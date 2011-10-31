@@ -10,29 +10,35 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_statustext_t
     {
-         public  byte severity; /// Severity of status, 0 = info message, 255 = critical fault
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=50)]
- public string text; /// Status text message, without null termination character
+        /// <summary>
+        /// Severity of status, 0 = info message, 255 = critical fault
+        /// </summary>
+        public  byte severity;
+            /// <summary>
+        /// Status text message, without null termination character
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=50)]
+ public string text;
     
     };
 
-/**
- * @brief Pack a statustext message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param severity Severity of status, 0 = info message, 255 = critical fault
- * @param text Status text message, without null termination character
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a statustext message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param severity Severity of status, 0 = info message, 255 = critical fault
+/// * @param text Status text message, without null termination character
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_statustext_pack(byte system_id, byte component_id, byte[] msg,
                                byte severity, string text)
 {
 if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(severity),0,msg,0,sizeof(byte));
-	//Array.Copy(text,0,msg,1,50);
+	Array.Copy(toArray(text),0,msg,1,50);
 } else {
     mavlink_statustext_t packet = new mavlink_statustext_t();
 	packet.severity = severity;

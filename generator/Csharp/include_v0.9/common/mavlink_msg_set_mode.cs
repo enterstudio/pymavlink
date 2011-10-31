@@ -10,21 +10,27 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_set_mode_t
     {
-         public  byte target; /// The system setting the mode
-     public  byte mode; /// The new mode
+        /// <summary>
+        /// The system setting the mode
+        /// </summary>
+        public  byte target;
+            /// <summary>
+        /// The new mode
+        /// </summary>
+        public  byte mode;
     
     };
 
-/**
- * @brief Pack a set_mode message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target The system setting the mode
- * @param mode The new mode
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a set_mode message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target The system setting the mode
+/// * @param mode The new mode
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_set_mode_pack(byte system_id, byte component_id, byte[] msg,
                                byte target, byte mode)

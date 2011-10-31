@@ -10,32 +10,53 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_object_detection_event_t
     {
-         public  UInt32 time; /// Timestamp in milliseconds since system boot
-     public  UInt16 object_id; /// Object ID
-     public  byte type; /// Object type: 0: image, 1: letter, 2: ground vehicle, 3: air vehicle, 4: surface vehicle, 5: sub-surface vehicle, 6: human, 7: animal
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
- public string name; /// Name of the object as defined by the detector
-     public  byte quality; /// Detection quality / confidence. 0: bad, 255: maximum confidence
-     public  Single bearing; /// Angle of the object with respect to the body frame in NED coordinates in radians. 0: front
-     public  Single distance; /// Ground distance in meters
+        /// <summary>
+        /// Timestamp in milliseconds since system boot
+        /// </summary>
+        public  UInt32 time;
+            /// <summary>
+        /// Object ID
+        /// </summary>
+        public  UInt16 object_id;
+            /// <summary>
+        /// Object type: 0: image, 1: letter, 2: ground vehicle, 3: air vehicle, 4: surface vehicle, 5: sub-surface vehicle, 6: human, 7: animal
+        /// </summary>
+        public  byte type;
+            /// <summary>
+        /// Name of the object as defined by the detector
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
+ public string name;
+            /// <summary>
+        /// Detection quality / confidence. 0: bad, 255: maximum confidence
+        /// </summary>
+        public  byte quality;
+            /// <summary>
+        /// Angle of the object with respect to the body frame in NED coordinates in radians. 0: front
+        /// </summary>
+        public  Single bearing;
+            /// <summary>
+        /// Ground distance in meters
+        /// </summary>
+        public  Single distance;
     
     };
 
-/**
- * @brief Pack a object_detection_event message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time Timestamp in milliseconds since system boot
- * @param object_id Object ID
- * @param type Object type: 0: image, 1: letter, 2: ground vehicle, 3: air vehicle, 4: surface vehicle, 5: sub-surface vehicle, 6: human, 7: animal
- * @param name Name of the object as defined by the detector
- * @param quality Detection quality / confidence. 0: bad, 255: maximum confidence
- * @param bearing Angle of the object with respect to the body frame in NED coordinates in radians. 0: front
- * @param distance Ground distance in meters
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a object_detection_event message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time Timestamp in milliseconds since system boot
+/// * @param object_id Object ID
+/// * @param type Object type: 0: image, 1: letter, 2: ground vehicle, 3: air vehicle, 4: surface vehicle, 5: sub-surface vehicle, 6: human, 7: animal
+/// * @param name Name of the object as defined by the detector
+/// * @param quality Detection quality / confidence. 0: bad, 255: maximum confidence
+/// * @param bearing Angle of the object with respect to the body frame in NED coordinates in radians. 0: front
+/// * @param distance Ground distance in meters
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_object_detection_event_pack(byte system_id, byte component_id, byte[] msg,
                                UInt32 time, UInt16 object_id, byte type, string name, byte quality, Single bearing, Single distance)
@@ -47,7 +68,7 @@ if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(quality),0,msg,27,sizeof(byte));
 	Array.Copy(BitConverter.GetBytes(bearing),0,msg,28,sizeof(Single));
 	Array.Copy(BitConverter.GetBytes(distance),0,msg,32,sizeof(Single));
-	//Array.Copy(name,0,msg,7,20);
+	Array.Copy(toArray(name),0,msg,7,20);
 } else {
     mavlink_object_detection_event_t packet = new mavlink_object_detection_event_t();
 	packet.time = time;

@@ -10,25 +10,37 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_watchdog_command_t
     {
-         public  byte target_system_id; /// Target system ID
-     public  UInt16 watchdog_id; /// Watchdog ID
-     public  UInt16 process_id; /// Process ID
-     public  byte command_id; /// Command ID
+        /// <summary>
+        /// Target system ID
+        /// </summary>
+        public  byte target_system_id;
+            /// <summary>
+        /// Watchdog ID
+        /// </summary>
+        public  UInt16 watchdog_id;
+            /// <summary>
+        /// Process ID
+        /// </summary>
+        public  UInt16 process_id;
+            /// <summary>
+        /// Command ID
+        /// </summary>
+        public  byte command_id;
     
     };
 
-/**
- * @brief Pack a watchdog_command message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system_id Target system ID
- * @param watchdog_id Watchdog ID
- * @param process_id Process ID
- * @param command_id Command ID
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a watchdog_command message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system_id Target system ID
+/// * @param watchdog_id Watchdog ID
+/// * @param process_id Process ID
+/// * @param command_id Command ID
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_watchdog_command_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system_id, UInt16 watchdog_id, UInt16 process_id, byte command_id)

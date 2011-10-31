@@ -10,23 +10,32 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_gps_global_origin_t
     {
-         public  Int32 latitude; /// Latitude (WGS84), expressed as * 1E7
-     public  Int32 longitude; /// Longitude (WGS84), expressed as * 1E7
-     public  Int32 altitude; /// Altitude(WGS84), expressed as * 1000
+        /// <summary>
+        /// Latitude (WGS84), expressed as * 1E7
+        /// </summary>
+        public  Int32 latitude;
+            /// <summary>
+        /// Longitude (WGS84), expressed as * 1E7
+        /// </summary>
+        public  Int32 longitude;
+            /// <summary>
+        /// Altitude(WGS84), expressed as * 1000
+        /// </summary>
+        public  Int32 altitude;
     
     };
 
-/**
- * @brief Pack a gps_global_origin message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param latitude Latitude (WGS84), expressed as * 1E7
- * @param longitude Longitude (WGS84), expressed as * 1E7
- * @param altitude Altitude(WGS84), expressed as * 1000
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a gps_global_origin message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param latitude Latitude (WGS84), expressed as * 1E7
+/// * @param longitude Longitude (WGS84), expressed as * 1E7
+/// * @param altitude Altitude(WGS84), expressed as * 1000
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_gps_global_origin_pack(byte system_id, byte component_id, byte[] msg,
                                Int32 latitude, Int32 longitude, Int32 altitude)

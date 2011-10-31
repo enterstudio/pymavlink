@@ -10,23 +10,32 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_change_operator_control_ack_t
     {
-         public  byte gcs_system_id; /// ID of the GCS this message 
-     public  byte control_request; /// 0: request control of this MAV, 1: Release control of this MAV
-     public  byte ack; /// 0: ACK, 1: NACK: Wrong passkey, 2: NACK: Unsupported passkey encryption method, 3: NACK: Already under control
+        /// <summary>
+        /// ID of the GCS this message 
+        /// </summary>
+        public  byte gcs_system_id;
+            /// <summary>
+        /// 0: request control of this MAV, 1: Release control of this MAV
+        /// </summary>
+        public  byte control_request;
+            /// <summary>
+        /// 0: ACK, 1: NACK: Wrong passkey, 2: NACK: Unsupported passkey encryption method, 3: NACK: Already under control
+        /// </summary>
+        public  byte ack;
     
     };
 
-/**
- * @brief Pack a change_operator_control_ack message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param gcs_system_id ID of the GCS this message 
- * @param control_request 0: request control of this MAV, 1: Release control of this MAV
- * @param ack 0: ACK, 1: NACK: Wrong passkey, 2: NACK: Unsupported passkey encryption method, 3: NACK: Already under control
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a change_operator_control_ack message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param gcs_system_id ID of the GCS this message 
+/// * @param control_request 0: request control of this MAV, 1: Release control of this MAV
+/// * @param ack 0: ACK, 1: NACK: Wrong passkey, 2: NACK: Unsupported passkey encryption method, 3: NACK: Already under control
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_change_operator_control_ack_pack(byte system_id, byte component_id, byte[] msg,
                                byte gcs_system_id, byte control_request, byte ack)

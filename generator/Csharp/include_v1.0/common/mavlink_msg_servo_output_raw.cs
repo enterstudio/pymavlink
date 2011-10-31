@@ -10,37 +10,67 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_servo_output_raw_t
     {
-         public  UInt32 time_usec; /// Timestamp (since UNIX epoch or microseconds since system boot)
-     public  UInt16 servo1_raw; /// Servo output 1 value, in microseconds
-     public  UInt16 servo2_raw; /// Servo output 2 value, in microseconds
-     public  UInt16 servo3_raw; /// Servo output 3 value, in microseconds
-     public  UInt16 servo4_raw; /// Servo output 4 value, in microseconds
-     public  UInt16 servo5_raw; /// Servo output 5 value, in microseconds
-     public  UInt16 servo6_raw; /// Servo output 6 value, in microseconds
-     public  UInt16 servo7_raw; /// Servo output 7 value, in microseconds
-     public  UInt16 servo8_raw; /// Servo output 8 value, in microseconds
-     public  byte port; /// Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows to encode more than 8 servos.
+        /// <summary>
+        /// Timestamp (since UNIX epoch or microseconds since system boot)
+        /// </summary>
+        public  UInt32 time_usec;
+            /// <summary>
+        /// Servo output 1 value, in microseconds
+        /// </summary>
+        public  UInt16 servo1_raw;
+            /// <summary>
+        /// Servo output 2 value, in microseconds
+        /// </summary>
+        public  UInt16 servo2_raw;
+            /// <summary>
+        /// Servo output 3 value, in microseconds
+        /// </summary>
+        public  UInt16 servo3_raw;
+            /// <summary>
+        /// Servo output 4 value, in microseconds
+        /// </summary>
+        public  UInt16 servo4_raw;
+            /// <summary>
+        /// Servo output 5 value, in microseconds
+        /// </summary>
+        public  UInt16 servo5_raw;
+            /// <summary>
+        /// Servo output 6 value, in microseconds
+        /// </summary>
+        public  UInt16 servo6_raw;
+            /// <summary>
+        /// Servo output 7 value, in microseconds
+        /// </summary>
+        public  UInt16 servo7_raw;
+            /// <summary>
+        /// Servo output 8 value, in microseconds
+        /// </summary>
+        public  UInt16 servo8_raw;
+            /// <summary>
+        /// Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows to encode more than 8 servos.
+        /// </summary>
+        public  byte port;
     
     };
 
-/**
- * @brief Pack a servo_output_raw message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time_usec Timestamp (since UNIX epoch or microseconds since system boot)
- * @param port Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows to encode more than 8 servos.
- * @param servo1_raw Servo output 1 value, in microseconds
- * @param servo2_raw Servo output 2 value, in microseconds
- * @param servo3_raw Servo output 3 value, in microseconds
- * @param servo4_raw Servo output 4 value, in microseconds
- * @param servo5_raw Servo output 5 value, in microseconds
- * @param servo6_raw Servo output 6 value, in microseconds
- * @param servo7_raw Servo output 7 value, in microseconds
- * @param servo8_raw Servo output 8 value, in microseconds
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a servo_output_raw message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time_usec Timestamp (since UNIX epoch or microseconds since system boot)
+/// * @param port Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows to encode more than 8 servos.
+/// * @param servo1_raw Servo output 1 value, in microseconds
+/// * @param servo2_raw Servo output 2 value, in microseconds
+/// * @param servo3_raw Servo output 3 value, in microseconds
+/// * @param servo4_raw Servo output 4 value, in microseconds
+/// * @param servo5_raw Servo output 5 value, in microseconds
+/// * @param servo6_raw Servo output 6 value, in microseconds
+/// * @param servo7_raw Servo output 7 value, in microseconds
+/// * @param servo8_raw Servo output 8 value, in microseconds
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_servo_output_raw_pack(byte system_id, byte component_id, byte[] msg,
                                UInt32 time_usec, byte port, UInt16 servo1_raw, UInt16 servo2_raw, UInt16 servo3_raw, UInt16 servo4_raw, UInt16 servo5_raw, UInt16 servo6_raw, UInt16 servo7_raw, UInt16 servo8_raw)

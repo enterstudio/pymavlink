@@ -10,27 +10,42 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_data_transmission_handshake_t
     {
-         public  byte type; /// type of requested/acknowledged data (as defined in ENUM DATA_TYPES in mavlink/include/mavlink_types.h)
-     public  UInt32 size; /// total data size in bytes (set on ACK only)
-     public  byte packets; /// number of packets beeing sent (set on ACK only)
-     public  byte payload; /// payload size per packet (normally 253 byte, see DATA field size in message ENCAPSULATED_DATA) (set on ACK only)
-     public  byte jpg_quality; /// JPEG quality out of [1,100]
+        /// <summary>
+        /// type of requested/acknowledged data (as defined in ENUM DATA_TYPES in mavlink/include/mavlink_types.h)
+        /// </summary>
+        public  byte type;
+            /// <summary>
+        /// total data size in bytes (set on ACK only)
+        /// </summary>
+        public  UInt32 size;
+            /// <summary>
+        /// number of packets beeing sent (set on ACK only)
+        /// </summary>
+        public  byte packets;
+            /// <summary>
+        /// payload size per packet (normally 253 byte, see DATA field size in message ENCAPSULATED_DATA) (set on ACK only)
+        /// </summary>
+        public  byte payload;
+            /// <summary>
+        /// JPEG quality out of [1,100]
+        /// </summary>
+        public  byte jpg_quality;
     
     };
 
-/**
- * @brief Pack a data_transmission_handshake message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param type type of requested/acknowledged data (as defined in ENUM DATA_TYPES in mavlink/include/mavlink_types.h)
- * @param size total data size in bytes (set on ACK only)
- * @param packets number of packets beeing sent (set on ACK only)
- * @param payload payload size per packet (normally 253 byte, see DATA field size in message ENCAPSULATED_DATA) (set on ACK only)
- * @param jpg_quality JPEG quality out of [1,100]
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a data_transmission_handshake message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param type type of requested/acknowledged data (as defined in ENUM DATA_TYPES in mavlink/include/mavlink_types.h)
+/// * @param size total data size in bytes (set on ACK only)
+/// * @param packets number of packets beeing sent (set on ACK only)
+/// * @param payload payload size per packet (normally 253 byte, see DATA field size in message ENCAPSULATED_DATA) (set on ACK only)
+/// * @param jpg_quality JPEG quality out of [1,100]
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_data_transmission_handshake_pack(byte system_id, byte component_id, byte[] msg,
                                byte type, UInt32 size, byte packets, byte payload, byte jpg_quality)

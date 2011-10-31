@@ -10,19 +10,22 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_system_time_t
     {
-         public  UInt64 time_usec; /// Timestamp of the master clock in microseconds since UNIX epoch.
+        /// <summary>
+        /// Timestamp of the master clock in microseconds since UNIX epoch.
+        /// </summary>
+        public  UInt64 time_usec;
     
     };
 
-/**
- * @brief Pack a system_time message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time_usec Timestamp of the master clock in microseconds since UNIX epoch.
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a system_time message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time_usec Timestamp of the master clock in microseconds since UNIX epoch.
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_system_time_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 time_usec)

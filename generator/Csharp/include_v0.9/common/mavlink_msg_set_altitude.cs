@@ -10,21 +10,27 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_set_altitude_t
     {
-         public  byte target; /// The system setting the altitude
-     public  UInt32 mode; /// The new altitude in meters
+        /// <summary>
+        /// The system setting the altitude
+        /// </summary>
+        public  byte target;
+            /// <summary>
+        /// The new altitude in meters
+        /// </summary>
+        public  UInt32 mode;
     
     };
 
-/**
- * @brief Pack a set_altitude message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target The system setting the altitude
- * @param mode The new altitude in meters
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a set_altitude message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target The system setting the altitude
+/// * @param mode The new altitude in meters
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_set_altitude_pack(byte system_id, byte component_id, byte[] msg,
                                byte target, UInt32 mode)

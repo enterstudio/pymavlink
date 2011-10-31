@@ -10,19 +10,22 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_boot_t
     {
-         public  UInt32 version; /// The onboard software version
+        /// <summary>
+        /// The onboard software version
+        /// </summary>
+        public  UInt32 version;
     
     };
 
-/**
- * @brief Pack a boot message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param version The onboard software version
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a boot message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param version The onboard software version
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_boot_pack(byte system_id, byte component_id, byte[] msg,
                                UInt32 version)

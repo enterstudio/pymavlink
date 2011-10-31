@@ -10,29 +10,35 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_encapsulated_data_t
     {
-         public  UInt16 seqnr; /// sequence number (starting with 0 on every transmission)
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=253)]
- public byte[] data; /// image data bytes
+        /// <summary>
+        /// sequence number (starting with 0 on every transmission)
+        /// </summary>
+        public  UInt16 seqnr;
+            /// <summary>
+        /// image data bytes
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=253)]
+ public byte[] data;
     
     };
 
-/**
- * @brief Pack a encapsulated_data message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param seqnr sequence number (starting with 0 on every transmission)
- * @param data image data bytes
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a encapsulated_data message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param seqnr sequence number (starting with 0 on every transmission)
+/// * @param data image data bytes
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_encapsulated_data_pack(byte system_id, byte component_id, byte[] msg,
                                UInt16 seqnr, byte[] data)
 {
 if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(seqnr),0,msg,0,sizeof(UInt16));
-	//Array.Copy(data,0,msg,2,253);
+	Array.Copy(toArray(data),0,msg,2,253);
 } else {
     mavlink_encapsulated_data_t packet = new mavlink_encapsulated_data_t();
 	packet.seqnr = seqnr;

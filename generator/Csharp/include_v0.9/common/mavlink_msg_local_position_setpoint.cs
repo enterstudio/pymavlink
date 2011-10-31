@@ -10,25 +10,37 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_local_position_setpoint_t
     {
-         public  Single x; /// x position
-     public  Single y; /// y position
-     public  Single z; /// z position
-     public  Single yaw; /// Desired yaw angle
+        /// <summary>
+        /// x position
+        /// </summary>
+        public  Single x;
+            /// <summary>
+        /// y position
+        /// </summary>
+        public  Single y;
+            /// <summary>
+        /// z position
+        /// </summary>
+        public  Single z;
+            /// <summary>
+        /// Desired yaw angle
+        /// </summary>
+        public  Single yaw;
     
     };
 
-/**
- * @brief Pack a local_position_setpoint message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param x x position
- * @param y y position
- * @param z z position
- * @param yaw Desired yaw angle
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a local_position_setpoint message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param x x position
+/// * @param y y position
+/// * @param z z position
+/// * @param yaw Desired yaw angle
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_local_position_setpoint_pack(byte system_id, byte component_id, byte[] msg,
                                Single x, Single y, Single z, Single yaw)

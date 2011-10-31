@@ -10,39 +10,72 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_hil_controls_t
     {
-         public  UInt64 time_usec; /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
-     public  Single roll_ailerons; /// Control output -1 .. 1
-     public  Single pitch_elevator; /// Control output -1 .. 1
-     public  Single yaw_rudder; /// Control output -1 .. 1
-     public  Single throttle; /// Throttle 0 .. 1
-     public  Single aux1; /// Aux 1, -1 .. 1
-     public  Single aux2; /// Aux 2, -1 .. 1
-     public  Single aux3; /// Aux 3, -1 .. 1
-     public  Single aux4; /// Aux 4, -1 .. 1
-     public  byte mode; /// System mode (MAV_MODE)
-     public  byte nav_mode; /// Navigation mode (MAV_NAV_MODE)
+        /// <summary>
+        /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+        /// </summary>
+        public  UInt64 time_usec;
+            /// <summary>
+        /// Control output -1 .. 1
+        /// </summary>
+        public  Single roll_ailerons;
+            /// <summary>
+        /// Control output -1 .. 1
+        /// </summary>
+        public  Single pitch_elevator;
+            /// <summary>
+        /// Control output -1 .. 1
+        /// </summary>
+        public  Single yaw_rudder;
+            /// <summary>
+        /// Throttle 0 .. 1
+        /// </summary>
+        public  Single throttle;
+            /// <summary>
+        /// Aux 1, -1 .. 1
+        /// </summary>
+        public  Single aux1;
+            /// <summary>
+        /// Aux 2, -1 .. 1
+        /// </summary>
+        public  Single aux2;
+            /// <summary>
+        /// Aux 3, -1 .. 1
+        /// </summary>
+        public  Single aux3;
+            /// <summary>
+        /// Aux 4, -1 .. 1
+        /// </summary>
+        public  Single aux4;
+            /// <summary>
+        /// System mode (MAV_MODE)
+        /// </summary>
+        public  byte mode;
+            /// <summary>
+        /// Navigation mode (MAV_NAV_MODE)
+        /// </summary>
+        public  byte nav_mode;
     
     };
 
-/**
- * @brief Pack a hil_controls message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
- * @param roll_ailerons Control output -1 .. 1
- * @param pitch_elevator Control output -1 .. 1
- * @param yaw_rudder Control output -1 .. 1
- * @param throttle Throttle 0 .. 1
- * @param aux1 Aux 1, -1 .. 1
- * @param aux2 Aux 2, -1 .. 1
- * @param aux3 Aux 3, -1 .. 1
- * @param aux4 Aux 4, -1 .. 1
- * @param mode System mode (MAV_MODE)
- * @param nav_mode Navigation mode (MAV_NAV_MODE)
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a hil_controls message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+/// * @param roll_ailerons Control output -1 .. 1
+/// * @param pitch_elevator Control output -1 .. 1
+/// * @param yaw_rudder Control output -1 .. 1
+/// * @param throttle Throttle 0 .. 1
+/// * @param aux1 Aux 1, -1 .. 1
+/// * @param aux2 Aux 2, -1 .. 1
+/// * @param aux3 Aux 3, -1 .. 1
+/// * @param aux4 Aux 4, -1 .. 1
+/// * @param mode System mode (MAV_MODE)
+/// * @param nav_mode Navigation mode (MAV_NAV_MODE)
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_hil_controls_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 time_usec, Single roll_ailerons, Single pitch_elevator, Single yaw_rudder, Single throttle, Single aux1, Single aux2, Single aux3, Single aux4, byte mode, byte nav_mode)

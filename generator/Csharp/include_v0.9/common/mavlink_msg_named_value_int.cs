@@ -10,29 +10,35 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_named_value_int_t
     {
-         [MarshalAs(UnmanagedType.ByValArray,SizeConst=10)]
- public string name; /// Name of the debug variable
-     public  Int32 value; /// Signed integer value
+        /// <summary>
+        /// Name of the debug variable
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=10)]
+ public string name;
+            /// <summary>
+        /// Signed integer value
+        /// </summary>
+        public  Int32 value;
     
     };
 
-/**
- * @brief Pack a named_value_int message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param name Name of the debug variable
- * @param value Signed integer value
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a named_value_int message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param name Name of the debug variable
+/// * @param value Signed integer value
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_named_value_int_pack(byte system_id, byte component_id, byte[] msg,
                                string name, Int32 value)
 {
 if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(value),0,msg,10,sizeof(Int32));
-	//Array.Copy(name,0,msg,0,10);
+	Array.Copy(toArray(name),0,msg,0,10);
 } else {
     mavlink_named_value_int_t packet = new mavlink_named_value_int_t();
 	packet.value = value;

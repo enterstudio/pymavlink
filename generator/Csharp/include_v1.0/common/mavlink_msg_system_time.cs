@@ -10,21 +10,27 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_system_time_t
     {
-         public  UInt64 time_unix_usec; /// Timestamp of the master clock in microseconds since UNIX epoch.
-     public  UInt32 time_boot_ms; /// Timestamp of the component clock since boot time in milliseconds.
+        /// <summary>
+        /// Timestamp of the master clock in microseconds since UNIX epoch.
+        /// </summary>
+        public  UInt64 time_unix_usec;
+            /// <summary>
+        /// Timestamp of the component clock since boot time in milliseconds.
+        /// </summary>
+        public  UInt32 time_boot_ms;
     
     };
 
-/**
- * @brief Pack a system_time message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time_unix_usec Timestamp of the master clock in microseconds since UNIX epoch.
- * @param time_boot_ms Timestamp of the component clock since boot time in milliseconds.
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a system_time message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time_unix_usec Timestamp of the master clock in microseconds since UNIX epoch.
+/// * @param time_boot_ms Timestamp of the component clock since boot time in milliseconds.
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_system_time_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 time_unix_usec, UInt32 time_boot_ms)

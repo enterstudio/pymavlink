@@ -10,21 +10,27 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_waypoint_clear_all_t
     {
-         public  byte target_system; /// System ID
-     public  byte target_component; /// Component ID
+        /// <summary>
+        /// System ID
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// Component ID
+        /// </summary>
+        public  byte target_component;
     
     };
 
-/**
- * @brief Pack a waypoint_clear_all message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system System ID
- * @param target_component Component ID
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a waypoint_clear_all message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system System ID
+/// * @param target_component Component ID
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_waypoint_clear_all_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system, byte target_component)

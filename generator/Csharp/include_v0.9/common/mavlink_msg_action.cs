@@ -10,23 +10,32 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_action_t
     {
-         public  byte target; /// The system executing the action
-     public  byte target_component; /// The component executing the action
-     public  byte action; /// The action id
+        /// <summary>
+        /// The system executing the action
+        /// </summary>
+        public  byte target;
+            /// <summary>
+        /// The component executing the action
+        /// </summary>
+        public  byte target_component;
+            /// <summary>
+        /// The action id
+        /// </summary>
+        public  byte action;
     
     };
 
-/**
- * @brief Pack a action message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target The system executing the action
- * @param target_component The component executing the action
- * @param action The action id
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a action message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target The system executing the action
+/// * @param target_component The component executing the action
+/// * @param action The action id
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_action_pack(byte system_id, byte component_id, byte[] msg,
                                byte target, byte target_component, byte action)

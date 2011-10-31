@@ -10,31 +10,52 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_gps_date_time_t
     {
-         public  byte year; /// Year reported by Gps 
-     public  byte month; /// Month reported by Gps 
-     public  byte day; /// Day reported by Gps 
-     public  byte hour; /// Hour reported by Gps 
-     public  byte min; /// Min reported by Gps 
-     public  byte sec; /// Sec reported by Gps  
-     public  byte visSat; /// Visible sattelites reported by Gps  
+        /// <summary>
+        /// Year reported by Gps 
+        /// </summary>
+        public  byte year;
+            /// <summary>
+        /// Month reported by Gps 
+        /// </summary>
+        public  byte month;
+            /// <summary>
+        /// Day reported by Gps 
+        /// </summary>
+        public  byte day;
+            /// <summary>
+        /// Hour reported by Gps 
+        /// </summary>
+        public  byte hour;
+            /// <summary>
+        /// Min reported by Gps 
+        /// </summary>
+        public  byte min;
+            /// <summary>
+        /// Sec reported by Gps  
+        /// </summary>
+        public  byte sec;
+            /// <summary>
+        /// Visible sattelites reported by Gps  
+        /// </summary>
+        public  byte visSat;
     
     };
 
-/**
- * @brief Pack a gps_date_time message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param year Year reported by Gps 
- * @param month Month reported by Gps 
- * @param day Day reported by Gps 
- * @param hour Hour reported by Gps 
- * @param min Min reported by Gps 
- * @param sec Sec reported by Gps  
- * @param visSat Visible sattelites reported by Gps  
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a gps_date_time message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param year Year reported by Gps 
+/// * @param month Month reported by Gps 
+/// * @param day Day reported by Gps 
+/// * @param hour Hour reported by Gps 
+/// * @param min Min reported by Gps 
+/// * @param sec Sec reported by Gps  
+/// * @param visSat Visible sattelites reported by Gps  
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_gps_date_time_pack(byte system_id, byte component_id, byte[] msg,
                                byte year, byte month, byte day, byte hour, byte min, byte sec, byte visSat)

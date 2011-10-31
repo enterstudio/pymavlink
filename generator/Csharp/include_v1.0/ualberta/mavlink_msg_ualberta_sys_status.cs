@@ -10,23 +10,32 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_ualberta_sys_status_t
     {
-         public  byte mode; /// System mode, see UALBERTA_AUTOPILOT_MODE ENUM
-     public  byte nav_mode; /// Navigation mode, see UALBERTA_NAV_MODE ENUM
-     public  byte pilot; /// Pilot mode, see UALBERTA_PILOT_MODE
+        /// <summary>
+        /// System mode, see UALBERTA_AUTOPILOT_MODE ENUM
+        /// </summary>
+        public  byte mode;
+            /// <summary>
+        /// Navigation mode, see UALBERTA_NAV_MODE ENUM
+        /// </summary>
+        public  byte nav_mode;
+            /// <summary>
+        /// Pilot mode, see UALBERTA_PILOT_MODE
+        /// </summary>
+        public  byte pilot;
     
     };
 
-/**
- * @brief Pack a ualberta_sys_status message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param mode System mode, see UALBERTA_AUTOPILOT_MODE ENUM
- * @param nav_mode Navigation mode, see UALBERTA_NAV_MODE ENUM
- * @param pilot Pilot mode, see UALBERTA_PILOT_MODE
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a ualberta_sys_status message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param mode System mode, see UALBERTA_AUTOPILOT_MODE ENUM
+/// * @param nav_mode Navigation mode, see UALBERTA_NAV_MODE ENUM
+/// * @param pilot Pilot mode, see UALBERTA_PILOT_MODE
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_ualberta_sys_status_pack(byte system_id, byte component_id, byte[] msg,
                                byte mode, byte nav_mode, byte pilot)

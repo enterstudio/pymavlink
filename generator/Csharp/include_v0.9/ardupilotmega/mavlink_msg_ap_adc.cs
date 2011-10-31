@@ -10,29 +10,47 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_ap_adc_t
     {
-         public  UInt16 adc1; /// ADC output 1
-     public  UInt16 adc2; /// ADC output 2
-     public  UInt16 adc3; /// ADC output 3
-     public  UInt16 adc4; /// ADC output 4
-     public  UInt16 adc5; /// ADC output 5
-     public  UInt16 adc6; /// ADC output 6
+        /// <summary>
+        /// ADC output 1
+        /// </summary>
+        public  UInt16 adc1;
+            /// <summary>
+        /// ADC output 2
+        /// </summary>
+        public  UInt16 adc2;
+            /// <summary>
+        /// ADC output 3
+        /// </summary>
+        public  UInt16 adc3;
+            /// <summary>
+        /// ADC output 4
+        /// </summary>
+        public  UInt16 adc4;
+            /// <summary>
+        /// ADC output 5
+        /// </summary>
+        public  UInt16 adc5;
+            /// <summary>
+        /// ADC output 6
+        /// </summary>
+        public  UInt16 adc6;
     
     };
 
-/**
- * @brief Pack a ap_adc message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param adc1 ADC output 1
- * @param adc2 ADC output 2
- * @param adc3 ADC output 3
- * @param adc4 ADC output 4
- * @param adc5 ADC output 5
- * @param adc6 ADC output 6
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a ap_adc message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param adc1 ADC output 1
+/// * @param adc2 ADC output 2
+/// * @param adc3 ADC output 3
+/// * @param adc4 ADC output 4
+/// * @param adc5 ADC output 5
+/// * @param adc6 ADC output 6
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_ap_adc_pack(byte system_id, byte component_id, byte[] msg,
                                UInt16 adc1, UInt16 adc2, UInt16 adc3, UInt16 adc4, UInt16 adc5, UInt16 adc6)

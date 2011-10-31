@@ -10,25 +10,37 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_mid_lvl_cmds_t
     {
-         public  Single hCommand; /// Commanded Airspeed
-     public  Single uCommand; /// Log value 2 
-     public  Single rCommand; /// Log value 3 
-     public  byte target; /// The system setting the commands
+        /// <summary>
+        /// Commanded Airspeed
+        /// </summary>
+        public  Single hCommand;
+            /// <summary>
+        /// Log value 2 
+        /// </summary>
+        public  Single uCommand;
+            /// <summary>
+        /// Log value 3 
+        /// </summary>
+        public  Single rCommand;
+            /// <summary>
+        /// The system setting the commands
+        /// </summary>
+        public  byte target;
     
     };
 
-/**
- * @brief Pack a mid_lvl_cmds message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target The system setting the commands
- * @param hCommand Commanded Airspeed
- * @param uCommand Log value 2 
- * @param rCommand Log value 3 
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a mid_lvl_cmds message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target The system setting the commands
+/// * @param hCommand Commanded Airspeed
+/// * @param uCommand Log value 2 
+/// * @param rCommand Log value 3 
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_mid_lvl_cmds_pack(byte system_id, byte component_id, byte[] msg,
                                byte target, Single hCommand, Single uCommand, Single rCommand)

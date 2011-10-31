@@ -10,31 +10,52 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_global_position_t
     {
-         public  UInt64 usec; /// Timestamp (microseconds since unix epoch)
-     public  Single lat; /// Latitude, in degrees
-     public  Single lon; /// Longitude, in degrees
-     public  Single alt; /// Absolute altitude, in meters
-     public  Single vx; /// X Speed (in Latitude direction, positive: going north)
-     public  Single vy; /// Y Speed (in Longitude direction, positive: going east)
-     public  Single vz; /// Z Speed (in Altitude direction, positive: going up)
+        /// <summary>
+        /// Timestamp (microseconds since unix epoch)
+        /// </summary>
+        public  UInt64 usec;
+            /// <summary>
+        /// Latitude, in degrees
+        /// </summary>
+        public  Single lat;
+            /// <summary>
+        /// Longitude, in degrees
+        /// </summary>
+        public  Single lon;
+            /// <summary>
+        /// Absolute altitude, in meters
+        /// </summary>
+        public  Single alt;
+            /// <summary>
+        /// X Speed (in Latitude direction, positive: going north)
+        /// </summary>
+        public  Single vx;
+            /// <summary>
+        /// Y Speed (in Longitude direction, positive: going east)
+        /// </summary>
+        public  Single vy;
+            /// <summary>
+        /// Z Speed (in Altitude direction, positive: going up)
+        /// </summary>
+        public  Single vz;
     
     };
 
-/**
- * @brief Pack a global_position message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param usec Timestamp (microseconds since unix epoch)
- * @param lat Latitude, in degrees
- * @param lon Longitude, in degrees
- * @param alt Absolute altitude, in meters
- * @param vx X Speed (in Latitude direction, positive: going north)
- * @param vy Y Speed (in Longitude direction, positive: going east)
- * @param vz Z Speed (in Altitude direction, positive: going up)
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a global_position message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param usec Timestamp (microseconds since unix epoch)
+/// * @param lat Latitude, in degrees
+/// * @param lon Longitude, in degrees
+/// * @param alt Absolute altitude, in meters
+/// * @param vx X Speed (in Latitude direction, positive: going north)
+/// * @param vy Y Speed (in Longitude direction, positive: going east)
+/// * @param vz Z Speed (in Altitude direction, positive: going up)
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_global_position_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 usec, Single lat, Single lon, Single alt, Single vx, Single vy, Single vz)

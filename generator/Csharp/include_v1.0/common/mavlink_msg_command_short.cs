@@ -10,33 +10,57 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_command_short_t
     {
-         public  Single param1; /// Parameter 1, as defined by MAV_CMD enum.
-     public  Single param2; /// Parameter 2, as defined by MAV_CMD enum.
-     public  Single param3; /// Parameter 3, as defined by MAV_CMD enum.
-     public  Single param4; /// Parameter 4, as defined by MAV_CMD enum.
-     public  byte target_system; /// System which should execute the command
-     public  byte target_component; /// Component which should execute the command, 0 for all components
-     public  byte command; /// Command ID, as defined by MAV_CMD enum.
-     public  byte confirmation; /// 0: First transmission of this command. 1-255: Confirmation transmissions (e.g. for kill command)
+        /// <summary>
+        /// Parameter 1, as defined by MAV_CMD enum.
+        /// </summary>
+        public  Single param1;
+            /// <summary>
+        /// Parameter 2, as defined by MAV_CMD enum.
+        /// </summary>
+        public  Single param2;
+            /// <summary>
+        /// Parameter 3, as defined by MAV_CMD enum.
+        /// </summary>
+        public  Single param3;
+            /// <summary>
+        /// Parameter 4, as defined by MAV_CMD enum.
+        /// </summary>
+        public  Single param4;
+            /// <summary>
+        /// System which should execute the command
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// Component which should execute the command, 0 for all components
+        /// </summary>
+        public  byte target_component;
+            /// <summary>
+        /// Command ID, as defined by MAV_CMD enum.
+        /// </summary>
+        public  byte command;
+            /// <summary>
+        /// 0: First transmission of this command. 1-255: Confirmation transmissions (e.g. for kill command)
+        /// </summary>
+        public  byte confirmation;
     
     };
 
-/**
- * @brief Pack a command_short message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system System which should execute the command
- * @param target_component Component which should execute the command, 0 for all components
- * @param command Command ID, as defined by MAV_CMD enum.
- * @param confirmation 0: First transmission of this command. 1-255: Confirmation transmissions (e.g. for kill command)
- * @param param1 Parameter 1, as defined by MAV_CMD enum.
- * @param param2 Parameter 2, as defined by MAV_CMD enum.
- * @param param3 Parameter 3, as defined by MAV_CMD enum.
- * @param param4 Parameter 4, as defined by MAV_CMD enum.
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a command_short message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system System which should execute the command
+/// * @param target_component Component which should execute the command, 0 for all components
+/// * @param command Command ID, as defined by MAV_CMD enum.
+/// * @param confirmation 0: First transmission of this command. 1-255: Confirmation transmissions (e.g. for kill command)
+/// * @param param1 Parameter 1, as defined by MAV_CMD enum.
+/// * @param param2 Parameter 2, as defined by MAV_CMD enum.
+/// * @param param3 Parameter 3, as defined by MAV_CMD enum.
+/// * @param param4 Parameter 4, as defined by MAV_CMD enum.
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_command_short_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system, byte target_component, byte command, byte confirmation, Single param1, Single param2, Single param3, Single param4)

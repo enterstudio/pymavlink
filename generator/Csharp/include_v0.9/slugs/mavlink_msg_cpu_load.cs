@@ -10,23 +10,32 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_cpu_load_t
     {
-         public  byte sensLoad; /// Sensor DSC Load
-     public  byte ctrlLoad; /// Control DSC Load
-     public  UInt16 batVolt; /// Battery Voltage in millivolts
+        /// <summary>
+        /// Sensor DSC Load
+        /// </summary>
+        public  byte sensLoad;
+            /// <summary>
+        /// Control DSC Load
+        /// </summary>
+        public  byte ctrlLoad;
+            /// <summary>
+        /// Battery Voltage in millivolts
+        /// </summary>
+        public  UInt16 batVolt;
     
     };
 
-/**
- * @brief Pack a cpu_load message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param sensLoad Sensor DSC Load
- * @param ctrlLoad Control DSC Load
- * @param batVolt Battery Voltage in millivolts
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a cpu_load message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param sensLoad Sensor DSC Load
+/// * @param ctrlLoad Control DSC Load
+/// * @param batVolt Battery Voltage in millivolts
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_cpu_load_pack(byte system_id, byte component_id, byte[] msg,
                                byte sensLoad, byte ctrlLoad, UInt16 batVolt)

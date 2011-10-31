@@ -10,27 +10,30 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_auth_key_t
     {
-         [MarshalAs(UnmanagedType.ByValArray,SizeConst=32)]
- public string key; /// key
+        /// <summary>
+        /// key
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=32)]
+ public string key;
     
     };
 
-/**
- * @brief Pack a auth_key message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param key key
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a auth_key message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param key key
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_auth_key_pack(byte system_id, byte component_id, byte[] msg,
                                string key)
 {
 if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 
-	//Array.Copy(key,0,msg,0,32);
+	Array.Copy(toArray(key),0,msg,0,32);
 } else {
     mavlink_auth_key_t packet = new mavlink_auth_key_t();
 

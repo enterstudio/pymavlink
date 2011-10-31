@@ -10,31 +10,52 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_local_position_t
     {
-         public  UInt64 usec; /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
-     public  Single x; /// X Position
-     public  Single y; /// Y Position
-     public  Single z; /// Z Position
-     public  Single vx; /// X Speed
-     public  Single vy; /// Y Speed
-     public  Single vz; /// Z Speed
+        /// <summary>
+        /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+        /// </summary>
+        public  UInt64 usec;
+            /// <summary>
+        /// X Position
+        /// </summary>
+        public  Single x;
+            /// <summary>
+        /// Y Position
+        /// </summary>
+        public  Single y;
+            /// <summary>
+        /// Z Position
+        /// </summary>
+        public  Single z;
+            /// <summary>
+        /// X Speed
+        /// </summary>
+        public  Single vx;
+            /// <summary>
+        /// Y Speed
+        /// </summary>
+        public  Single vy;
+            /// <summary>
+        /// Z Speed
+        /// </summary>
+        public  Single vz;
     
     };
 
-/**
- * @brief Pack a local_position message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
- * @param x X Position
- * @param y Y Position
- * @param z Z Position
- * @param vx X Speed
- * @param vy Y Speed
- * @param vz Z Speed
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a local_position message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+/// * @param x X Position
+/// * @param y Y Position
+/// * @param z Z Position
+/// * @param vx X Speed
+/// * @param vy Y Speed
+/// * @param vz Z Speed
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_local_position_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 usec, Single x, Single y, Single z, Single vx, Single vy, Single vz)

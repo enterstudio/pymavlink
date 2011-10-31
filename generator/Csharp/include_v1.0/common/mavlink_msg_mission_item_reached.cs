@@ -10,19 +10,22 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_mission_item_reached_t
     {
-         public  UInt16 seq; /// Sequence
+        /// <summary>
+        /// Sequence
+        /// </summary>
+        public  UInt16 seq;
     
     };
 
-/**
- * @brief Pack a mission_item_reached message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param seq Sequence
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a mission_item_reached message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param seq Sequence
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_mission_item_reached_pack(byte system_id, byte component_id, byte[] msg,
                                UInt16 seq)

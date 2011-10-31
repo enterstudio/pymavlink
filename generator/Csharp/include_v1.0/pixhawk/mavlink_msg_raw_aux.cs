@@ -10,31 +10,52 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_raw_aux_t
     {
-         public  Int32 baro; /// Barometric pressure (hecto Pascal)
-     public  UInt16 adc1; /// ADC1 (J405 ADC3, LPC2148 AD0.6)
-     public  UInt16 adc2; /// ADC2 (J405 ADC5, LPC2148 AD0.2)
-     public  UInt16 adc3; /// ADC3 (J405 ADC6, LPC2148 AD0.1)
-     public  UInt16 adc4; /// ADC4 (J405 ADC7, LPC2148 AD1.3)
-     public  UInt16 vbat; /// Battery voltage
-     public  Int16 temp; /// Temperature (degrees celcius)
+        /// <summary>
+        /// Barometric pressure (hecto Pascal)
+        /// </summary>
+        public  Int32 baro;
+            /// <summary>
+        /// ADC1 (J405 ADC3, LPC2148 AD0.6)
+        /// </summary>
+        public  UInt16 adc1;
+            /// <summary>
+        /// ADC2 (J405 ADC5, LPC2148 AD0.2)
+        /// </summary>
+        public  UInt16 adc2;
+            /// <summary>
+        /// ADC3 (J405 ADC6, LPC2148 AD0.1)
+        /// </summary>
+        public  UInt16 adc3;
+            /// <summary>
+        /// ADC4 (J405 ADC7, LPC2148 AD1.3)
+        /// </summary>
+        public  UInt16 adc4;
+            /// <summary>
+        /// Battery voltage
+        /// </summary>
+        public  UInt16 vbat;
+            /// <summary>
+        /// Temperature (degrees celcius)
+        /// </summary>
+        public  Int16 temp;
     
     };
 
-/**
- * @brief Pack a raw_aux message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param adc1 ADC1 (J405 ADC3, LPC2148 AD0.6)
- * @param adc2 ADC2 (J405 ADC5, LPC2148 AD0.2)
- * @param adc3 ADC3 (J405 ADC6, LPC2148 AD0.1)
- * @param adc4 ADC4 (J405 ADC7, LPC2148 AD1.3)
- * @param vbat Battery voltage
- * @param temp Temperature (degrees celcius)
- * @param baro Barometric pressure (hecto Pascal)
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a raw_aux message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param adc1 ADC1 (J405 ADC3, LPC2148 AD0.6)
+/// * @param adc2 ADC2 (J405 ADC5, LPC2148 AD0.2)
+/// * @param adc3 ADC3 (J405 ADC6, LPC2148 AD0.1)
+/// * @param adc4 ADC4 (J405 ADC7, LPC2148 AD1.3)
+/// * @param vbat Battery voltage
+/// * @param temp Temperature (degrees celcius)
+/// * @param baro Barometric pressure (hecto Pascal)
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_raw_aux_pack(byte system_id, byte component_id, byte[] msg,
                                UInt16 adc1, UInt16 adc2, UInt16 adc3, UInt16 adc4, UInt16 vbat, Int16 temp, Int32 baro)

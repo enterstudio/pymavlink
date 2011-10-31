@@ -10,28 +10,46 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_heartbeat_t
     {
-         public  UInt32 custom_mode; /// Navigation mode bitfield, see MAV_AUTOPILOT_CUSTOM_MODE ENUM for some examples. This field is autopilot-specific.
-     public  byte type; /// Type of the MAV (quadrotor, helicopter, etc., up to 15 types, defined in MAV_TYPE ENUM)
-     public  byte autopilot; /// Autopilot type / class. defined in MAV_CLASS ENUM
-     public  byte base_mode; /// System mode bitfield, see MAV_MODE_FLAGS ENUM in mavlink/include/mavlink_types.h
-     public  byte system_status; /// System status flag, see MAV_STATUS ENUM
-     public  byte mavlink_version; /// MAVLink version
+        /// <summary>
+        /// Navigation mode bitfield, see MAV_AUTOPILOT_CUSTOM_MODE ENUM for some examples. This field is autopilot-specific.
+        /// </summary>
+        public  UInt32 custom_mode;
+            /// <summary>
+        /// Type of the MAV (quadrotor, helicopter, etc., up to 15 types, defined in MAV_TYPE ENUM)
+        /// </summary>
+        public  byte type;
+            /// <summary>
+        /// Autopilot type / class. defined in MAV_CLASS ENUM
+        /// </summary>
+        public  byte autopilot;
+            /// <summary>
+        /// System mode bitfield, see MAV_MODE_FLAGS ENUM in mavlink/include/mavlink_types.h
+        /// </summary>
+        public  byte base_mode;
+            /// <summary>
+        /// System status flag, see MAV_STATUS ENUM
+        /// </summary>
+        public  byte system_status;
+            /// <summary>
+        /// MAVLink version
+        /// </summary>
+        public  byte mavlink_version;
     
     };
 
-/**
- * @brief Pack a heartbeat message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param type Type of the MAV (quadrotor, helicopter, etc., up to 15 types, defined in MAV_TYPE ENUM)
- * @param autopilot Autopilot type / class. defined in MAV_CLASS ENUM
- * @param base_mode System mode bitfield, see MAV_MODE_FLAGS ENUM in mavlink/include/mavlink_types.h
- * @param custom_mode Navigation mode bitfield, see MAV_AUTOPILOT_CUSTOM_MODE ENUM for some examples. This field is autopilot-specific.
- * @param system_status System status flag, see MAV_STATUS ENUM
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a heartbeat message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param type Type of the MAV (quadrotor, helicopter, etc., up to 15 types, defined in MAV_TYPE ENUM)
+/// * @param autopilot Autopilot type / class. defined in MAV_CLASS ENUM
+/// * @param base_mode System mode bitfield, see MAV_MODE_FLAGS ENUM in mavlink/include/mavlink_types.h
+/// * @param custom_mode Navigation mode bitfield, see MAV_AUTOPILOT_CUSTOM_MODE ENUM for some examples. This field is autopilot-specific.
+/// * @param system_status System status flag, see MAV_STATUS ENUM
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_heartbeat_pack(byte system_id, byte component_id, byte[] msg,
                                byte type, byte autopilot, byte base_mode, UInt32 custom_mode, byte system_status)

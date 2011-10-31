@@ -10,29 +10,47 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_data_log_t
     {
-         public  Single fl_1; /// Log value 1 
-     public  Single fl_2; /// Log value 2 
-     public  Single fl_3; /// Log value 3 
-     public  Single fl_4; /// Log value 4 
-     public  Single fl_5; /// Log value 5 
-     public  Single fl_6; /// Log value 6 
+        /// <summary>
+        /// Log value 1 
+        /// </summary>
+        public  Single fl_1;
+            /// <summary>
+        /// Log value 2 
+        /// </summary>
+        public  Single fl_2;
+            /// <summary>
+        /// Log value 3 
+        /// </summary>
+        public  Single fl_3;
+            /// <summary>
+        /// Log value 4 
+        /// </summary>
+        public  Single fl_4;
+            /// <summary>
+        /// Log value 5 
+        /// </summary>
+        public  Single fl_5;
+            /// <summary>
+        /// Log value 6 
+        /// </summary>
+        public  Single fl_6;
     
     };
 
-/**
- * @brief Pack a data_log message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param fl_1 Log value 1 
- * @param fl_2 Log value 2 
- * @param fl_3 Log value 3 
- * @param fl_4 Log value 4 
- * @param fl_5 Log value 5 
- * @param fl_6 Log value 6 
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a data_log message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param fl_1 Log value 1 
+/// * @param fl_2 Log value 2 
+/// * @param fl_3 Log value 3 
+/// * @param fl_4 Log value 4 
+/// * @param fl_5 Log value 5 
+/// * @param fl_6 Log value 6 
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_data_log_pack(byte system_id, byte component_id, byte[] msg,
                                Single fl_1, Single fl_2, Single fl_3, Single fl_4, Single fl_5, Single fl_6)

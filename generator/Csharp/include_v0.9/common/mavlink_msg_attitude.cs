@@ -10,31 +10,52 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_attitude_t
     {
-         public  UInt64 usec; /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
-     public  Single roll; /// Roll angle (rad)
-     public  Single pitch; /// Pitch angle (rad)
-     public  Single yaw; /// Yaw angle (rad)
-     public  Single rollspeed; /// Roll angular speed (rad/s)
-     public  Single pitchspeed; /// Pitch angular speed (rad/s)
-     public  Single yawspeed; /// Yaw angular speed (rad/s)
+        /// <summary>
+        /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+        /// </summary>
+        public  UInt64 usec;
+            /// <summary>
+        /// Roll angle (rad)
+        /// </summary>
+        public  Single roll;
+            /// <summary>
+        /// Pitch angle (rad)
+        /// </summary>
+        public  Single pitch;
+            /// <summary>
+        /// Yaw angle (rad)
+        /// </summary>
+        public  Single yaw;
+            /// <summary>
+        /// Roll angular speed (rad/s)
+        /// </summary>
+        public  Single rollspeed;
+            /// <summary>
+        /// Pitch angular speed (rad/s)
+        /// </summary>
+        public  Single pitchspeed;
+            /// <summary>
+        /// Yaw angular speed (rad/s)
+        /// </summary>
+        public  Single yawspeed;
     
     };
 
-/**
- * @brief Pack a attitude message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
- * @param roll Roll angle (rad)
- * @param pitch Pitch angle (rad)
- * @param yaw Yaw angle (rad)
- * @param rollspeed Roll angular speed (rad/s)
- * @param pitchspeed Pitch angular speed (rad/s)
- * @param yawspeed Yaw angular speed (rad/s)
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a attitude message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+/// * @param roll Roll angle (rad)
+/// * @param pitch Pitch angle (rad)
+/// * @param yaw Yaw angle (rad)
+/// * @param rollspeed Roll angular speed (rad/s)
+/// * @param pitchspeed Pitch angular speed (rad/s)
+/// * @param yawspeed Yaw angular speed (rad/s)
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_attitude_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 usec, Single roll, Single pitch, Single yaw, Single rollspeed, Single pitchspeed, Single yawspeed)

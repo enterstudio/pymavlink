@@ -10,29 +10,47 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_set_roll_pitch_yaw_thrust_t
     {
-         public  byte target_system; /// System ID
-     public  byte target_component; /// Component ID
-     public  Single roll; /// Desired roll angle in radians
-     public  Single pitch; /// Desired pitch angle in radians
-     public  Single yaw; /// Desired yaw angle in radians
-     public  Single thrust; /// Collective thrust, normalized to 0 .. 1
+        /// <summary>
+        /// System ID
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// Component ID
+        /// </summary>
+        public  byte target_component;
+            /// <summary>
+        /// Desired roll angle in radians
+        /// </summary>
+        public  Single roll;
+            /// <summary>
+        /// Desired pitch angle in radians
+        /// </summary>
+        public  Single pitch;
+            /// <summary>
+        /// Desired yaw angle in radians
+        /// </summary>
+        public  Single yaw;
+            /// <summary>
+        /// Collective thrust, normalized to 0 .. 1
+        /// </summary>
+        public  Single thrust;
     
     };
 
-/**
- * @brief Pack a set_roll_pitch_yaw_thrust message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system System ID
- * @param target_component Component ID
- * @param roll Desired roll angle in radians
- * @param pitch Desired pitch angle in radians
- * @param yaw Desired yaw angle in radians
- * @param thrust Collective thrust, normalized to 0 .. 1
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a set_roll_pitch_yaw_thrust message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system System ID
+/// * @param target_component Component ID
+/// * @param roll Desired roll angle in radians
+/// * @param pitch Desired pitch angle in radians
+/// * @param yaw Desired yaw angle in radians
+/// * @param thrust Collective thrust, normalized to 0 .. 1
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_set_roll_pitch_yaw_thrust_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system, byte target_component, Single roll, Single pitch, Single yaw, Single thrust)

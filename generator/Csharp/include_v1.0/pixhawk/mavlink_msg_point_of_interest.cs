@@ -10,34 +10,58 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_point_of_interest_t
     {
-         public  Single x; /// X Position
-     public  Single y; /// Y Position
-     public  Single z; /// Z Position
-     public  UInt16 timeout; /// 0: no timeout, >1: timeout in seconds
-     public  byte type; /// 0: Notice, 1: Warning, 2: Critical, 3: Emergency, 4: Debug
-     public  byte color; /// 0: blue, 1: yellow, 2: red, 3: orange, 4: green, 5: magenta
-     public  byte coordinate_system; /// 0: global, 1:local
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=26)]
- public string name; /// POI name
+        /// <summary>
+        /// X Position
+        /// </summary>
+        public  Single x;
+            /// <summary>
+        /// Y Position
+        /// </summary>
+        public  Single y;
+            /// <summary>
+        /// Z Position
+        /// </summary>
+        public  Single z;
+            /// <summary>
+        /// 0: no timeout, >1: timeout in seconds
+        /// </summary>
+        public  UInt16 timeout;
+            /// <summary>
+        /// 0: Notice, 1: Warning, 2: Critical, 3: Emergency, 4: Debug
+        /// </summary>
+        public  byte type;
+            /// <summary>
+        /// 0: blue, 1: yellow, 2: red, 3: orange, 4: green, 5: magenta
+        /// </summary>
+        public  byte color;
+            /// <summary>
+        /// 0: global, 1:local
+        /// </summary>
+        public  byte coordinate_system;
+            /// <summary>
+        /// POI name
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=26)]
+ public string name;
     
     };
 
-/**
- * @brief Pack a point_of_interest message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param type 0: Notice, 1: Warning, 2: Critical, 3: Emergency, 4: Debug
- * @param color 0: blue, 1: yellow, 2: red, 3: orange, 4: green, 5: magenta
- * @param coordinate_system 0: global, 1:local
- * @param timeout 0: no timeout, >1: timeout in seconds
- * @param x X Position
- * @param y Y Position
- * @param z Z Position
- * @param name POI name
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a point_of_interest message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param type 0: Notice, 1: Warning, 2: Critical, 3: Emergency, 4: Debug
+/// * @param color 0: blue, 1: yellow, 2: red, 3: orange, 4: green, 5: magenta
+/// * @param coordinate_system 0: global, 1:local
+/// * @param timeout 0: no timeout, >1: timeout in seconds
+/// * @param x X Position
+/// * @param y Y Position
+/// * @param z Z Position
+/// * @param name POI name
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_point_of_interest_pack(byte system_id, byte component_id, byte[] msg,
                                byte type, byte color, byte coordinate_system, UInt16 timeout, Single x, Single y, Single z, string name)
@@ -50,7 +74,7 @@ if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(type),0,msg,14,sizeof(byte));
 	Array.Copy(BitConverter.GetBytes(color),0,msg,15,sizeof(byte));
 	Array.Copy(BitConverter.GetBytes(coordinate_system),0,msg,16,sizeof(byte));
-	//Array.Copy(name,0,msg,17,26);
+	Array.Copy(toArray(name),0,msg,17,26);
 } else {
     mavlink_point_of_interest_t packet = new mavlink_point_of_interest_t();
 	packet.x = x;

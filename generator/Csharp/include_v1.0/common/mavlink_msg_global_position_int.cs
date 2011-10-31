@@ -10,35 +10,62 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_global_position_int_t
     {
-         public  UInt32 time_boot_ms; /// Timestamp (milliseconds since system boot)
-     public  Int32 lat; /// Latitude, expressed as * 1E7
-     public  Int32 lon; /// Longitude, expressed as * 1E7
-     public  Int32 alt; /// Altitude in meters, expressed as * 1000 (millimeters), above MSL
-     public  Int32 relative_alt; /// Altitude above ground in meters, expressed as * 1000 (millimeters)
-     public  Int16 vx; /// Ground X Speed (Latitude), expressed as m/s * 100
-     public  Int16 vy; /// Ground Y Speed (Longitude), expressed as m/s * 100
-     public  Int16 vz; /// Ground Z Speed (Altitude), expressed as m/s * 100
-     public  UInt16 hdg; /// Compass heading in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
+        /// <summary>
+        /// Timestamp (milliseconds since system boot)
+        /// </summary>
+        public  UInt32 time_boot_ms;
+            /// <summary>
+        /// Latitude, expressed as * 1E7
+        /// </summary>
+        public  Int32 lat;
+            /// <summary>
+        /// Longitude, expressed as * 1E7
+        /// </summary>
+        public  Int32 lon;
+            /// <summary>
+        /// Altitude in meters, expressed as * 1000 (millimeters), above MSL
+        /// </summary>
+        public  Int32 alt;
+            /// <summary>
+        /// Altitude above ground in meters, expressed as * 1000 (millimeters)
+        /// </summary>
+        public  Int32 relative_alt;
+            /// <summary>
+        /// Ground X Speed (Latitude), expressed as m/s * 100
+        /// </summary>
+        public  Int16 vx;
+            /// <summary>
+        /// Ground Y Speed (Longitude), expressed as m/s * 100
+        /// </summary>
+        public  Int16 vy;
+            /// <summary>
+        /// Ground Z Speed (Altitude), expressed as m/s * 100
+        /// </summary>
+        public  Int16 vz;
+            /// <summary>
+        /// Compass heading in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
+        /// </summary>
+        public  UInt16 hdg;
     
     };
 
-/**
- * @brief Pack a global_position_int message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time_boot_ms Timestamp (milliseconds since system boot)
- * @param lat Latitude, expressed as * 1E7
- * @param lon Longitude, expressed as * 1E7
- * @param alt Altitude in meters, expressed as * 1000 (millimeters), above MSL
- * @param relative_alt Altitude above ground in meters, expressed as * 1000 (millimeters)
- * @param vx Ground X Speed (Latitude), expressed as m/s * 100
- * @param vy Ground Y Speed (Longitude), expressed as m/s * 100
- * @param vz Ground Z Speed (Altitude), expressed as m/s * 100
- * @param hdg Compass heading in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a global_position_int message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time_boot_ms Timestamp (milliseconds since system boot)
+/// * @param lat Latitude, expressed as * 1E7
+/// * @param lon Longitude, expressed as * 1E7
+/// * @param alt Altitude in meters, expressed as * 1000 (millimeters), above MSL
+/// * @param relative_alt Altitude above ground in meters, expressed as * 1000 (millimeters)
+/// * @param vx Ground X Speed (Latitude), expressed as m/s * 100
+/// * @param vy Ground Y Speed (Longitude), expressed as m/s * 100
+/// * @param vz Ground Z Speed (Altitude), expressed as m/s * 100
+/// * @param hdg Compass heading in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_global_position_int_pack(byte system_id, byte component_id, byte[] msg,
                                UInt32 time_boot_ms, Int32 lat, Int32 lon, Int32 alt, Int32 relative_alt, Int16 vx, Int16 vy, Int16 vz, UInt16 hdg)

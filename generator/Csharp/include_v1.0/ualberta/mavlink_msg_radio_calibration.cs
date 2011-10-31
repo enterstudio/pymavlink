@@ -10,47 +10,65 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_radio_calibration_t
     {
-         [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- public uint16_t aileron; /// Aileron setpoints: left, center, right
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- public uint16_t elevator; /// Elevator setpoints: nose down, center, nose up
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- public uint16_t rudder; /// Rudder setpoints: nose left, center, nose right
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=2)]
- public uint16_t gyro; /// Tail gyro mode/gain setpoints: heading hold, rate mode
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=5)]
- public uint16_t pitch; /// Pitch curve setpoints (every 25%)
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=5)]
- public uint16_t throttle; /// Throttle curve setpoints (every 25%)
+        /// <summary>
+        /// Aileron setpoints: left, center, right
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ public uint16_t aileron;
+            /// <summary>
+        /// Elevator setpoints: nose down, center, nose up
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ public uint16_t elevator;
+            /// <summary>
+        /// Rudder setpoints: nose left, center, nose right
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ public uint16_t rudder;
+            /// <summary>
+        /// Tail gyro mode/gain setpoints: heading hold, rate mode
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=2)]
+ public uint16_t gyro;
+            /// <summary>
+        /// Pitch curve setpoints (every 25%)
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=5)]
+ public uint16_t pitch;
+            /// <summary>
+        /// Throttle curve setpoints (every 25%)
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=5)]
+ public uint16_t throttle;
     
     };
 
-/**
- * @brief Pack a radio_calibration message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param aileron Aileron setpoints: left, center, right
- * @param elevator Elevator setpoints: nose down, center, nose up
- * @param rudder Rudder setpoints: nose left, center, nose right
- * @param gyro Tail gyro mode/gain setpoints: heading hold, rate mode
- * @param pitch Pitch curve setpoints (every 25%)
- * @param throttle Throttle curve setpoints (every 25%)
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a radio_calibration message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param aileron Aileron setpoints: left, center, right
+/// * @param elevator Elevator setpoints: nose down, center, nose up
+/// * @param rudder Rudder setpoints: nose left, center, nose right
+/// * @param gyro Tail gyro mode/gain setpoints: heading hold, rate mode
+/// * @param pitch Pitch curve setpoints (every 25%)
+/// * @param throttle Throttle curve setpoints (every 25%)
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_radio_calibration_pack(byte system_id, byte component_id, byte[] msg,
                                uint16_t aileron, uint16_t elevator, uint16_t rudder, uint16_t gyro, uint16_t pitch, uint16_t throttle)
 {
 if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 
-	//Array.Copy(aileron,0,msg,0,3);
-	//Array.Copy(elevator,0,msg,6,3);
-	//Array.Copy(rudder,0,msg,12,3);
-	//Array.Copy(gyro,0,msg,18,2);
-	//Array.Copy(pitch,0,msg,22,5);
-	//Array.Copy(throttle,0,msg,32,5);
+	Array.Copy(toArray(aileron),0,msg,0,3);
+	Array.Copy(toArray(elevator),0,msg,6,3);
+	Array.Copy(toArray(rudder),0,msg,12,3);
+	Array.Copy(toArray(gyro),0,msg,18,2);
+	Array.Copy(toArray(pitch),0,msg,22,5);
+	Array.Copy(toArray(throttle),0,msg,32,5);
 } else {
     mavlink_radio_calibration_t packet = new mavlink_radio_calibration_t();
 

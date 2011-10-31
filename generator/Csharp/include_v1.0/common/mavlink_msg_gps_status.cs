@@ -10,45 +10,63 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_gps_status_t
     {
-         public  byte satellites_visible; /// Number of satellites visible
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
- public byte[] satellite_prn; /// Global satellite ID
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
- public byte[] satellite_used; /// 0: Satellite not used, 1: used for localization
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
- public byte[] satellite_elevation; /// Elevation (0: right on top of receiver, 90: on the horizon) of satellite
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
- public byte[] satellite_azimuth; /// Direction of satellite, 0: 0 deg, 255: 360 deg.
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
- public byte[] satellite_snr; /// Signal to noise ratio of satellite
+        /// <summary>
+        /// Number of satellites visible
+        /// </summary>
+        public  byte satellites_visible;
+            /// <summary>
+        /// Global satellite ID
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
+ public byte[] satellite_prn;
+            /// <summary>
+        /// 0: Satellite not used, 1: used for localization
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
+ public byte[] satellite_used;
+            /// <summary>
+        /// Elevation (0: right on top of receiver, 90: on the horizon) of satellite
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
+ public byte[] satellite_elevation;
+            /// <summary>
+        /// Direction of satellite, 0: 0 deg, 255: 360 deg.
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
+ public byte[] satellite_azimuth;
+            /// <summary>
+        /// Signal to noise ratio of satellite
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=20)]
+ public byte[] satellite_snr;
     
     };
 
-/**
- * @brief Pack a gps_status message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param satellites_visible Number of satellites visible
- * @param satellite_prn Global satellite ID
- * @param satellite_used 0: Satellite not used, 1: used for localization
- * @param satellite_elevation Elevation (0: right on top of receiver, 90: on the horizon) of satellite
- * @param satellite_azimuth Direction of satellite, 0: 0 deg, 255: 360 deg.
- * @param satellite_snr Signal to noise ratio of satellite
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a gps_status message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param satellites_visible Number of satellites visible
+/// * @param satellite_prn Global satellite ID
+/// * @param satellite_used 0: Satellite not used, 1: used for localization
+/// * @param satellite_elevation Elevation (0: right on top of receiver, 90: on the horizon) of satellite
+/// * @param satellite_azimuth Direction of satellite, 0: 0 deg, 255: 360 deg.
+/// * @param satellite_snr Signal to noise ratio of satellite
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_gps_status_pack(byte system_id, byte component_id, byte[] msg,
                                byte satellites_visible, byte[] satellite_prn, byte[] satellite_used, byte[] satellite_elevation, byte[] satellite_azimuth, byte[] satellite_snr)
 {
 if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(satellites_visible),0,msg,0,sizeof(byte));
-	//Array.Copy(satellite_prn,0,msg,1,20);
-	//Array.Copy(satellite_used,0,msg,21,20);
-	//Array.Copy(satellite_elevation,0,msg,41,20);
-	//Array.Copy(satellite_azimuth,0,msg,61,20);
-	//Array.Copy(satellite_snr,0,msg,81,20);
+	Array.Copy(toArray(satellite_prn),0,msg,1,20);
+	Array.Copy(toArray(satellite_used),0,msg,21,20);
+	Array.Copy(toArray(satellite_elevation),0,msg,41,20);
+	Array.Copy(toArray(satellite_azimuth),0,msg,61,20);
+	Array.Copy(toArray(satellite_snr),0,msg,81,20);
 } else {
     mavlink_gps_status_t packet = new mavlink_gps_status_t();
 	packet.satellites_visible = satellites_visible;

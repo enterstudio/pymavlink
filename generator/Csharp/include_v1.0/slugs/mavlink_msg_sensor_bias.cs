@@ -10,29 +10,47 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_sensor_bias_t
     {
-         public  Single axBias; /// Accelerometer X bias (m/s)
-     public  Single ayBias; /// Accelerometer Y bias (m/s)
-     public  Single azBias; /// Accelerometer Z bias (m/s)
-     public  Single gxBias; /// Gyro X bias (rad/s)
-     public  Single gyBias; /// Gyro Y bias (rad/s)
-     public  Single gzBias; /// Gyro Z bias (rad/s)
+        /// <summary>
+        /// Accelerometer X bias (m/s)
+        /// </summary>
+        public  Single axBias;
+            /// <summary>
+        /// Accelerometer Y bias (m/s)
+        /// </summary>
+        public  Single ayBias;
+            /// <summary>
+        /// Accelerometer Z bias (m/s)
+        /// </summary>
+        public  Single azBias;
+            /// <summary>
+        /// Gyro X bias (rad/s)
+        /// </summary>
+        public  Single gxBias;
+            /// <summary>
+        /// Gyro Y bias (rad/s)
+        /// </summary>
+        public  Single gyBias;
+            /// <summary>
+        /// Gyro Z bias (rad/s)
+        /// </summary>
+        public  Single gzBias;
     
     };
 
-/**
- * @brief Pack a sensor_bias message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param axBias Accelerometer X bias (m/s)
- * @param ayBias Accelerometer Y bias (m/s)
- * @param azBias Accelerometer Z bias (m/s)
- * @param gxBias Gyro X bias (rad/s)
- * @param gyBias Gyro Y bias (rad/s)
- * @param gzBias Gyro Z bias (rad/s)
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a sensor_bias message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param axBias Accelerometer X bias (m/s)
+/// * @param ayBias Accelerometer Y bias (m/s)
+/// * @param azBias Accelerometer Z bias (m/s)
+/// * @param gxBias Gyro X bias (rad/s)
+/// * @param gyBias Gyro Y bias (rad/s)
+/// * @param gzBias Gyro Z bias (rad/s)
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_sensor_bias_pack(byte system_id, byte component_id, byte[] msg,
                                Single axBias, Single ayBias, Single azBias, Single gxBias, Single gyBias, Single gzBias)

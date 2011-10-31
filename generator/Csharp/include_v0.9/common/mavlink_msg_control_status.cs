@@ -10,33 +10,57 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_control_status_t
     {
-         public  byte position_fix; /// Position fix: 0: lost, 2: 2D position fix, 3: 3D position fix 
-     public  byte vision_fix; /// Vision position fix: 0: lost, 1: 2D local position hold, 2: 2D global position fix, 3: 3D global position fix 
-     public  byte gps_fix; /// GPS position fix: 0: no reception, 1: Minimum 1 satellite, but no position fix, 2: 2D position fix, 3: 3D position fix 
-     public  byte ahrs_health; /// Attitude estimation health: 0: poor, 255: excellent
-     public  byte control_att; /// 0: Attitude control disabled, 1: enabled
-     public  byte control_pos_xy; /// 0: X, Y position control disabled, 1: enabled
-     public  byte control_pos_z; /// 0: Z position control disabled, 1: enabled
-     public  byte control_pos_yaw; /// 0: Yaw angle control disabled, 1: enabled
+        /// <summary>
+        /// Position fix: 0: lost, 2: 2D position fix, 3: 3D position fix 
+        /// </summary>
+        public  byte position_fix;
+            /// <summary>
+        /// Vision position fix: 0: lost, 1: 2D local position hold, 2: 2D global position fix, 3: 3D global position fix 
+        /// </summary>
+        public  byte vision_fix;
+            /// <summary>
+        /// GPS position fix: 0: no reception, 1: Minimum 1 satellite, but no position fix, 2: 2D position fix, 3: 3D position fix 
+        /// </summary>
+        public  byte gps_fix;
+            /// <summary>
+        /// Attitude estimation health: 0: poor, 255: excellent
+        /// </summary>
+        public  byte ahrs_health;
+            /// <summary>
+        /// 0: Attitude control disabled, 1: enabled
+        /// </summary>
+        public  byte control_att;
+            /// <summary>
+        /// 0: X, Y position control disabled, 1: enabled
+        /// </summary>
+        public  byte control_pos_xy;
+            /// <summary>
+        /// 0: Z position control disabled, 1: enabled
+        /// </summary>
+        public  byte control_pos_z;
+            /// <summary>
+        /// 0: Yaw angle control disabled, 1: enabled
+        /// </summary>
+        public  byte control_pos_yaw;
     
     };
 
-/**
- * @brief Pack a control_status message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param position_fix Position fix: 0: lost, 2: 2D position fix, 3: 3D position fix 
- * @param vision_fix Vision position fix: 0: lost, 1: 2D local position hold, 2: 2D global position fix, 3: 3D global position fix 
- * @param gps_fix GPS position fix: 0: no reception, 1: Minimum 1 satellite, but no position fix, 2: 2D position fix, 3: 3D position fix 
- * @param ahrs_health Attitude estimation health: 0: poor, 255: excellent
- * @param control_att 0: Attitude control disabled, 1: enabled
- * @param control_pos_xy 0: X, Y position control disabled, 1: enabled
- * @param control_pos_z 0: Z position control disabled, 1: enabled
- * @param control_pos_yaw 0: Yaw angle control disabled, 1: enabled
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a control_status message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param position_fix Position fix: 0: lost, 2: 2D position fix, 3: 3D position fix 
+/// * @param vision_fix Vision position fix: 0: lost, 1: 2D local position hold, 2: 2D global position fix, 3: 3D global position fix 
+/// * @param gps_fix GPS position fix: 0: no reception, 1: Minimum 1 satellite, but no position fix, 2: 2D position fix, 3: 3D position fix 
+/// * @param ahrs_health Attitude estimation health: 0: poor, 255: excellent
+/// * @param control_att 0: Attitude control disabled, 1: enabled
+/// * @param control_pos_xy 0: X, Y position control disabled, 1: enabled
+/// * @param control_pos_z 0: Z position control disabled, 1: enabled
+/// * @param control_pos_yaw 0: Yaw angle control disabled, 1: enabled
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_control_status_pack(byte system_id, byte component_id, byte[] msg,
                                byte position_fix, byte vision_fix, byte gps_fix, byte ahrs_health, byte control_att, byte control_pos_xy, byte control_pos_z, byte control_pos_yaw)

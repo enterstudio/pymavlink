@@ -128,11 +128,12 @@ class MAVEnumEntry(object):
         self.param = []
 
 class MAVEnum(object):
-    def __init__(self, name, description=''):
+    def __init__(self, name, linenumber, description=''):
         self.name = name
         self.description = description
         self.entry = []
-        self.next_value = 0
+        self.highest_value = 0
+        self.linenumber = linenumber
 
 class MAVXML(object):
     '''parse a mavlink XML file'''
@@ -189,14 +190,15 @@ class MAVXML(object):
                                                         print_format, self))
             elif in_element == "mavlink.enums.enum":
                 check_attrs(attrs, ['name'], 'enum')
-                self.enum.append(MAVEnum(attrs['name']))
+                self.enum.append(MAVEnum(attrs['name'], p.CurrentLineNumber))
             elif in_element == "mavlink.enums.enum.entry":
                 check_attrs(attrs, ['name'], 'enum entry')
                 if 'value' in attrs:
                     value = int(attrs['value'])
                 else:
-                    value = self.enum[-1].next_value
-                self.enum[-1].next_value = value+1
+                    value = self.enum[-1].highest_value + 1
+                if (value > self.enum[-1].highest_value):
+                    self.enum[-1].highest_value = value
                 self.enum[-1].entry.append(MAVEnumEntry(attrs['name'], value))
             elif in_element == "mavlink.enums.enum.entry.param":
                 check_attrs(attrs, ['index'], 'enum param')
@@ -206,7 +208,8 @@ class MAVXML(object):
             in_element = '.'.join(in_element_list)
             if in_element == "mavlink.enums.enum":
                 # add a ENUM_END
-                self.enum[-1].entry.append(MAVEnumEntry("%s_ENUM_END" % self.enum[-1].name, self.enum[-1].next_value))
+                self.enum[-1].entry.append(MAVEnumEntry("%s_ENUM_END" % self.enum[-1].name,
+                                                        self.enum[-1].highest_value+1))
             in_element_list.pop()
 
         def char_data(data):
@@ -270,7 +273,6 @@ class MAVXML(object):
             if m.wire_length+8 > 64:
                 print("Warning: message %s is longer than 64 bytes long (%u bytes)" % (m.name, m.wire_length+8))
 
-
     def __str__(self):
         return "MAVXML for %s from %s (%u message, %u enums)" % (
             self.basename, self.filename, len(self.message), len(self.enum))
@@ -289,7 +291,9 @@ def message_checksum(msg):
 
 def check_duplicates(xml):
     '''check for duplicate message IDs'''
+
     msgmap = {}
+    enummap = {}
     for x in xml:
         for m in x.message:
             if m.id in msgmap:
@@ -307,6 +311,18 @@ def check_duplicates(xml):
                     return True
                 fieldset.add(f.name)
             msgmap[m.id] = '%s (%s:%u)' % (m.name, x.filename, m.linenumber)
+        for enum in x.enum:
+            for entry in enum.entry:
+                s1 = "%s.%s" % (enum.name, entry.name)
+                s2 = "%s.%s" % (enum.name, entry.value)
+                if s1 in enummap or s2 in enummap:
+                    print("ERROR: Duplicate enums %s/%s at %s:%u and %s" % (
+                        s1, entry.value, x.filename, enum.linenumber,
+                        enummap.get(s1) or enummap.get(s2)))
+                    return True
+                enummap[s1] = "%s:%u" % (x.filename, enum.linenumber)
+                enummap[s2] = "%s:%u" % (x.filename, enum.linenumber)
+                    
     return False
 
 

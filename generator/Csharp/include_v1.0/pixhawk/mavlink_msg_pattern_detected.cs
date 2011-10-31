@@ -10,26 +10,38 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_pattern_detected_t
     {
-         public  Single confidence; /// Confidence of detection
-     public  byte type; /// 0: Pattern, 1: Letter
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=100)]
- public string file; /// Pattern file name
-     public  byte detected; /// Accepted as true detection, 0 no, 1 yes
+        /// <summary>
+        /// Confidence of detection
+        /// </summary>
+        public  Single confidence;
+            /// <summary>
+        /// 0: Pattern, 1: Letter
+        /// </summary>
+        public  byte type;
+            /// <summary>
+        /// Pattern file name
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=100)]
+ public string file;
+            /// <summary>
+        /// Accepted as true detection, 0 no, 1 yes
+        /// </summary>
+        public  byte detected;
     
     };
 
-/**
- * @brief Pack a pattern_detected message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param type 0: Pattern, 1: Letter
- * @param confidence Confidence of detection
- * @param file Pattern file name
- * @param detected Accepted as true detection, 0 no, 1 yes
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a pattern_detected message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param type 0: Pattern, 1: Letter
+/// * @param confidence Confidence of detection
+/// * @param file Pattern file name
+/// * @param detected Accepted as true detection, 0 no, 1 yes
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_pattern_detected_pack(byte system_id, byte component_id, byte[] msg,
                                byte type, Single confidence, string file, byte detected)
@@ -38,7 +50,7 @@ if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(confidence),0,msg,0,sizeof(Single));
 	Array.Copy(BitConverter.GetBytes(type),0,msg,4,sizeof(byte));
 	Array.Copy(BitConverter.GetBytes(detected),0,msg,105,sizeof(byte));
-	//Array.Copy(file,0,msg,5,100);
+	Array.Copy(toArray(file),0,msg,5,100);
 } else {
     mavlink_pattern_detected_t packet = new mavlink_pattern_detected_t();
 	packet.confidence = confidence;

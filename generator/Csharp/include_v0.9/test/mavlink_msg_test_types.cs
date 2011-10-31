@@ -10,72 +10,138 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_test_types_t
     {
-         public  byte c; /// char
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=10)]
- public string s; /// string
-     public  byte u8; /// uint8_t
-     public  UInt16 u16; /// uint16_t
-     public  UInt32 u32; /// uint32_t
-     public  UInt64 u64; /// uint64_t
-     public  byte s8; /// int8_t
-     public  Int16 s16; /// int16_t
-     public  Int32 s32; /// int32_t
-     public  Int64 s64; /// int64_t
-     public  Single f; /// float
-     public  double d; /// double
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- public byte[] u8_array; /// uint8_t_array
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- public uint16_t u16_array; /// uint16_t_array
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- public uint32_t u32_array; /// uint32_t_array
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- public uint64_t u64_array; /// uint64_t_array
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- public byte[] s8_array; /// int8_t_array
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- public int16_t s16_array; /// int16_t_array
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- public int32_t s32_array; /// int32_t_array
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- public int64_t s64_array; /// int64_t_array
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- public float f_array; /// float_array
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
- public double d_array; /// double_array
+        /// <summary>
+        /// char
+        /// </summary>
+        public  byte c;
+            /// <summary>
+        /// string
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=10)]
+ public string s;
+            /// <summary>
+        /// uint8_t
+        /// </summary>
+        public  byte u8;
+            /// <summary>
+        /// uint16_t
+        /// </summary>
+        public  UInt16 u16;
+            /// <summary>
+        /// uint32_t
+        /// </summary>
+        public  UInt32 u32;
+            /// <summary>
+        /// uint64_t
+        /// </summary>
+        public  UInt64 u64;
+            /// <summary>
+        /// int8_t
+        /// </summary>
+        public  byte s8;
+            /// <summary>
+        /// int16_t
+        /// </summary>
+        public  Int16 s16;
+            /// <summary>
+        /// int32_t
+        /// </summary>
+        public  Int32 s32;
+            /// <summary>
+        /// int64_t
+        /// </summary>
+        public  Int64 s64;
+            /// <summary>
+        /// float
+        /// </summary>
+        public  Single f;
+            /// <summary>
+        /// double
+        /// </summary>
+        public  double d;
+            /// <summary>
+        /// uint8_t_array
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ public byte[] u8_array;
+            /// <summary>
+        /// uint16_t_array
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ public uint16_t u16_array;
+            /// <summary>
+        /// uint32_t_array
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ public uint32_t u32_array;
+            /// <summary>
+        /// uint64_t_array
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ public uint64_t u64_array;
+            /// <summary>
+        /// int8_t_array
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ public byte[] s8_array;
+            /// <summary>
+        /// int16_t_array
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ public int16_t s16_array;
+            /// <summary>
+        /// int32_t_array
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ public int32_t s32_array;
+            /// <summary>
+        /// int64_t_array
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ public int64_t s64_array;
+            /// <summary>
+        /// float_array
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ public float f_array;
+            /// <summary>
+        /// double_array
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=3)]
+ public double d_array;
     
     };
 
-/**
- * @brief Pack a test_types message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param c char
- * @param s string
- * @param u8 uint8_t
- * @param u16 uint16_t
- * @param u32 uint32_t
- * @param u64 uint64_t
- * @param s8 int8_t
- * @param s16 int16_t
- * @param s32 int32_t
- * @param s64 int64_t
- * @param f float
- * @param d double
- * @param u8_array uint8_t_array
- * @param u16_array uint16_t_array
- * @param u32_array uint32_t_array
- * @param u64_array uint64_t_array
- * @param s8_array int8_t_array
- * @param s16_array int16_t_array
- * @param s32_array int32_t_array
- * @param s64_array int64_t_array
- * @param f_array float_array
- * @param d_array double_array
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a test_types message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param c char
+/// * @param s string
+/// * @param u8 uint8_t
+/// * @param u16 uint16_t
+/// * @param u32 uint32_t
+/// * @param u64 uint64_t
+/// * @param s8 int8_t
+/// * @param s16 int16_t
+/// * @param s32 int32_t
+/// * @param s64 int64_t
+/// * @param f float
+/// * @param d double
+/// * @param u8_array uint8_t_array
+/// * @param u16_array uint16_t_array
+/// * @param u32_array uint32_t_array
+/// * @param u64_array uint64_t_array
+/// * @param s8_array int8_t_array
+/// * @param s16_array int16_t_array
+/// * @param s32_array int32_t_array
+/// * @param s64_array int64_t_array
+/// * @param f_array float_array
+/// * @param d_array double_array
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_test_types_pack(byte system_id, byte component_id, byte[] msg,
                                byte c, string s, byte u8, UInt16 u16, UInt32 u32, UInt64 u64, byte s8, Int16 s16, Int32 s32, Int64 s64, Single f, double d, byte[] u8_array, uint16_t u16_array, uint32_t u32_array, uint64_t u64_array, byte[] s8_array, int16_t s16_array, int32_t s32_array, int64_t s64_array, float f_array, double d_array)
@@ -92,17 +158,17 @@ if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(s64),0,msg,33,sizeof(Int64));
 	Array.Copy(BitConverter.GetBytes(f),0,msg,41,sizeof(Single));
 	Array.Copy(BitConverter.GetBytes(d),0,msg,45,sizeof(double));
-	//Array.Copy(s,0,msg,1,10);
-	//Array.Copy(u8_array,0,msg,53,3);
-	//Array.Copy(u16_array,0,msg,56,3);
-	//Array.Copy(u32_array,0,msg,62,3);
-	//Array.Copy(u64_array,0,msg,74,3);
-	//Array.Copy(s8_array,0,msg,98,3);
-	//Array.Copy(s16_array,0,msg,101,3);
-	//Array.Copy(s32_array,0,msg,107,3);
-	//Array.Copy(s64_array,0,msg,119,3);
-	//Array.Copy(f_array,0,msg,143,3);
-	//Array.Copy(d_array,0,msg,155,3);
+	Array.Copy(toArray(s),0,msg,1,10);
+	Array.Copy(toArray(u8_array),0,msg,53,3);
+	Array.Copy(toArray(u16_array),0,msg,56,3);
+	Array.Copy(toArray(u32_array),0,msg,62,3);
+	Array.Copy(toArray(u64_array),0,msg,74,3);
+	Array.Copy(toArray(s8_array),0,msg,98,3);
+	Array.Copy(toArray(s16_array),0,msg,101,3);
+	Array.Copy(toArray(s32_array),0,msg,107,3);
+	Array.Copy(toArray(s64_array),0,msg,119,3);
+	Array.Copy(toArray(f_array),0,msg,143,3);
+	Array.Copy(toArray(d_array),0,msg,155,3);
 } else {
     mavlink_test_types_t packet = new mavlink_test_types_t();
 	packet.c = c;

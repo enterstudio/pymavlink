@@ -10,23 +10,32 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_waypoint_count_t
     {
-         public  byte target_system; /// System ID
-     public  byte target_component; /// Component ID
-     public  UInt16 count; /// Number of Waypoints in the Sequence
+        /// <summary>
+        /// System ID
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// Component ID
+        /// </summary>
+        public  byte target_component;
+            /// <summary>
+        /// Number of Waypoints in the Sequence
+        /// </summary>
+        public  UInt16 count;
     
     };
 
-/**
- * @brief Pack a waypoint_count message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system System ID
- * @param target_component Component ID
- * @param count Number of Waypoints in the Sequence
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a waypoint_count message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system System ID
+/// * @param target_component Component ID
+/// * @param count Number of Waypoints in the Sequence
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_waypoint_count_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system, byte target_component, UInt16 count)

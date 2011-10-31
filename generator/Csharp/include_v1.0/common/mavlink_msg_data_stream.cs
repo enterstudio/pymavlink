@@ -10,23 +10,32 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_data_stream_t
     {
-         public  UInt16 message_rate; /// The requested interval between two messages of this type
-     public  byte stream_id; /// The ID of the requested data stream
-     public  byte on_off; /// 1 stream is enabled, 0 stream is stopped.
+        /// <summary>
+        /// The requested interval between two messages of this type
+        /// </summary>
+        public  UInt16 message_rate;
+            /// <summary>
+        /// The ID of the requested data stream
+        /// </summary>
+        public  byte stream_id;
+            /// <summary>
+        /// 1 stream is enabled, 0 stream is stopped.
+        /// </summary>
+        public  byte on_off;
     
     };
 
-/**
- * @brief Pack a data_stream message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param stream_id The ID of the requested data stream
- * @param message_rate The requested interval between two messages of this type
- * @param on_off 1 stream is enabled, 0 stream is stopped.
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a data_stream message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param stream_id The ID of the requested data stream
+/// * @param message_rate The requested interval between two messages of this type
+/// * @param on_off 1 stream is enabled, 0 stream is stopped.
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_data_stream_pack(byte system_id, byte component_id, byte[] msg,
                                byte stream_id, UInt16 message_rate, byte on_off)

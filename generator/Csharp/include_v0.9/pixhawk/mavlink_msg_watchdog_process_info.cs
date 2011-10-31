@@ -10,29 +10,44 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_watchdog_process_info_t
     {
-         public  UInt16 watchdog_id; /// Watchdog ID
-     public  UInt16 process_id; /// Process ID
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=100)]
- public string name; /// Process name
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=147)]
- public string arguments; /// Process arguments
-     public  Int32 timeout; /// Timeout (seconds)
+        /// <summary>
+        /// Watchdog ID
+        /// </summary>
+        public  UInt16 watchdog_id;
+            /// <summary>
+        /// Process ID
+        /// </summary>
+        public  UInt16 process_id;
+            /// <summary>
+        /// Process name
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=100)]
+ public string name;
+            /// <summary>
+        /// Process arguments
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=147)]
+ public string arguments;
+            /// <summary>
+        /// Timeout (seconds)
+        /// </summary>
+        public  Int32 timeout;
     
     };
 
-/**
- * @brief Pack a watchdog_process_info message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param watchdog_id Watchdog ID
- * @param process_id Process ID
- * @param name Process name
- * @param arguments Process arguments
- * @param timeout Timeout (seconds)
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a watchdog_process_info message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param watchdog_id Watchdog ID
+/// * @param process_id Process ID
+/// * @param name Process name
+/// * @param arguments Process arguments
+/// * @param timeout Timeout (seconds)
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_watchdog_process_info_pack(byte system_id, byte component_id, byte[] msg,
                                UInt16 watchdog_id, UInt16 process_id, string name, string arguments, Int32 timeout)
@@ -41,8 +56,8 @@ if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(watchdog_id),0,msg,0,sizeof(UInt16));
 	Array.Copy(BitConverter.GetBytes(process_id),0,msg,2,sizeof(UInt16));
 	Array.Copy(BitConverter.GetBytes(timeout),0,msg,251,sizeof(Int32));
-	//Array.Copy(name,0,msg,4,100);
-	//Array.Copy(arguments,0,msg,104,147);
+	Array.Copy(toArray(name),0,msg,4,100);
+	Array.Copy(toArray(arguments),0,msg,104,147);
 } else {
     mavlink_watchdog_process_info_t packet = new mavlink_watchdog_process_info_t();
 	packet.watchdog_id = watchdog_id;

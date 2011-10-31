@@ -10,35 +10,62 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_manual_control_t
     {
-         public  byte target; /// The system to be controlled
-     public  Single roll; /// roll
-     public  Single pitch; /// pitch
-     public  Single yaw; /// yaw
-     public  Single thrust; /// thrust
-     public  byte roll_manual; /// roll control enabled auto:0, manual:1
-     public  byte pitch_manual; /// pitch auto:0, manual:1
-     public  byte yaw_manual; /// yaw auto:0, manual:1
-     public  byte thrust_manual; /// thrust auto:0, manual:1
+        /// <summary>
+        /// The system to be controlled
+        /// </summary>
+        public  byte target;
+            /// <summary>
+        /// roll
+        /// </summary>
+        public  Single roll;
+            /// <summary>
+        /// pitch
+        /// </summary>
+        public  Single pitch;
+            /// <summary>
+        /// yaw
+        /// </summary>
+        public  Single yaw;
+            /// <summary>
+        /// thrust
+        /// </summary>
+        public  Single thrust;
+            /// <summary>
+        /// roll control enabled auto:0, manual:1
+        /// </summary>
+        public  byte roll_manual;
+            /// <summary>
+        /// pitch auto:0, manual:1
+        /// </summary>
+        public  byte pitch_manual;
+            /// <summary>
+        /// yaw auto:0, manual:1
+        /// </summary>
+        public  byte yaw_manual;
+            /// <summary>
+        /// thrust auto:0, manual:1
+        /// </summary>
+        public  byte thrust_manual;
     
     };
 
-/**
- * @brief Pack a manual_control message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target The system to be controlled
- * @param roll roll
- * @param pitch pitch
- * @param yaw yaw
- * @param thrust thrust
- * @param roll_manual roll control enabled auto:0, manual:1
- * @param pitch_manual pitch auto:0, manual:1
- * @param yaw_manual yaw auto:0, manual:1
- * @param thrust_manual thrust auto:0, manual:1
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a manual_control message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target The system to be controlled
+/// * @param roll roll
+/// * @param pitch pitch
+/// * @param yaw yaw
+/// * @param thrust thrust
+/// * @param roll_manual roll control enabled auto:0, manual:1
+/// * @param pitch_manual pitch auto:0, manual:1
+/// * @param yaw_manual yaw auto:0, manual:1
+/// * @param thrust_manual thrust auto:0, manual:1
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_manual_control_pack(byte system_id, byte component_id, byte[] msg,
                                byte target, Single roll, Single pitch, Single yaw, Single thrust, byte roll_manual, byte pitch_manual, byte yaw_manual, byte thrust_manual)

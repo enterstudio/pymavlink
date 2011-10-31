@@ -10,35 +10,62 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_state_correction_t
     {
-         public  Single xErr; /// x position error
-     public  Single yErr; /// y position error
-     public  Single zErr; /// z position error
-     public  Single rollErr; /// roll error (radians)
-     public  Single pitchErr; /// pitch error (radians)
-     public  Single yawErr; /// yaw error (radians)
-     public  Single vxErr; /// x velocity
-     public  Single vyErr; /// y velocity
-     public  Single vzErr; /// z velocity
+        /// <summary>
+        /// x position error
+        /// </summary>
+        public  Single xErr;
+            /// <summary>
+        /// y position error
+        /// </summary>
+        public  Single yErr;
+            /// <summary>
+        /// z position error
+        /// </summary>
+        public  Single zErr;
+            /// <summary>
+        /// roll error (radians)
+        /// </summary>
+        public  Single rollErr;
+            /// <summary>
+        /// pitch error (radians)
+        /// </summary>
+        public  Single pitchErr;
+            /// <summary>
+        /// yaw error (radians)
+        /// </summary>
+        public  Single yawErr;
+            /// <summary>
+        /// x velocity
+        /// </summary>
+        public  Single vxErr;
+            /// <summary>
+        /// y velocity
+        /// </summary>
+        public  Single vyErr;
+            /// <summary>
+        /// z velocity
+        /// </summary>
+        public  Single vzErr;
     
     };
 
-/**
- * @brief Pack a state_correction message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param xErr x position error
- * @param yErr y position error
- * @param zErr z position error
- * @param rollErr roll error (radians)
- * @param pitchErr pitch error (radians)
- * @param yawErr yaw error (radians)
- * @param vxErr x velocity
- * @param vyErr y velocity
- * @param vzErr z velocity
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a state_correction message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param xErr x position error
+/// * @param yErr y position error
+/// * @param zErr z position error
+/// * @param rollErr roll error (radians)
+/// * @param pitchErr pitch error (radians)
+/// * @param yawErr yaw error (radians)
+/// * @param vxErr x velocity
+/// * @param vyErr y velocity
+/// * @param vzErr z velocity
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_state_correction_pack(byte system_id, byte component_id, byte[] msg,
                                Single xErr, Single yErr, Single zErr, Single rollErr, Single pitchErr, Single yawErr, Single vxErr, Single vyErr, Single vzErr)

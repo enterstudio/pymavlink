@@ -10,29 +10,35 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_named_value_float_t
     {
-         [MarshalAs(UnmanagedType.ByValArray,SizeConst=10)]
- public string name; /// Name of the debug variable
-     public  Single value; /// Floating point value
+        /// <summary>
+        /// Name of the debug variable
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=10)]
+ public string name;
+            /// <summary>
+        /// Floating point value
+        /// </summary>
+        public  Single value;
     
     };
 
-/**
- * @brief Pack a named_value_float message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param name Name of the debug variable
- * @param value Floating point value
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a named_value_float message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param name Name of the debug variable
+/// * @param value Floating point value
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_named_value_float_pack(byte system_id, byte component_id, byte[] msg,
                                string name, Single value)
 {
 if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(value),0,msg,10,sizeof(Single));
-	//Array.Copy(name,0,msg,0,10);
+	Array.Copy(toArray(name),0,msg,0,10);
 } else {
     mavlink_named_value_float_t packet = new mavlink_named_value_float_t();
 	packet.value = value;

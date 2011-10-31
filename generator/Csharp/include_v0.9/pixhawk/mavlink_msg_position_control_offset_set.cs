@@ -10,29 +10,47 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_position_control_offset_set_t
     {
-         public  byte target_system; /// System ID
-     public  byte target_component; /// Component ID
-     public  Single x; /// x position offset
-     public  Single y; /// y position offset
-     public  Single z; /// z position offset
-     public  Single yaw; /// yaw orientation offset in radians, 0 = NORTH
+        /// <summary>
+        /// System ID
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// Component ID
+        /// </summary>
+        public  byte target_component;
+            /// <summary>
+        /// x position offset
+        /// </summary>
+        public  Single x;
+            /// <summary>
+        /// y position offset
+        /// </summary>
+        public  Single y;
+            /// <summary>
+        /// z position offset
+        /// </summary>
+        public  Single z;
+            /// <summary>
+        /// yaw orientation offset in radians, 0 = NORTH
+        /// </summary>
+        public  Single yaw;
     
     };
 
-/**
- * @brief Pack a position_control_offset_set message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system System ID
- * @param target_component Component ID
- * @param x x position offset
- * @param y y position offset
- * @param z z position offset
- * @param yaw yaw orientation offset in radians, 0 = NORTH
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a position_control_offset_set message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system System ID
+/// * @param target_component Component ID
+/// * @param x x position offset
+/// * @param y y position offset
+/// * @param z z position offset
+/// * @param yaw yaw orientation offset in radians, 0 = NORTH
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_position_control_offset_set_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system, byte target_component, Single x, Single y, Single z, Single yaw)

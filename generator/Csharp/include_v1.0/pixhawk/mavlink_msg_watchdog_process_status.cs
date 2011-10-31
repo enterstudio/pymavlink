@@ -10,29 +10,47 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_watchdog_process_status_t
     {
-         public  Int32 pid; /// PID
-     public  UInt16 watchdog_id; /// Watchdog ID
-     public  UInt16 process_id; /// Process ID
-     public  UInt16 crashes; /// Number of crashes
-     public  byte state; /// Is running / finished / suspended / crashed
-     public  byte muted; /// Is muted
+        /// <summary>
+        /// PID
+        /// </summary>
+        public  Int32 pid;
+            /// <summary>
+        /// Watchdog ID
+        /// </summary>
+        public  UInt16 watchdog_id;
+            /// <summary>
+        /// Process ID
+        /// </summary>
+        public  UInt16 process_id;
+            /// <summary>
+        /// Number of crashes
+        /// </summary>
+        public  UInt16 crashes;
+            /// <summary>
+        /// Is running / finished / suspended / crashed
+        /// </summary>
+        public  byte state;
+            /// <summary>
+        /// Is muted
+        /// </summary>
+        public  byte muted;
     
     };
 
-/**
- * @brief Pack a watchdog_process_status message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param watchdog_id Watchdog ID
- * @param process_id Process ID
- * @param state Is running / finished / suspended / crashed
- * @param muted Is muted
- * @param pid PID
- * @param crashes Number of crashes
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a watchdog_process_status message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param watchdog_id Watchdog ID
+/// * @param process_id Process ID
+/// * @param state Is running / finished / suspended / crashed
+/// * @param muted Is muted
+/// * @param pid PID
+/// * @param crashes Number of crashes
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_watchdog_process_status_pack(byte system_id, byte component_id, byte[] msg,
                                UInt16 watchdog_id, UInt16 process_id, byte state, byte muted, Int32 pid, UInt16 crashes)

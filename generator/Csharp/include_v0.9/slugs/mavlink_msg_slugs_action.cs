@@ -10,23 +10,32 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_slugs_action_t
     {
-         public  byte target; /// The system reporting the action
-     public  byte actionId; /// Action ID. See apDefinitions.h in the SLUGS /clib directory for the ID names
-     public  UInt16 actionVal; /// Value associated with the action
+        /// <summary>
+        /// The system reporting the action
+        /// </summary>
+        public  byte target;
+            /// <summary>
+        /// Action ID. See apDefinitions.h in the SLUGS /clib directory for the ID names
+        /// </summary>
+        public  byte actionId;
+            /// <summary>
+        /// Value associated with the action
+        /// </summary>
+        public  UInt16 actionVal;
     
     };
 
-/**
- * @brief Pack a slugs_action message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target The system reporting the action
- * @param actionId Action ID. See apDefinitions.h in the SLUGS /clib directory for the ID names
- * @param actionVal Value associated with the action
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a slugs_action message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target The system reporting the action
+/// * @param actionId Action ID. See apDefinitions.h in the SLUGS /clib directory for the ID names
+/// * @param actionVal Value associated with the action
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_slugs_action_pack(byte system_id, byte component_id, byte[] msg,
                                byte target, byte actionId, UInt16 actionVal)

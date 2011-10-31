@@ -2,7 +2,7 @@
 '''
 parse a MAVLink protocol XML file and generate a C implementation
 
-Copyright Andrew Tridgell 2011
+Copyright Michael Oborne 2011
 Released under GNU GPL version 3 or later
 '''
 
@@ -26,9 +26,9 @@ def generate_version_h(directory, xml):
 
 public partial class Mavlink
 {
-    const string MAVLINK_BUILD_DATE = "${parse_time}";
-    const string MAVLINK_WIRE_PROTOCOL_VERSION = "${wire_protocol_version}";
-    const int MAVLINK_MAX_DIALECT_PAYLOAD_SIZE = ${largest_payload};
+    public const string MAVLINK_BUILD_DATE = "${parse_time}";
+    public const string MAVLINK_WIRE_PROTOCOL_VERSION = "${wire_protocol_version}";
+    public const int MAVLINK_MAX_DIALECT_PAYLOAD_SIZE = ${largest_payload};
 }
 ''', xml)
     f.close()
@@ -45,17 +45,19 @@ def generate_mavlink_h(directory, xml):
  
 public partial class Mavlink
 {
-    const int MAVLINK_LITTLE_ENDIAN = 1;
+    public const int MAVLINK_LITTLE_ENDIAN = 1;
 
-    const byte MAVLINK_STX = ${protocol_marker};
+    public const byte MAVLINK_STX = ${protocol_marker};
 
-    const byte MAVLINK_ENDIAN = ${mavlink_endian};
+    public const byte MAVLINK_ENDIAN = ${mavlink_endian};
 
-    const bool MAVLINK_ALIGNED_FIELDS = (${aligned_fields_define} == 1);
+    public const bool MAVLINK_ALIGNED_FIELDS = (${aligned_fields_define} == 1);
 
-    const byte MAVLINK_CRC_EXTRA = ${crc_extra_define};
+    public const byte MAVLINK_CRC_EXTRA = ${crc_extra_define};
     
-    const bool MAVLINK_NEED_BYTE_SWAP = (MAVLINK_ENDIAN == MAVLINK_LITTLE_ENDIAN);
+    public const bool MAVLINK_NEED_BYTE_SWAP = (MAVLINK_ENDIAN == MAVLINK_LITTLE_ENDIAN);
+    
+    public byte packetcount = 0;
 }
 ''', xml)
     f.close()
@@ -69,6 +71,7 @@ def generate_main_h(directory, xml):
  *	@see http://qgroundcontrol.org/mavlink/
  */
  using System;
+ using System.Runtime.InteropServices;
 
 // MESSAGE LENGTHS AND CRCS
 
@@ -77,7 +80,7 @@ public partial class Mavlink
 
     public byte[] MAVLINK_MESSAGE_LENGTHS = new byte[] {${message_lengths_array}};
 
-    public byte[]  MAVLINK_MESSAGE_CRCS = new byte[] {${message_crcs_array}};
+    public byte[] MAVLINK_MESSAGE_CRCS = new byte[] {${message_crcs_array}};
 
     public Type[] MAVLINK_MESSAGE_INFO = new Type[] {${message_info_array}};
 
@@ -94,7 +97,244 @@ public partial class Mavlink
         Array.Copy(msg, offset, temp, 0, length);
         return temp;
     }
+    
+    public static char[] toArray(string text)
+    {
+        return text.ToCharArray();
+    }
+    
+    public static byte[] toArray(byte[] data)
+    {
+        return data;
+    }
 
+    const int X25_INIT_CRC = 0xffff;
+    const int X25_VALIDATE_CRC = 0xf0b8;
+
+    ushort crc_accumulate(byte b, ushort crc)
+    {
+        unchecked
+        {
+            byte ch = (byte)(b ^ (byte)(crc & 0x00ff));
+            ch = (byte)(ch ^ (ch << 4));
+            return (ushort)((crc >> 8) ^ (ch << 8) ^ (ch << 3) ^ (ch >> 4));
+        }
+    }
+
+    ushort crc_calculate(byte[] pBuffer, int length)
+    {
+        if (length < 1)
+        {
+            return 0xffff;
+        }
+        // For a "message" of length bytes contained in the unsigned char array
+        // pointed to by pBuffer, calculate the CRC
+        // crcCalculate(unsigned char* pBuffer, int length, unsigned short* checkConst) < not needed
+
+        ushort crcTmp;
+        int i;
+
+        crcTmp = X25_INIT_CRC;
+
+        for (i = 1; i < length; i++) // skips header U
+        {
+            crcTmp = crc_accumulate(pBuffer[i], crcTmp);
+            //Console.WriteLine(crcTmp + " " + pBuffer[i] + " " + length);
+        }
+
+        return (crcTmp);
+    }
+    
+    public byte[] generatePacket(object indata, byte sysid, byte compid)
+    {
+        byte messageType = 0;
+        foreach (Type ty in MAVLINK_MESSAGE_INFO)
+        {
+            if (ty == indata.GetType()) {
+                break;
+            }
+            messageType++;
+        }
+        
+        byte[] data;
+        
+        if (MAVLINK_ENDIAN == MAVLINK_LITTLE_ENDIAN)
+        {
+            data = StructureToByteArray(indata);
+        }
+        else
+        {
+            data = StructureToByteArrayEndian(indata);
+        }
+        
+        byte[] packet = new byte[data.Length + 6 + 2];
+        
+        packet[0] = (byte)MAVLINK_STX;
+        packet[1] = (byte)data.Length;
+        packet[2] = packetcount;
+        packet[3] = sysid;
+        packet[4] = compid;
+        packet[5] = messageType;
+        
+        int i = 6;
+        foreach (byte b in data)
+        {
+            packet[i] = b;
+            i++;
+        }
+        
+        
+        ushort checksum = crc_calculate(packet, packet[1] + 6);
+
+        if (MAVLINK_CRC_EXTRA == 1)
+        {
+            checksum = crc_accumulate(MAVLINK_MESSAGE_CRCS[messageType], checksum);
+        }
+
+        byte ck_a = (byte)(checksum & 0xFF); ///< High byte
+        byte ck_b = (byte)(checksum >> 8); ///< Low byte
+
+        packet[i] = ck_a;
+        i += 1;
+        packet[i] = ck_b;
+        i += 1;
+        
+        return packet;
+    }
+    
+    byte[] StructureToByteArrayEndian(params object[] list)
+    {
+        // The copy is made becuase SetValue won't work on a struct.
+        // Boxing was used because SetValue works on classes/objects.
+        // Unfortunately, it results in 2 copy operations.
+        object thisBoxed = list[0]; // Why make a copy?
+        Type test = thisBoxed.GetType();
+
+        int offset = 0;
+        byte[] data = new byte[Marshal.SizeOf(thisBoxed)];
+
+        // System.Net.IPAddress.NetworkToHostOrder is used to perform byte swapping.
+        // To convert unsigned to signed, 'unchecked()' was used.
+        // See http://stackoverflow.com/questions/1131843/how-do-i-convert-uint-to-int-in-c
+
+        object fieldValue;
+        TypeCode typeCode;
+
+        byte[] temp;
+
+        // Enumerate each structure field using reflection.
+        foreach (var field in test.GetFields())
+        {
+            // field.Name has the field's name.
+
+            fieldValue = field.GetValue(thisBoxed); // Get value
+
+            // Get the TypeCode enumeration. Multiple types get mapped to a common typecode.
+            typeCode = Type.GetTypeCode(fieldValue.GetType());
+
+            switch (typeCode)
+            {
+                case TypeCode.Single: // float
+                    {
+                        temp = BitConverter.GetBytes((Single)fieldValue);
+                        Array.Reverse(temp);
+                        Array.Copy(temp, 0, data, offset, sizeof(Single));
+                        break;
+                    }
+                case TypeCode.Int32:
+                    {
+                        temp = BitConverter.GetBytes((Int32)fieldValue);
+                        Array.Reverse(temp);
+                        Array.Copy(temp, 0, data, offset, sizeof(Int32));
+                        break;
+                    }
+                case TypeCode.UInt32:
+                    {
+                        temp = BitConverter.GetBytes((UInt32)fieldValue);
+                        Array.Reverse(temp);
+                        Array.Copy(temp, 0, data, offset, sizeof(UInt32));
+                        break;
+                    }
+                case TypeCode.Int16:
+                    {
+                        temp = BitConverter.GetBytes((Int16)fieldValue);
+                        Array.Reverse(temp);
+                        Array.Copy(temp, 0, data, offset, sizeof(Int16));
+                        break;
+                    }
+                case TypeCode.UInt16:
+                    {
+                        temp = BitConverter.GetBytes((UInt16)fieldValue);
+                        Array.Reverse(temp);
+                        Array.Copy(temp, 0, data, offset, sizeof(UInt16));
+                        break;
+                    }
+                case TypeCode.Int64:
+                    {
+                        temp = BitConverter.GetBytes((Int64)fieldValue);
+                        Array.Reverse(temp);
+                        Array.Copy(temp, 0, data, offset, sizeof(Int64));
+                        break;
+                    }
+                case TypeCode.UInt64:
+                    {
+                        temp = BitConverter.GetBytes((UInt64)fieldValue);
+                        Array.Reverse(temp);
+                        Array.Copy(temp, 0, data, offset, sizeof(UInt64));
+                        break;
+                    }
+                case TypeCode.Double:
+                    {
+                        temp = BitConverter.GetBytes((Double)fieldValue);
+                        Array.Reverse(temp);
+                        Array.Copy(temp, 0, data, offset, sizeof(Double));
+                        break;
+                    }
+                case TypeCode.Byte:
+                    {
+                        data[offset] = (Byte)fieldValue;
+                        break;
+                    }
+                default:
+                    {
+                        //System.Diagnostics.Debug.Fail("No conversion provided for this type : " + typeCode.ToString());
+                        break;
+                    }
+            }; // switch
+            if (typeCode == TypeCode.Object)
+            {
+                int length = ((byte[])fieldValue).Length;
+                Array.Copy(((byte[])fieldValue), 0, data, offset, length);
+                offset += length;
+            }
+            else
+            {
+                offset += Marshal.SizeOf(fieldValue);
+            }
+        } // foreach
+
+        return data;
+    } // Swap
+    
+    byte[] StructureToByteArray(object obj)
+    {
+
+        int len = Marshal.SizeOf(obj);
+
+        byte[] arr = new byte[len];
+
+        IntPtr ptr = Marshal.AllocHGlobal(len);
+
+        Marshal.StructureToPtr(obj, ptr, true);
+
+        Marshal.Copy(ptr, arr, 0, len);
+
+        Marshal.FreeHGlobal(ptr);
+
+        return arr;
+
+    }
+    
 // ENUM DEFINITIONS
 
 public struct mavlink_message_t {
@@ -112,7 +352,8 @@ ${{enum:
 /** @brief ${description} */
     public enum ${name}
     {
-        ${{entry:	${name}=${value}, /* ${description} |${{param:${description}| }} */
+${{entry:	///<summary> ${description} |${{param:${description}| }} </summary>
+        ${name}=${value}, 
     }}
     };
 }}
@@ -139,20 +380,23 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_${name_lower}_t
     {
-        ${{ordered_fields: ${array_prefix} ${type} ${name}${array_suffix}; /// ${description}
+${{ordered_fields:        /// <summary>
+        /// ${description}
+        /// </summary>
+        ${array_prefix} ${type} ${name}${array_suffix};
     }}
     };
 
-/**
- * @brief Pack a ${name_lower} message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
-${{arg_fields: * @param ${name} ${description}
+/// <summary>
+/// * @brief Pack a ${name_lower} message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+${{arg_fields:/// * @param ${name} ${description}
 }}
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_${name_lower}_pack(byte system_id, byte component_id, byte[] msg,
                               ${{arg_fields: ${type} ${name},}})
@@ -160,7 +404,7 @@ public static UInt16 mavlink_msg_${name_lower}_pack(byte system_id, byte compone
 if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 ${{scalar_fields:	Array.Copy(BitConverter.GetBytes(${putname}),0,msg,${wire_offset},sizeof(${type}));
 }}
-${{array_fields:	//Array.Copy(${name},0,msg,${wire_offset},${array_length});
+${{array_fields:	Array.Copy(toArray(${name}),0,msg,${wire_offset},${array_length});
 }}
 } else {
     mavlink_${name_lower}_t packet = new mavlink_${name_lower}_t();

@@ -10,26 +10,38 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_memory_vect_t
     {
-         public  UInt16 address; /// Starting address of the debug variables
-     public  byte ver; /// Version code of the type variable. 0=unknown, type ignored and assumed int16_t. 1=as below
-     public  byte type; /// Type code of the memory variables. for ver = 1: 0=16 x int16_t, 1=16 x uint16_t, 2=16 x Q15, 3=16 x 1Q14
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=32)]
- public byte[] value; /// Memory contents at specified address
+        /// <summary>
+        /// Starting address of the debug variables
+        /// </summary>
+        public  UInt16 address;
+            /// <summary>
+        /// Version code of the type variable. 0=unknown, type ignored and assumed int16_t. 1=as below
+        /// </summary>
+        public  byte ver;
+            /// <summary>
+        /// Type code of the memory variables. for ver = 1: 0=16 x int16_t, 1=16 x uint16_t, 2=16 x Q15, 3=16 x 1Q14
+        /// </summary>
+        public  byte type;
+            /// <summary>
+        /// Memory contents at specified address
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=32)]
+ public byte[] value;
     
     };
 
-/**
- * @brief Pack a memory_vect message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param address Starting address of the debug variables
- * @param ver Version code of the type variable. 0=unknown, type ignored and assumed int16_t. 1=as below
- * @param type Type code of the memory variables. for ver = 1: 0=16 x int16_t, 1=16 x uint16_t, 2=16 x Q15, 3=16 x 1Q14
- * @param value Memory contents at specified address
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a memory_vect message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param address Starting address of the debug variables
+/// * @param ver Version code of the type variable. 0=unknown, type ignored and assumed int16_t. 1=as below
+/// * @param type Type code of the memory variables. for ver = 1: 0=16 x int16_t, 1=16 x uint16_t, 2=16 x Q15, 3=16 x 1Q14
+/// * @param value Memory contents at specified address
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_memory_vect_pack(byte system_id, byte component_id, byte[] msg,
                                UInt16 address, byte ver, byte type, byte[] value)
@@ -38,7 +50,7 @@ if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(address),0,msg,0,sizeof(UInt16));
 	Array.Copy(BitConverter.GetBytes(ver),0,msg,2,sizeof(byte));
 	Array.Copy(BitConverter.GetBytes(type),0,msg,3,sizeof(byte));
-	//Array.Copy(value,0,msg,4,32);
+	Array.Copy(toArray(value),0,msg,4,32);
 } else {
     mavlink_memory_vect_t packet = new mavlink_memory_vect_t();
 	packet.address = address;

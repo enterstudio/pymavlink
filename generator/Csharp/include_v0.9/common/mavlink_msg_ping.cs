@@ -10,25 +10,37 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_ping_t
     {
-         public  UInt32 seq; /// PING sequence
-     public  byte target_system; /// 0: request ping from all receiving systems, if greater than 0: message is a ping response and number is the system id of the requesting system
-     public  byte target_component; /// 0: request ping from all receiving components, if greater than 0: message is a ping response and number is the system id of the requesting system
-     public  UInt64 time; /// Unix timestamp in microseconds
+        /// <summary>
+        /// PING sequence
+        /// </summary>
+        public  UInt32 seq;
+            /// <summary>
+        /// 0: request ping from all receiving systems, if greater than 0: message is a ping response and number is the system id of the requesting system
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// 0: request ping from all receiving components, if greater than 0: message is a ping response and number is the system id of the requesting system
+        /// </summary>
+        public  byte target_component;
+            /// <summary>
+        /// Unix timestamp in microseconds
+        /// </summary>
+        public  UInt64 time;
     
     };
 
-/**
- * @brief Pack a ping message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param seq PING sequence
- * @param target_system 0: request ping from all receiving systems, if greater than 0: message is a ping response and number is the system id of the requesting system
- * @param target_component 0: request ping from all receiving components, if greater than 0: message is a ping response and number is the system id of the requesting system
- * @param time Unix timestamp in microseconds
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a ping message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param seq PING sequence
+/// * @param target_system 0: request ping from all receiving systems, if greater than 0: message is a ping response and number is the system id of the requesting system
+/// * @param target_component 0: request ping from all receiving components, if greater than 0: message is a ping response and number is the system id of the requesting system
+/// * @param time Unix timestamp in microseconds
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_ping_pack(byte system_id, byte component_id, byte[] msg,
                                UInt32 seq, byte target_system, byte target_component, UInt64 time)

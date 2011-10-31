@@ -10,25 +10,37 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_vision_speed_estimate_t
     {
-         public  UInt64 usec; /// Timestamp (milliseconds)
-     public  Single x; /// Global X speed
-     public  Single y; /// Global Y speed
-     public  Single z; /// Global Z speed
+        /// <summary>
+        /// Timestamp (milliseconds)
+        /// </summary>
+        public  UInt64 usec;
+            /// <summary>
+        /// Global X speed
+        /// </summary>
+        public  Single x;
+            /// <summary>
+        /// Global Y speed
+        /// </summary>
+        public  Single y;
+            /// <summary>
+        /// Global Z speed
+        /// </summary>
+        public  Single z;
     
     };
 
-/**
- * @brief Pack a vision_speed_estimate message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param usec Timestamp (milliseconds)
- * @param x Global X speed
- * @param y Global Y speed
- * @param z Global Z speed
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a vision_speed_estimate message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param usec Timestamp (milliseconds)
+/// * @param x Global X speed
+/// * @param y Global Y speed
+/// * @param z Global Z speed
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_vision_speed_estimate_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 usec, Single x, Single y, Single z)

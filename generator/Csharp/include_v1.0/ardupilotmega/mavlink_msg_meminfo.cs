@@ -10,21 +10,27 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_meminfo_t
     {
-         public  UInt16 brkval; /// heap top
-     public  UInt16 freemem; /// free memory
+        /// <summary>
+        /// heap top
+        /// </summary>
+        public  UInt16 brkval;
+            /// <summary>
+        /// free memory
+        /// </summary>
+        public  UInt16 freemem;
     
     };
 
-/**
- * @brief Pack a meminfo message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param brkval heap top
- * @param freemem free memory
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a meminfo message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param brkval heap top
+/// * @param freemem free memory
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_meminfo_pack(byte system_id, byte component_id, byte[] msg,
                                UInt16 brkval, UInt16 freemem)

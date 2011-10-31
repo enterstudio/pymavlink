@@ -10,29 +10,47 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_optical_flow_t
     {
-         public  UInt64 time; /// Timestamp (UNIX)
-     public  byte sensor_id; /// Sensor ID
-     public  Int16 flow_x; /// Flow in pixels in x-sensor direction
-     public  Int16 flow_y; /// Flow in pixels in y-sensor direction
-     public  byte quality; /// Optical flow quality / confidence. 0: bad, 255: maximum quality
-     public  Single ground_distance; /// Ground distance in meters
+        /// <summary>
+        /// Timestamp (UNIX)
+        /// </summary>
+        public  UInt64 time;
+            /// <summary>
+        /// Sensor ID
+        /// </summary>
+        public  byte sensor_id;
+            /// <summary>
+        /// Flow in pixels in x-sensor direction
+        /// </summary>
+        public  Int16 flow_x;
+            /// <summary>
+        /// Flow in pixels in y-sensor direction
+        /// </summary>
+        public  Int16 flow_y;
+            /// <summary>
+        /// Optical flow quality / confidence. 0: bad, 255: maximum quality
+        /// </summary>
+        public  byte quality;
+            /// <summary>
+        /// Ground distance in meters
+        /// </summary>
+        public  Single ground_distance;
     
     };
 
-/**
- * @brief Pack a optical_flow message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time Timestamp (UNIX)
- * @param sensor_id Sensor ID
- * @param flow_x Flow in pixels in x-sensor direction
- * @param flow_y Flow in pixels in y-sensor direction
- * @param quality Optical flow quality / confidence. 0: bad, 255: maximum quality
- * @param ground_distance Ground distance in meters
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a optical_flow message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time Timestamp (UNIX)
+/// * @param sensor_id Sensor ID
+/// * @param flow_x Flow in pixels in x-sensor direction
+/// * @param flow_y Flow in pixels in y-sensor direction
+/// * @param quality Optical flow quality / confidence. 0: bad, 255: maximum quality
+/// * @param ground_distance Ground distance in meters
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_optical_flow_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 time, byte sensor_id, Int16 flow_x, Int16 flow_y, byte quality, Single ground_distance)

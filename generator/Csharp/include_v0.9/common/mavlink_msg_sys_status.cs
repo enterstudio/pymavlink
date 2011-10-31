@@ -10,31 +10,52 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_sys_status_t
     {
-         public  byte mode; /// System mode, see MAV_MODE ENUM in mavlink/include/mavlink_types.h
-     public  byte nav_mode; /// Navigation mode, see MAV_NAV_MODE ENUM
-     public  byte status; /// System status flag, see MAV_STATUS ENUM
-     public  UInt16 load; /// Maximum usage in percent of the mainloop time, (0%: 0, 100%: 1000) should be always below 1000
-     public  UInt16 vbat; /// Battery voltage, in millivolts (1 = 1 millivolt)
-     public  UInt16 battery_remaining; /// Remaining battery energy: (0%: 0, 100%: 1000)
-     public  UInt16 packet_drop; /// Dropped packets (packets that were corrupted on reception on the MAV)
+        /// <summary>
+        /// System mode, see MAV_MODE ENUM in mavlink/include/mavlink_types.h
+        /// </summary>
+        public  byte mode;
+            /// <summary>
+        /// Navigation mode, see MAV_NAV_MODE ENUM
+        /// </summary>
+        public  byte nav_mode;
+            /// <summary>
+        /// System status flag, see MAV_STATUS ENUM
+        /// </summary>
+        public  byte status;
+            /// <summary>
+        /// Maximum usage in percent of the mainloop time, (0%: 0, 100%: 1000) should be always below 1000
+        /// </summary>
+        public  UInt16 load;
+            /// <summary>
+        /// Battery voltage, in millivolts (1 = 1 millivolt)
+        /// </summary>
+        public  UInt16 vbat;
+            /// <summary>
+        /// Remaining battery energy: (0%: 0, 100%: 1000)
+        /// </summary>
+        public  UInt16 battery_remaining;
+            /// <summary>
+        /// Dropped packets (packets that were corrupted on reception on the MAV)
+        /// </summary>
+        public  UInt16 packet_drop;
     
     };
 
-/**
- * @brief Pack a sys_status message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param mode System mode, see MAV_MODE ENUM in mavlink/include/mavlink_types.h
- * @param nav_mode Navigation mode, see MAV_NAV_MODE ENUM
- * @param status System status flag, see MAV_STATUS ENUM
- * @param load Maximum usage in percent of the mainloop time, (0%: 0, 100%: 1000) should be always below 1000
- * @param vbat Battery voltage, in millivolts (1 = 1 millivolt)
- * @param battery_remaining Remaining battery energy: (0%: 0, 100%: 1000)
- * @param packet_drop Dropped packets (packets that were corrupted on reception on the MAV)
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a sys_status message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param mode System mode, see MAV_MODE ENUM in mavlink/include/mavlink_types.h
+/// * @param nav_mode Navigation mode, see MAV_NAV_MODE ENUM
+/// * @param status System status flag, see MAV_STATUS ENUM
+/// * @param load Maximum usage in percent of the mainloop time, (0%: 0, 100%: 1000) should be always below 1000
+/// * @param vbat Battery voltage, in millivolts (1 = 1 millivolt)
+/// * @param battery_remaining Remaining battery energy: (0%: 0, 100%: 1000)
+/// * @param packet_drop Dropped packets (packets that were corrupted on reception on the MAV)
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_sys_status_pack(byte system_id, byte component_id, byte[] msg,
                                byte mode, byte nav_mode, byte status, UInt16 load, UInt16 vbat, UInt16 battery_remaining, UInt16 packet_drop)

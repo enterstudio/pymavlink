@@ -10,37 +10,67 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_raw_imu_t
     {
-         public  UInt64 usec; /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
-     public  Int16 xacc; /// X acceleration (raw)
-     public  Int16 yacc; /// Y acceleration (raw)
-     public  Int16 zacc; /// Z acceleration (raw)
-     public  Int16 xgyro; /// Angular speed around X axis (raw)
-     public  Int16 ygyro; /// Angular speed around Y axis (raw)
-     public  Int16 zgyro; /// Angular speed around Z axis (raw)
-     public  Int16 xmag; /// X Magnetic field (raw)
-     public  Int16 ymag; /// Y Magnetic field (raw)
-     public  Int16 zmag; /// Z Magnetic field (raw)
+        /// <summary>
+        /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+        /// </summary>
+        public  UInt64 usec;
+            /// <summary>
+        /// X acceleration (raw)
+        /// </summary>
+        public  Int16 xacc;
+            /// <summary>
+        /// Y acceleration (raw)
+        /// </summary>
+        public  Int16 yacc;
+            /// <summary>
+        /// Z acceleration (raw)
+        /// </summary>
+        public  Int16 zacc;
+            /// <summary>
+        /// Angular speed around X axis (raw)
+        /// </summary>
+        public  Int16 xgyro;
+            /// <summary>
+        /// Angular speed around Y axis (raw)
+        /// </summary>
+        public  Int16 ygyro;
+            /// <summary>
+        /// Angular speed around Z axis (raw)
+        /// </summary>
+        public  Int16 zgyro;
+            /// <summary>
+        /// X Magnetic field (raw)
+        /// </summary>
+        public  Int16 xmag;
+            /// <summary>
+        /// Y Magnetic field (raw)
+        /// </summary>
+        public  Int16 ymag;
+            /// <summary>
+        /// Z Magnetic field (raw)
+        /// </summary>
+        public  Int16 zmag;
     
     };
 
-/**
- * @brief Pack a raw_imu message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
- * @param xacc X acceleration (raw)
- * @param yacc Y acceleration (raw)
- * @param zacc Z acceleration (raw)
- * @param xgyro Angular speed around X axis (raw)
- * @param ygyro Angular speed around Y axis (raw)
- * @param zgyro Angular speed around Z axis (raw)
- * @param xmag X Magnetic field (raw)
- * @param ymag Y Magnetic field (raw)
- * @param zmag Z Magnetic field (raw)
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a raw_imu message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+/// * @param xacc X acceleration (raw)
+/// * @param yacc Y acceleration (raw)
+/// * @param zacc Z acceleration (raw)
+/// * @param xgyro Angular speed around X axis (raw)
+/// * @param ygyro Angular speed around Y axis (raw)
+/// * @param zgyro Angular speed around Z axis (raw)
+/// * @param xmag X Magnetic field (raw)
+/// * @param ymag Y Magnetic field (raw)
+/// * @param zmag Z Magnetic field (raw)
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_raw_imu_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 usec, Int16 xacc, Int16 yacc, Int16 zacc, Int16 xgyro, Int16 ygyro, Int16 zgyro, Int16 xmag, Int16 ymag, Int16 zmag)

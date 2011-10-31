@@ -10,27 +10,42 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_roll_pitch_yaw_thrust_setpoint_t
     {
-         public  UInt64 time_us; /// Timestamp in micro seconds since unix epoch
-     public  Single roll; /// Desired roll angle in radians
-     public  Single pitch; /// Desired pitch angle in radians
-     public  Single yaw; /// Desired yaw angle in radians
-     public  Single thrust; /// Collective thrust, normalized to 0 .. 1
+        /// <summary>
+        /// Timestamp in micro seconds since unix epoch
+        /// </summary>
+        public  UInt64 time_us;
+            /// <summary>
+        /// Desired roll angle in radians
+        /// </summary>
+        public  Single roll;
+            /// <summary>
+        /// Desired pitch angle in radians
+        /// </summary>
+        public  Single pitch;
+            /// <summary>
+        /// Desired yaw angle in radians
+        /// </summary>
+        public  Single yaw;
+            /// <summary>
+        /// Collective thrust, normalized to 0 .. 1
+        /// </summary>
+        public  Single thrust;
     
     };
 
-/**
- * @brief Pack a roll_pitch_yaw_thrust_setpoint message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time_us Timestamp in micro seconds since unix epoch
- * @param roll Desired roll angle in radians
- * @param pitch Desired pitch angle in radians
- * @param yaw Desired yaw angle in radians
- * @param thrust Collective thrust, normalized to 0 .. 1
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a roll_pitch_yaw_thrust_setpoint message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time_us Timestamp in micro seconds since unix epoch
+/// * @param roll Desired roll angle in radians
+/// * @param pitch Desired pitch angle in radians
+/// * @param yaw Desired yaw angle in radians
+/// * @param thrust Collective thrust, normalized to 0 .. 1
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_roll_pitch_yaw_thrust_setpoint_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 time_us, Single roll, Single pitch, Single yaw, Single thrust)

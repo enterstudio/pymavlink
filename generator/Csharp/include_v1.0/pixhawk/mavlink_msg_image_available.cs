@@ -10,63 +10,132 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_image_available_t
     {
-         public  UInt64 cam_id; /// Camera id
-     public  UInt64 timestamp; /// Timestamp
-     public  UInt64 valid_until; /// Until which timestamp this buffer will stay valid
-     public  UInt32 img_seq; /// The image sequence number
-     public  UInt32 img_buf_index; /// Position of the image in the buffer, starts with 0
-     public  UInt32 key; /// Shared memory area key
-     public  UInt32 exposure; /// Exposure time, in microseconds
-     public  Single gain; /// Camera gain
-     public  Single roll; /// Roll angle in rad
-     public  Single pitch; /// Pitch angle in rad
-     public  Single yaw; /// Yaw angle in rad
-     public  Single local_z; /// Local frame Z coordinate (height over ground)
-     public  Single lat; /// GPS X coordinate
-     public  Single lon; /// GPS Y coordinate
-     public  Single alt; /// Global frame altitude
-     public  Single ground_x; /// Ground truth X
-     public  Single ground_y; /// Ground truth Y
-     public  Single ground_z; /// Ground truth Z
-     public  UInt16 width; /// Image width
-     public  UInt16 height; /// Image height
-     public  UInt16 depth; /// Image depth
-     public  byte cam_no; /// Camera # (starts with 0)
-     public  byte channels; /// Image channels
+        /// <summary>
+        /// Camera id
+        /// </summary>
+        public  UInt64 cam_id;
+            /// <summary>
+        /// Timestamp
+        /// </summary>
+        public  UInt64 timestamp;
+            /// <summary>
+        /// Until which timestamp this buffer will stay valid
+        /// </summary>
+        public  UInt64 valid_until;
+            /// <summary>
+        /// The image sequence number
+        /// </summary>
+        public  UInt32 img_seq;
+            /// <summary>
+        /// Position of the image in the buffer, starts with 0
+        /// </summary>
+        public  UInt32 img_buf_index;
+            /// <summary>
+        /// Shared memory area key
+        /// </summary>
+        public  UInt32 key;
+            /// <summary>
+        /// Exposure time, in microseconds
+        /// </summary>
+        public  UInt32 exposure;
+            /// <summary>
+        /// Camera gain
+        /// </summary>
+        public  Single gain;
+            /// <summary>
+        /// Roll angle in rad
+        /// </summary>
+        public  Single roll;
+            /// <summary>
+        /// Pitch angle in rad
+        /// </summary>
+        public  Single pitch;
+            /// <summary>
+        /// Yaw angle in rad
+        /// </summary>
+        public  Single yaw;
+            /// <summary>
+        /// Local frame Z coordinate (height over ground)
+        /// </summary>
+        public  Single local_z;
+            /// <summary>
+        /// GPS X coordinate
+        /// </summary>
+        public  Single lat;
+            /// <summary>
+        /// GPS Y coordinate
+        /// </summary>
+        public  Single lon;
+            /// <summary>
+        /// Global frame altitude
+        /// </summary>
+        public  Single alt;
+            /// <summary>
+        /// Ground truth X
+        /// </summary>
+        public  Single ground_x;
+            /// <summary>
+        /// Ground truth Y
+        /// </summary>
+        public  Single ground_y;
+            /// <summary>
+        /// Ground truth Z
+        /// </summary>
+        public  Single ground_z;
+            /// <summary>
+        /// Image width
+        /// </summary>
+        public  UInt16 width;
+            /// <summary>
+        /// Image height
+        /// </summary>
+        public  UInt16 height;
+            /// <summary>
+        /// Image depth
+        /// </summary>
+        public  UInt16 depth;
+            /// <summary>
+        /// Camera # (starts with 0)
+        /// </summary>
+        public  byte cam_no;
+            /// <summary>
+        /// Image channels
+        /// </summary>
+        public  byte channels;
     
     };
 
-/**
- * @brief Pack a image_available message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param cam_id Camera id
- * @param cam_no Camera # (starts with 0)
- * @param timestamp Timestamp
- * @param valid_until Until which timestamp this buffer will stay valid
- * @param img_seq The image sequence number
- * @param img_buf_index Position of the image in the buffer, starts with 0
- * @param width Image width
- * @param height Image height
- * @param depth Image depth
- * @param channels Image channels
- * @param key Shared memory area key
- * @param exposure Exposure time, in microseconds
- * @param gain Camera gain
- * @param roll Roll angle in rad
- * @param pitch Pitch angle in rad
- * @param yaw Yaw angle in rad
- * @param local_z Local frame Z coordinate (height over ground)
- * @param lat GPS X coordinate
- * @param lon GPS Y coordinate
- * @param alt Global frame altitude
- * @param ground_x Ground truth X
- * @param ground_y Ground truth Y
- * @param ground_z Ground truth Z
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a image_available message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param cam_id Camera id
+/// * @param cam_no Camera # (starts with 0)
+/// * @param timestamp Timestamp
+/// * @param valid_until Until which timestamp this buffer will stay valid
+/// * @param img_seq The image sequence number
+/// * @param img_buf_index Position of the image in the buffer, starts with 0
+/// * @param width Image width
+/// * @param height Image height
+/// * @param depth Image depth
+/// * @param channels Image channels
+/// * @param key Shared memory area key
+/// * @param exposure Exposure time, in microseconds
+/// * @param gain Camera gain
+/// * @param roll Roll angle in rad
+/// * @param pitch Pitch angle in rad
+/// * @param yaw Yaw angle in rad
+/// * @param local_z Local frame Z coordinate (height over ground)
+/// * @param lat GPS X coordinate
+/// * @param lon GPS Y coordinate
+/// * @param alt Global frame altitude
+/// * @param ground_x Ground truth X
+/// * @param ground_y Ground truth Y
+/// * @param ground_z Ground truth Z
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_image_available_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 cam_id, byte cam_no, UInt64 timestamp, UInt64 valid_until, UInt32 img_seq, UInt32 img_buf_index, UInt16 width, UInt16 height, UInt16 depth, byte channels, UInt32 key, UInt32 exposure, Single gain, Single roll, Single pitch, Single yaw, Single local_z, Single lat, Single lon, Single alt, Single ground_x, Single ground_y, Single ground_z)

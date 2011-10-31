@@ -10,41 +10,77 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_image_triggered_t
     {
-         public  UInt64 timestamp; /// Timestamp
-     public  UInt32 seq; /// IMU seq
-     public  Single roll; /// Roll angle in rad
-     public  Single pitch; /// Pitch angle in rad
-     public  Single yaw; /// Yaw angle in rad
-     public  Single local_z; /// Local frame Z coordinate (height over ground)
-     public  Single lat; /// GPS X coordinate
-     public  Single lon; /// GPS Y coordinate
-     public  Single alt; /// Global frame altitude
-     public  Single ground_x; /// Ground truth X
-     public  Single ground_y; /// Ground truth Y
-     public  Single ground_z; /// Ground truth Z
+        /// <summary>
+        /// Timestamp
+        /// </summary>
+        public  UInt64 timestamp;
+            /// <summary>
+        /// IMU seq
+        /// </summary>
+        public  UInt32 seq;
+            /// <summary>
+        /// Roll angle in rad
+        /// </summary>
+        public  Single roll;
+            /// <summary>
+        /// Pitch angle in rad
+        /// </summary>
+        public  Single pitch;
+            /// <summary>
+        /// Yaw angle in rad
+        /// </summary>
+        public  Single yaw;
+            /// <summary>
+        /// Local frame Z coordinate (height over ground)
+        /// </summary>
+        public  Single local_z;
+            /// <summary>
+        /// GPS X coordinate
+        /// </summary>
+        public  Single lat;
+            /// <summary>
+        /// GPS Y coordinate
+        /// </summary>
+        public  Single lon;
+            /// <summary>
+        /// Global frame altitude
+        /// </summary>
+        public  Single alt;
+            /// <summary>
+        /// Ground truth X
+        /// </summary>
+        public  Single ground_x;
+            /// <summary>
+        /// Ground truth Y
+        /// </summary>
+        public  Single ground_y;
+            /// <summary>
+        /// Ground truth Z
+        /// </summary>
+        public  Single ground_z;
     
     };
 
-/**
- * @brief Pack a image_triggered message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param timestamp Timestamp
- * @param seq IMU seq
- * @param roll Roll angle in rad
- * @param pitch Pitch angle in rad
- * @param yaw Yaw angle in rad
- * @param local_z Local frame Z coordinate (height over ground)
- * @param lat GPS X coordinate
- * @param lon GPS Y coordinate
- * @param alt Global frame altitude
- * @param ground_x Ground truth X
- * @param ground_y Ground truth Y
- * @param ground_z Ground truth Z
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a image_triggered message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param timestamp Timestamp
+/// * @param seq IMU seq
+/// * @param roll Roll angle in rad
+/// * @param pitch Pitch angle in rad
+/// * @param yaw Yaw angle in rad
+/// * @param local_z Local frame Z coordinate (height over ground)
+/// * @param lat GPS X coordinate
+/// * @param lon GPS Y coordinate
+/// * @param alt Global frame altitude
+/// * @param ground_x Ground truth X
+/// * @param ground_y Ground truth Y
+/// * @param ground_z Ground truth Z
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_image_triggered_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 timestamp, UInt32 seq, Single roll, Single pitch, Single yaw, Single local_z, Single lat, Single lon, Single alt, Single ground_x, Single ground_y, Single ground_z)

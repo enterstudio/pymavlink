@@ -10,29 +10,47 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_diagnostic_t
     {
-         public  Single diagFl1; /// Diagnostic float 1
-     public  Single diagFl2; /// Diagnostic float 2
-     public  Single diagFl3; /// Diagnostic float 3
-     public  Int16 diagSh1; /// Diagnostic short 1
-     public  Int16 diagSh2; /// Diagnostic short 2
-     public  Int16 diagSh3; /// Diagnostic short 3
+        /// <summary>
+        /// Diagnostic float 1
+        /// </summary>
+        public  Single diagFl1;
+            /// <summary>
+        /// Diagnostic float 2
+        /// </summary>
+        public  Single diagFl2;
+            /// <summary>
+        /// Diagnostic float 3
+        /// </summary>
+        public  Single diagFl3;
+            /// <summary>
+        /// Diagnostic short 1
+        /// </summary>
+        public  Int16 diagSh1;
+            /// <summary>
+        /// Diagnostic short 2
+        /// </summary>
+        public  Int16 diagSh2;
+            /// <summary>
+        /// Diagnostic short 3
+        /// </summary>
+        public  Int16 diagSh3;
     
     };
 
-/**
- * @brief Pack a diagnostic message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param diagFl1 Diagnostic float 1
- * @param diagFl2 Diagnostic float 2
- * @param diagFl3 Diagnostic float 3
- * @param diagSh1 Diagnostic short 1
- * @param diagSh2 Diagnostic short 2
- * @param diagSh3 Diagnostic short 3
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a diagnostic message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param diagFl1 Diagnostic float 1
+/// * @param diagFl2 Diagnostic float 2
+/// * @param diagFl3 Diagnostic float 3
+/// * @param diagSh1 Diagnostic short 1
+/// * @param diagSh2 Diagnostic short 2
+/// * @param diagSh3 Diagnostic short 3
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_diagnostic_pack(byte system_id, byte component_id, byte[] msg,
                                Single diagFl1, Single diagFl2, Single diagFl3, Int16 diagSh1, Int16 diagSh2, Int16 diagSh3)

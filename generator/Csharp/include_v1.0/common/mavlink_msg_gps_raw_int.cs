@@ -10,37 +10,67 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_gps_raw_int_t
     {
-         public  UInt64 time_usec; /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
-     public  Int32 lat; /// Latitude in 1E7 degrees
-     public  Int32 lon; /// Longitude in 1E7 degrees
-     public  Int32 alt; /// Altitude in 1E3 meters (millimeters) above MSL
-     public  UInt16 eph; /// GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
-     public  UInt16 epv; /// GPS VDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
-     public  UInt16 vel; /// GPS ground speed (m/s * 100). If unknown, set to: 65535
-     public  UInt16 cog; /// Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
-     public  byte fix_type; /// 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
-     public  byte satellites_visible; /// Number of satellites visible. If unknown, set to 255
+        /// <summary>
+        /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+        /// </summary>
+        public  UInt64 time_usec;
+            /// <summary>
+        /// Latitude in 1E7 degrees
+        /// </summary>
+        public  Int32 lat;
+            /// <summary>
+        /// Longitude in 1E7 degrees
+        /// </summary>
+        public  Int32 lon;
+            /// <summary>
+        /// Altitude in 1E3 meters (millimeters) above MSL
+        /// </summary>
+        public  Int32 alt;
+            /// <summary>
+        /// GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
+        /// </summary>
+        public  UInt16 eph;
+            /// <summary>
+        /// GPS VDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
+        /// </summary>
+        public  UInt16 epv;
+            /// <summary>
+        /// GPS ground speed (m/s * 100). If unknown, set to: 65535
+        /// </summary>
+        public  UInt16 vel;
+            /// <summary>
+        /// Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
+        /// </summary>
+        public  UInt16 cog;
+            /// <summary>
+        /// 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
+        /// </summary>
+        public  byte fix_type;
+            /// <summary>
+        /// Number of satellites visible. If unknown, set to 255
+        /// </summary>
+        public  byte satellites_visible;
     
     };
 
-/**
- * @brief Pack a gps_raw_int message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
- * @param fix_type 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
- * @param lat Latitude in 1E7 degrees
- * @param lon Longitude in 1E7 degrees
- * @param alt Altitude in 1E3 meters (millimeters) above MSL
- * @param eph GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
- * @param epv GPS VDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
- * @param vel GPS ground speed (m/s * 100). If unknown, set to: 65535
- * @param cog Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
- * @param satellites_visible Number of satellites visible. If unknown, set to 255
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a gps_raw_int message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+/// * @param fix_type 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
+/// * @param lat Latitude in 1E7 degrees
+/// * @param lon Longitude in 1E7 degrees
+/// * @param alt Altitude in 1E3 meters (millimeters) above MSL
+/// * @param eph GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
+/// * @param epv GPS VDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
+/// * @param vel GPS ground speed (m/s * 100). If unknown, set to: 65535
+/// * @param cog Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
+/// * @param satellites_visible Number of satellites visible. If unknown, set to 255
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_gps_raw_int_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 time_usec, byte fix_type, Int32 lat, Int32 lon, Int32 alt, UInt16 eph, UInt16 epv, UInt16 vel, UInt16 cog, byte satellites_visible)

@@ -10,26 +10,38 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_param_value_t
     {
-         [MarshalAs(UnmanagedType.ByValArray,SizeConst=15)]
- public byte[] param_id; /// Onboard parameter id
-     public  Single param_value; /// Onboard parameter value
-     public  UInt16 param_count; /// Total number of onboard parameters
-     public  UInt16 param_index; /// Index of this onboard parameter
+        /// <summary>
+        /// Onboard parameter id
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=15)]
+ public byte[] param_id;
+            /// <summary>
+        /// Onboard parameter value
+        /// </summary>
+        public  Single param_value;
+            /// <summary>
+        /// Total number of onboard parameters
+        /// </summary>
+        public  UInt16 param_count;
+            /// <summary>
+        /// Index of this onboard parameter
+        /// </summary>
+        public  UInt16 param_index;
     
     };
 
-/**
- * @brief Pack a param_value message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param param_id Onboard parameter id
- * @param param_value Onboard parameter value
- * @param param_count Total number of onboard parameters
- * @param param_index Index of this onboard parameter
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a param_value message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param param_id Onboard parameter id
+/// * @param param_value Onboard parameter value
+/// * @param param_count Total number of onboard parameters
+/// * @param param_index Index of this onboard parameter
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_param_value_pack(byte system_id, byte component_id, byte[] msg,
                                byte[] param_id, Single param_value, UInt16 param_count, UInt16 param_index)
@@ -38,7 +50,7 @@ if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(param_value),0,msg,15,sizeof(Single));
 	Array.Copy(BitConverter.GetBytes(param_count),0,msg,19,sizeof(UInt16));
 	Array.Copy(BitConverter.GetBytes(param_index),0,msg,21,sizeof(UInt16));
-	//Array.Copy(param_id,0,msg,0,15);
+	Array.Copy(toArray(param_id),0,msg,0,15);
 } else {
     mavlink_param_value_t packet = new mavlink_param_value_t();
 	packet.param_value = param_value;

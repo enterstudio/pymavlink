@@ -10,27 +10,42 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_set_mag_offsets_t
     {
-         public  Int16 mag_ofs_x; /// magnetometer X offset
-     public  Int16 mag_ofs_y; /// magnetometer Y offset
-     public  Int16 mag_ofs_z; /// magnetometer Z offset
-     public  byte target_system; /// System ID
-     public  byte target_component; /// Component ID
+        /// <summary>
+        /// magnetometer X offset
+        /// </summary>
+        public  Int16 mag_ofs_x;
+            /// <summary>
+        /// magnetometer Y offset
+        /// </summary>
+        public  Int16 mag_ofs_y;
+            /// <summary>
+        /// magnetometer Z offset
+        /// </summary>
+        public  Int16 mag_ofs_z;
+            /// <summary>
+        /// System ID
+        /// </summary>
+        public  byte target_system;
+            /// <summary>
+        /// Component ID
+        /// </summary>
+        public  byte target_component;
     
     };
 
-/**
- * @brief Pack a set_mag_offsets message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param target_system System ID
- * @param target_component Component ID
- * @param mag_ofs_x magnetometer X offset
- * @param mag_ofs_y magnetometer Y offset
- * @param mag_ofs_z magnetometer Z offset
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a set_mag_offsets message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param target_system System ID
+/// * @param target_component Component ID
+/// * @param mag_ofs_x magnetometer X offset
+/// * @param mag_ofs_y magnetometer Y offset
+/// * @param mag_ofs_z magnetometer Z offset
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_set_mag_offsets_pack(byte system_id, byte component_id, byte[] msg,
                                byte target_system, byte target_component, Int16 mag_ofs_x, Int16 mag_ofs_y, Int16 mag_ofs_z)

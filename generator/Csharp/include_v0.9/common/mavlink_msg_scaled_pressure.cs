@@ -10,25 +10,37 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_scaled_pressure_t
     {
-         public  UInt64 usec; /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
-     public  Single press_abs; /// Absolute pressure (hectopascal)
-     public  Single press_diff; /// Differential pressure 1 (hectopascal)
-     public  Int16 temperature; /// Temperature measurement (0.01 degrees celsius)
+        /// <summary>
+        /// Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+        /// </summary>
+        public  UInt64 usec;
+            /// <summary>
+        /// Absolute pressure (hectopascal)
+        /// </summary>
+        public  Single press_abs;
+            /// <summary>
+        /// Differential pressure 1 (hectopascal)
+        /// </summary>
+        public  Single press_diff;
+            /// <summary>
+        /// Temperature measurement (0.01 degrees celsius)
+        /// </summary>
+        public  Int16 temperature;
     
     };
 
-/**
- * @brief Pack a scaled_pressure message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
- * @param press_abs Absolute pressure (hectopascal)
- * @param press_diff Differential pressure 1 (hectopascal)
- * @param temperature Temperature measurement (0.01 degrees celsius)
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a scaled_pressure message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+/// * @param press_abs Absolute pressure (hectopascal)
+/// * @param press_diff Differential pressure 1 (hectopascal)
+/// * @param temperature Temperature measurement (0.01 degrees celsius)
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_scaled_pressure_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 usec, Single press_abs, Single press_diff, Int16 temperature)

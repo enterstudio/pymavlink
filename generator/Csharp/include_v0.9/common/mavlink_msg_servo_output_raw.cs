@@ -10,33 +10,57 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_servo_output_raw_t
     {
-         public  UInt16 servo1_raw; /// Servo output 1 value, in microseconds
-     public  UInt16 servo2_raw; /// Servo output 2 value, in microseconds
-     public  UInt16 servo3_raw; /// Servo output 3 value, in microseconds
-     public  UInt16 servo4_raw; /// Servo output 4 value, in microseconds
-     public  UInt16 servo5_raw; /// Servo output 5 value, in microseconds
-     public  UInt16 servo6_raw; /// Servo output 6 value, in microseconds
-     public  UInt16 servo7_raw; /// Servo output 7 value, in microseconds
-     public  UInt16 servo8_raw; /// Servo output 8 value, in microseconds
+        /// <summary>
+        /// Servo output 1 value, in microseconds
+        /// </summary>
+        public  UInt16 servo1_raw;
+            /// <summary>
+        /// Servo output 2 value, in microseconds
+        /// </summary>
+        public  UInt16 servo2_raw;
+            /// <summary>
+        /// Servo output 3 value, in microseconds
+        /// </summary>
+        public  UInt16 servo3_raw;
+            /// <summary>
+        /// Servo output 4 value, in microseconds
+        /// </summary>
+        public  UInt16 servo4_raw;
+            /// <summary>
+        /// Servo output 5 value, in microseconds
+        /// </summary>
+        public  UInt16 servo5_raw;
+            /// <summary>
+        /// Servo output 6 value, in microseconds
+        /// </summary>
+        public  UInt16 servo6_raw;
+            /// <summary>
+        /// Servo output 7 value, in microseconds
+        /// </summary>
+        public  UInt16 servo7_raw;
+            /// <summary>
+        /// Servo output 8 value, in microseconds
+        /// </summary>
+        public  UInt16 servo8_raw;
     
     };
 
-/**
- * @brief Pack a servo_output_raw message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param servo1_raw Servo output 1 value, in microseconds
- * @param servo2_raw Servo output 2 value, in microseconds
- * @param servo3_raw Servo output 3 value, in microseconds
- * @param servo4_raw Servo output 4 value, in microseconds
- * @param servo5_raw Servo output 5 value, in microseconds
- * @param servo6_raw Servo output 6 value, in microseconds
- * @param servo7_raw Servo output 7 value, in microseconds
- * @param servo8_raw Servo output 8 value, in microseconds
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a servo_output_raw message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param servo1_raw Servo output 1 value, in microseconds
+/// * @param servo2_raw Servo output 2 value, in microseconds
+/// * @param servo3_raw Servo output 3 value, in microseconds
+/// * @param servo4_raw Servo output 4 value, in microseconds
+/// * @param servo5_raw Servo output 5 value, in microseconds
+/// * @param servo6_raw Servo output 6 value, in microseconds
+/// * @param servo7_raw Servo output 7 value, in microseconds
+/// * @param servo8_raw Servo output 8 value, in microseconds
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_servo_output_raw_pack(byte system_id, byte component_id, byte[] msg,
                                UInt16 servo1_raw, UInt16 servo2_raw, UInt16 servo3_raw, UInt16 servo4_raw, UInt16 servo5_raw, UInt16 servo6_raw, UInt16 servo7_raw, UInt16 servo8_raw)

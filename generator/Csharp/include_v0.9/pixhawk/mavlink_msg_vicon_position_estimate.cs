@@ -10,31 +10,52 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_vicon_position_estimate_t
     {
-         public  UInt64 usec; /// Timestamp (milliseconds)
-     public  Single x; /// Global X position
-     public  Single y; /// Global Y position
-     public  Single z; /// Global Z position
-     public  Single roll; /// Roll angle in rad
-     public  Single pitch; /// Pitch angle in rad
-     public  Single yaw; /// Yaw angle in rad
+        /// <summary>
+        /// Timestamp (milliseconds)
+        /// </summary>
+        public  UInt64 usec;
+            /// <summary>
+        /// Global X position
+        /// </summary>
+        public  Single x;
+            /// <summary>
+        /// Global Y position
+        /// </summary>
+        public  Single y;
+            /// <summary>
+        /// Global Z position
+        /// </summary>
+        public  Single z;
+            /// <summary>
+        /// Roll angle in rad
+        /// </summary>
+        public  Single roll;
+            /// <summary>
+        /// Pitch angle in rad
+        /// </summary>
+        public  Single pitch;
+            /// <summary>
+        /// Yaw angle in rad
+        /// </summary>
+        public  Single yaw;
     
     };
 
-/**
- * @brief Pack a vicon_position_estimate message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param usec Timestamp (milliseconds)
- * @param x Global X position
- * @param y Global Y position
- * @param z Global Z position
- * @param roll Roll angle in rad
- * @param pitch Pitch angle in rad
- * @param yaw Yaw angle in rad
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a vicon_position_estimate message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param usec Timestamp (milliseconds)
+/// * @param x Global X position
+/// * @param y Global Y position
+/// * @param z Global Z position
+/// * @param roll Roll angle in rad
+/// * @param pitch Pitch angle in rad
+/// * @param yaw Yaw angle in rad
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_vicon_position_estimate_pack(byte system_id, byte component_id, byte[] msg,
                                UInt64 usec, Single x, Single y, Single z, Single roll, Single pitch, Single yaw)

@@ -10,28 +10,43 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_debug_vect_t
     {
-         public  UInt64 time_usec; /// Timestamp
-     public  Single x; /// x
-     public  Single y; /// y
-     public  Single z; /// z
-     [MarshalAs(UnmanagedType.ByValArray,SizeConst=10)]
- public string name; /// Name
+        /// <summary>
+        /// Timestamp
+        /// </summary>
+        public  UInt64 time_usec;
+            /// <summary>
+        /// x
+        /// </summary>
+        public  Single x;
+            /// <summary>
+        /// y
+        /// </summary>
+        public  Single y;
+            /// <summary>
+        /// z
+        /// </summary>
+        public  Single z;
+            /// <summary>
+        /// Name
+        /// </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=10)]
+ public string name;
     
     };
 
-/**
- * @brief Pack a debug_vect message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param name Name
- * @param time_usec Timestamp
- * @param x x
- * @param y y
- * @param z z
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a debug_vect message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param name Name
+/// * @param time_usec Timestamp
+/// * @param x x
+/// * @param y y
+/// * @param z z
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_debug_vect_pack(byte system_id, byte component_id, byte[] msg,
                                string name, UInt64 time_usec, Single x, Single y, Single z)
@@ -41,7 +56,7 @@ if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
 	Array.Copy(BitConverter.GetBytes(x),0,msg,8,sizeof(Single));
 	Array.Copy(BitConverter.GetBytes(y),0,msg,12,sizeof(Single));
 	Array.Copy(BitConverter.GetBytes(z),0,msg,16,sizeof(Single));
-	//Array.Copy(name,0,msg,20,10);
+	Array.Copy(toArray(name),0,msg,20,10);
 } else {
     mavlink_debug_vect_t packet = new mavlink_debug_vect_t();
 	packet.time_usec = time_usec;

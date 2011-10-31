@@ -10,31 +10,52 @@ public partial class Mavlink
     [StructLayout(LayoutKind.Sequential,Pack=1)]
     public struct mavlink_safety_allowed_area_t
     {
-         public  byte frame; /// Coordinate frame, as defined by MAV_FRAME enum in mavlink_types.h. Can be either global, GPS, right-handed with Z axis up or local, right handed, Z axis down.
-     public  Single p1x; /// x position 1 / Latitude 1
-     public  Single p1y; /// y position 1 / Longitude 1
-     public  Single p1z; /// z position 1 / Altitude 1
-     public  Single p2x; /// x position 2 / Latitude 2
-     public  Single p2y; /// y position 2 / Longitude 2
-     public  Single p2z; /// z position 2 / Altitude 2
+        /// <summary>
+        /// Coordinate frame, as defined by MAV_FRAME enum in mavlink_types.h. Can be either global, GPS, right-handed with Z axis up or local, right handed, Z axis down.
+        /// </summary>
+        public  byte frame;
+            /// <summary>
+        /// x position 1 / Latitude 1
+        /// </summary>
+        public  Single p1x;
+            /// <summary>
+        /// y position 1 / Longitude 1
+        /// </summary>
+        public  Single p1y;
+            /// <summary>
+        /// z position 1 / Altitude 1
+        /// </summary>
+        public  Single p1z;
+            /// <summary>
+        /// x position 2 / Latitude 2
+        /// </summary>
+        public  Single p2x;
+            /// <summary>
+        /// y position 2 / Longitude 2
+        /// </summary>
+        public  Single p2y;
+            /// <summary>
+        /// z position 2 / Altitude 2
+        /// </summary>
+        public  Single p2z;
     
     };
 
-/**
- * @brief Pack a safety_allowed_area message
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- *
- * @param frame Coordinate frame, as defined by MAV_FRAME enum in mavlink_types.h. Can be either global, GPS, right-handed with Z axis up or local, right handed, Z axis down.
- * @param p1x x position 1 / Latitude 1
- * @param p1y y position 1 / Longitude 1
- * @param p1z z position 1 / Altitude 1
- * @param p2x x position 2 / Latitude 2
- * @param p2y y position 2 / Longitude 2
- * @param p2z z position 2 / Altitude 2
- * @return length of the message in bytes (excluding serial stream start sign)
- */
+/// <summary>
+/// * @brief Pack a safety_allowed_area message
+/// * @param system_id ID of this system
+/// * @param component_id ID of this component (e.g. 200 for IMU)
+/// * @param msg The MAVLink message to compress the data into
+/// *
+/// * @param frame Coordinate frame, as defined by MAV_FRAME enum in mavlink_types.h. Can be either global, GPS, right-handed with Z axis up or local, right handed, Z axis down.
+/// * @param p1x x position 1 / Latitude 1
+/// * @param p1y y position 1 / Longitude 1
+/// * @param p1z z position 1 / Altitude 1
+/// * @param p2x x position 2 / Latitude 2
+/// * @param p2y y position 2 / Longitude 2
+/// * @param p2z z position 2 / Altitude 2
+/// * @return length of the message in bytes (excluding serial stream start sign)
+/// </summary>
  
 public static UInt16 mavlink_msg_safety_allowed_area_pack(byte system_id, byte component_id, byte[] msg,
                                byte frame, Single p1x, Single p1y, Single p1z, Single p2x, Single p2y, Single p2z)
