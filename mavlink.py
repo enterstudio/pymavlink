@@ -156,6 +156,18 @@ MAV_CMD_PREFLIGHT_STORAGE = 245 # Request storage of different parameter values 
                         # will be only accepted if in pre-flight mode.
 MAV_CMD_ENUM_END = 246 # 
 
+# FENCE_ACTION
+FENCE_ACTION_NONE = 0 # Disable fenced mode
+FENCE_ACTION_GUIDED = 1 # Switched to guided mode to return point (fence point 0)
+FENCE_ACTION_ENUM_END = 2 # 
+
+# FENCE_BREACH
+FENCE_BREACH_NONE = 0 # No last fence breach
+FENCE_BREACH_MINALT = 1 # Breached minimum altitude
+FENCE_BREACH_MAXALT = 2 # Breached minimum altitude
+FENCE_BREACH_BOUNDARY = 3 # Breached fence boundary
+FENCE_BREACH_ENUM_END = 4 # 
+
 # MAV_DATA_STREAM
 MAV_DATA_STREAM_ALL = 0 # Enable all data streams
 MAV_DATA_STREAM_RAW_SENSORS = 1 # Enable IMU_RAW, GPS_RAW, GPS_STATUS packets.
@@ -188,6 +200,9 @@ MAVLINK_MSG_ID_DIGICAM_CONTROL = 155
 MAVLINK_MSG_ID_MOUNT_CONFIGURE = 156
 MAVLINK_MSG_ID_MOUNT_CONTROL = 157
 MAVLINK_MSG_ID_MOUNT_STATUS = 158
+MAVLINK_MSG_ID_FENCE_POINT = 160
+MAVLINK_MSG_ID_FENCE_FETCH_POINT = 161
+MAVLINK_MSG_ID_FENCE_STATUS = 162
 MAVLINK_MSG_ID_HEARTBEAT = 0
 MAVLINK_MSG_ID_BOOT = 1
 MAVLINK_MSG_ID_SYSTEM_TIME = 2
@@ -422,6 +437,54 @@ class MAVLink_mount_status_message(MAVLink_message):
 
         def pack(self, mav):
                 return MAVLink_message.pack(self, mav, 233, struct.pack('>BBiii', self.target_system, self.target_component, self.pointing_a, self.pointing_b, self.pointing_c))
+
+class MAVLink_fence_point_message(MAVLink_message):
+        '''
+        A fence point. Used to set a point when from               GCS
+        -> MAV. Also used to return a point from MAV -> GCS
+        '''
+        def __init__(self, target_system, target_component, idx, count, lat, lng):
+                MAVLink_message.__init__(self, MAVLINK_MSG_ID_FENCE_POINT, 'FENCE_POINT')
+                self._fieldnames = ['target_system', 'target_component', 'idx', 'count', 'lat', 'lng']
+                self.target_system = target_system
+                self.target_component = target_component
+                self.idx = idx
+                self.count = count
+                self.lat = lat
+                self.lng = lng
+
+        def pack(self, mav):
+                return MAVLink_message.pack(self, mav, 18, struct.pack('>BBBBff', self.target_system, self.target_component, self.idx, self.count, self.lat, self.lng))
+
+class MAVLink_fence_fetch_point_message(MAVLink_message):
+        '''
+        Request a current fence point from MAV
+        '''
+        def __init__(self, target_system, target_component, idx):
+                MAVLink_message.__init__(self, MAVLINK_MSG_ID_FENCE_FETCH_POINT, 'FENCE_FETCH_POINT')
+                self._fieldnames = ['target_system', 'target_component', 'idx']
+                self.target_system = target_system
+                self.target_component = target_component
+                self.idx = idx
+
+        def pack(self, mav):
+                return MAVLink_message.pack(self, mav, 68, struct.pack('>BBB', self.target_system, self.target_component, self.idx))
+
+class MAVLink_fence_status_message(MAVLink_message):
+        '''
+        Status of geo-fencing. Sent in extended             status
+        stream when fencing enabled
+        '''
+        def __init__(self, breach_status, breach_count, breach_type, breach_time):
+                MAVLink_message.__init__(self, MAVLINK_MSG_ID_FENCE_STATUS, 'FENCE_STATUS')
+                self._fieldnames = ['breach_status', 'breach_count', 'breach_type', 'breach_time']
+                self.breach_status = breach_status
+                self.breach_count = breach_count
+                self.breach_type = breach_type
+                self.breach_time = breach_time
+
+        def pack(self, mav):
+                return MAVLink_message.pack(self, mav, 136, struct.pack('>BHBI', self.breach_status, self.breach_count, self.breach_type, self.breach_time))
 
 class MAVLink_heartbeat_message(MAVLink_message):
         '''
@@ -1718,6 +1781,9 @@ mavlink_map = {
         MAVLINK_MSG_ID_MOUNT_CONFIGURE : ( '>BBBBBB', MAVLink_mount_configure_message, [0, 1, 2, 3, 4, 5], 19 ),
         MAVLINK_MSG_ID_MOUNT_CONTROL : ( '>BBiiiB', MAVLink_mount_control_message, [0, 1, 2, 3, 4, 5], 97 ),
         MAVLINK_MSG_ID_MOUNT_STATUS : ( '>BBiii', MAVLink_mount_status_message, [0, 1, 2, 3, 4], 233 ),
+        MAVLINK_MSG_ID_FENCE_POINT : ( '>BBBBff', MAVLink_fence_point_message, [0, 1, 2, 3, 4, 5], 18 ),
+        MAVLINK_MSG_ID_FENCE_FETCH_POINT : ( '>BBB', MAVLink_fence_fetch_point_message, [0, 1, 2], 68 ),
+        MAVLINK_MSG_ID_FENCE_STATUS : ( '>BHBI', MAVLink_fence_status_message, [0, 1, 2, 3], 136 ),
         MAVLINK_MSG_ID_HEARTBEAT : ( '>BBB', MAVLink_heartbeat_message, [0, 1, 2], 72 ),
         MAVLINK_MSG_ID_BOOT : ( '>I', MAVLink_boot_message, [0], 39 ),
         MAVLINK_MSG_ID_SYSTEM_TIME : ( '>Q', MAVLink_system_time_message, [0], 190 ),
@@ -2266,6 +2332,90 @@ class MAVLink(object):
 
                 '''
                 return self.send(self.mount_status_encode(target_system, target_component, pointing_a, pointing_b, pointing_c))
+            
+        def fence_point_encode(self, target_system, target_component, idx, count, lat, lng):
+                '''
+                A fence point. Used to set a point when from               GCS -> MAV.
+                Also used to return a point from MAV -> GCS
+
+                target_system             : System ID (uint8_t)
+                target_component          : Component ID (uint8_t)
+                idx                       : point index (first point is 1, 0 is for return point) (uint8_t)
+                count                     : total number of points (for sanity checking) (uint8_t)
+                lat                       : Latitude of point (float)
+                lng                       : Longitude of point (float)
+
+                '''
+                msg = MAVLink_fence_point_message(target_system, target_component, idx, count, lat, lng)
+                msg.pack(self)
+                return msg
+            
+        def fence_point_send(self, target_system, target_component, idx, count, lat, lng):
+                '''
+                A fence point. Used to set a point when from               GCS -> MAV.
+                Also used to return a point from MAV -> GCS
+
+                target_system             : System ID (uint8_t)
+                target_component          : Component ID (uint8_t)
+                idx                       : point index (first point is 1, 0 is for return point) (uint8_t)
+                count                     : total number of points (for sanity checking) (uint8_t)
+                lat                       : Latitude of point (float)
+                lng                       : Longitude of point (float)
+
+                '''
+                return self.send(self.fence_point_encode(target_system, target_component, idx, count, lat, lng))
+            
+        def fence_fetch_point_encode(self, target_system, target_component, idx):
+                '''
+                Request a current fence point from MAV
+
+                target_system             : System ID (uint8_t)
+                target_component          : Component ID (uint8_t)
+                idx                       : point index (first point is 1, 0 is for return point) (uint8_t)
+
+                '''
+                msg = MAVLink_fence_fetch_point_message(target_system, target_component, idx)
+                msg.pack(self)
+                return msg
+            
+        def fence_fetch_point_send(self, target_system, target_component, idx):
+                '''
+                Request a current fence point from MAV
+
+                target_system             : System ID (uint8_t)
+                target_component          : Component ID (uint8_t)
+                idx                       : point index (first point is 1, 0 is for return point) (uint8_t)
+
+                '''
+                return self.send(self.fence_fetch_point_encode(target_system, target_component, idx))
+            
+        def fence_status_encode(self, breach_status, breach_count, breach_type, breach_time):
+                '''
+                Status of geo-fencing. Sent in extended             status stream when
+                fencing enabled
+
+                breach_status             : 0 if currently inside fence, 1 if outside (uint8_t)
+                breach_count              : number of fence breaches (uint16_t)
+                breach_type               : last breach type (see FENCE_BREACH_* enum) (uint8_t)
+                breach_time               : time of last breach in milliseconds since boot (uint32_t)
+
+                '''
+                msg = MAVLink_fence_status_message(breach_status, breach_count, breach_type, breach_time)
+                msg.pack(self)
+                return msg
+            
+        def fence_status_send(self, breach_status, breach_count, breach_type, breach_time):
+                '''
+                Status of geo-fencing. Sent in extended             status stream when
+                fencing enabled
+
+                breach_status             : 0 if currently inside fence, 1 if outside (uint8_t)
+                breach_count              : number of fence breaches (uint16_t)
+                breach_type               : last breach type (see FENCE_BREACH_* enum) (uint8_t)
+                breach_time               : time of last breach in milliseconds since boot (uint32_t)
+
+                '''
+                return self.send(self.fence_status_encode(breach_status, breach_count, breach_type, breach_time))
             
         def heartbeat_encode(self, type, autopilot, mavlink_version=2):
                 '''
