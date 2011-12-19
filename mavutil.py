@@ -489,7 +489,11 @@ def is_printable(c):
     global have_ascii
     if have_ascii:
         return ascii.isprint(c)
-    return ord(c) >= 32 and ord(c) <= 126
+    if isinstance(c, int):
+        ic = c
+    else:
+        ic = ord(c)
+    return ic >= 32 and ic <= 126
 
 def all_printable(buf):
     '''see if a string is all printable'''
