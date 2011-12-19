@@ -8,6 +8,7 @@ Useful for visualising flights
 '''
 
 import sys, time, os, struct
+import Tkinter
 
 # allow import from the parent directory, where mavlink.py is
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
@@ -37,62 +38,108 @@ if len(args) < 1:
     sys.exit(1)
 
 filename = args[0]
-mlog = mavutil.mavlink_connection(filename, planner_format=opts.planner,
-                                  robust_parsing=opts.robust)
 
-mout = []
-for m in opts.out:
-    mout.append(mavutil.mavudp(m, input=False))
+class App():
+    def __init__(self, filename):
+        self.root = Tkinter.Tk()
 
-fgout = []
-for f in opts.fgout:
-    fgout.append(mavutil.mavudp(f, input=False))
+        self.mlog = mavutil.mavlink_connection(filename, planner_format=opts.planner,
+                                               robust_parsing=opts.robust)
+        self.mout = []
+        for m in opts.out:
+            self.mout.append(mavutil.mavudp(m, input=False))
+
+        self.fgout = []
+        for f in opts.fgout:
+            self.fgout.append(mavutil.mavudp(f, input=False))
     
+        self.fdm = fgFDM.fgFDM()
 
-fdm = fgFDM.fgFDM()
+        self.msg = self.mlog.recv_match(condition=opts.condition)
+        if self.msg is None:
+            sys.exit(1)
+        self.last_timestamp = getattr(self.msg, '_timestamp')
 
-playpack_speed = 1.0
-last_timestamp = None
+        self.frame = Tkinter.Frame(self.root)
+        self.frame.pack()
 
-while True:
-    msg = mlog.recv_match(condition=opts.condition)
-    if msg is None:
-        break
+        self.quit = Tkinter.Button(self.frame, text="QUIT", command=self.frame.quit)
+        self.quit.pack(side=Tkinter.LEFT)
 
-    timestamp = getattr(msg, '_timestamp')
+        self.clock = Tkinter.Label(self.frame,text="")
+        self.clock.pack()
 
-    for m in mout:
-        m.write(struct.pack('>Q', timestamp*1.0e6))
-        m.write(msg.get_msgbuf().tostring())
+        self.playback = Tkinter.Spinbox(self.frame, from_=0, to=20, increment=0.5)
+        self.playback.pack()
+        self.playback.delete(0, "end")
+        self.playback.insert(0, 1)
 
-    if msg.get_type() == "GPS_RAW":
-        fdm.set('latitude', msg.lat, units='degrees')
-        fdm.set('longitude', msg.lon, units='degrees')
-        if opts.gpsalt:
-            fdm.set('altitude', msg.alt, units='meters')
-    if msg.get_type() == "VFR_HUD":
-        if not opts.gpsalt:
-            fdm.set('altitude', msg.alt, units='meters')
-        fdm.set('num_engines', 1)
-        fdm.set('vcas', msg.airspeed, units='mps')
-    if msg.get_type() == "ATTITUDE":
-        fdm.set('phi', msg.roll, units='radians')
-        fdm.set('theta', msg.pitch, units='radians')
-        fdm.set('psi', msg.yaw, units='radians')
-        fdm.set('phidot', msg.rollspeed, units='rps')
-        fdm.set('thetadot', msg.pitchspeed, units='rps')
-        fdm.set('psidot', msg.yawspeed, units='rps')
-    if msg.get_type() == "RC_CHANNELS_SCALED":
-        fdm.set("right_aileron", msg.chan1_scaled*0.0001)
-        fdm.set("left_aileron", -msg.chan1_scaled*0.0001)
-        fdm.set("rudder",        msg.chan4_scaled*0.0001)
-        fdm.set("elevator",      msg.chan2_scaled*0.0001)
-        fdm.set('rpm',           msg.chan3_scaled*0.01)
+        self.next_message()
+        self.root.mainloop()
 
-    if fdm.get('latitude') != 0:
-        for f in fgout:
-            f.write(fdm.pack())
+    def next_message(self):
+        '''called as each msg is ready'''
+        
+        msg = self.msg
+        if msg is None:
+            return
 
-    if last_timestamp != None:
-        time.sleep((timestamp - last_timestamp) / playpack_speed)
-    last_timestamp = timestamp
+        speed = float(self.playback.get())
+        if speed == 0.0:
+            self.root.after(100, self.next_message)
+            return
+
+        timestamp = getattr(msg, '_timestamp')
+
+        now = time.strftime("%H:%M:%S", time.localtime(timestamp))
+        self.clock.configure(text=now)
+
+        self.root.after(int(1000*(timestamp - self.last_timestamp) / speed), self.next_message)
+        self.last_timestamp = timestamp
+        self.msg = self.mlog.recv_match(condition=opts.condition)
+
+        for m in self.mout:
+            m.write(struct.pack('>Q', timestamp*1.0e6))
+            m.write(msg.get_msgbuf().tostring())
+
+        if msg.get_type() == "GPS_RAW":
+            self.fdm.set('latitude', msg.lat, units='degrees')
+            self.fdm.set('longitude', msg.lon, units='degrees')
+            if opts.gpsalt:
+                self.fdm.set('altitude', msg.alt, units='meters')
+
+        if msg.get_type() == "VFR_HUD":
+            if not opts.gpsalt:
+                self.fdm.set('altitude', msg.alt, units='meters')
+            self.fdm.set('num_engines', 1)
+            self.fdm.set('vcas', msg.airspeed, units='mps')
+
+        if msg.get_type() == "ATTITUDE":
+            self.fdm.set('phi', msg.roll, units='radians')
+            self.fdm.set('theta', msg.pitch, units='radians')
+            self.fdm.set('psi', msg.yaw, units='radians')
+            self.fdm.set('phidot', msg.rollspeed, units='rps')
+            self.fdm.set('thetadot', msg.pitchspeed, units='rps')
+            self.fdm.set('psidot', msg.yawspeed, units='rps')
+
+        if msg.get_type() == "RC_CHANNELS_SCALED":
+            self.fdm.set("right_aileron", msg.chan1_scaled*0.0001)
+            self.fdm.set("left_aileron", -msg.chan1_scaled*0.0001)
+            self.fdm.set("rudder",        msg.chan4_scaled*0.0001)
+            self.fdm.set("elevator",      msg.chan2_scaled*0.0001)
+            self.fdm.set('rpm',           msg.chan3_scaled*0.01)
+
+        if msg.get_type() == "BAD_DATA":
+            if mavutil.all_printable(msg.data):
+                sys.stdout.write(msg.data)
+                sys.stdout.flush()
+
+        if msg.get_type() == 'STATUSTEXT':
+            print("APM: %s" % msg.text)
+
+        if self.fdm.get('latitude') != 0:
+            for f in self.fgout:
+                f.write(self.fdm.pack())
+
+
+app=App(filename)
