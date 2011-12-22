@@ -31,7 +31,7 @@ def plotit(x, y, fields, colors=[]):
             xrange = x[i][-1] - x[i][0]
     xrange *= 24 * 60 * 60
     if formatter is None:
-        if xrange < 180:
+        if xrange < 1000:
             formatter = matplotlib.dates.DateFormatter('%H:%M:%S')
         else:
             formatter = matplotlib.dates.DateFormatter('%H:%M')
@@ -39,7 +39,7 @@ def plotit(x, y, fields, colors=[]):
         intervals = [ 1, 2, 5, 10, 15, 30, 60, 120, 240, 300, 600,
                       900, 1800, 3600, 7200, 5*3600, 10*3600, 24*3600 ]
         for interval in intervals:
-            if xrange / interval < 10:
+            if xrange / interval < 15:
                 break
         locator = matplotlib.dates.SecondLocator(interval=interval)
     ax1.xaxis.set_major_locator(locator)
