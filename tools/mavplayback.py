@@ -86,7 +86,7 @@ class App():
         self.clock = Tkinter.Label(self.topframe,text="")
         self.clock.pack(side=Tkinter.RIGHT)
 
-        self.playback = Tkinter.Spinbox(self.topframe, from_=0, to=20, increment=0.5, width=3)
+        self.playback = Tkinter.Spinbox(self.topframe, from_=0, to=20, increment=0.1, width=3)
         self.playback.pack(side=Tkinter.BOTTOM)
         self.playback.delete(0, "end")
         self.playback.insert(0, 1)
@@ -96,15 +96,21 @@ class App():
         self.button('pause', 'media-playback-pause.png', self.pause)
         self.button('rewind', 'media-seek-backward.png', self.rewind)
         self.button('forward', 'media-seek-forward.png', self.forward)
+        self.button('status', 'Status', self.status)
+        self.flightmode = Tkinter.Label(self.frame,text="")
+        self.flightmode.pack(side=Tkinter.RIGHT)
 
         self.next_message()
         self.root.mainloop()
 
     def button(self, name, filename, command):
         '''add a button'''
-        img = LoadImage(filename)
-        b = Tkinter.Button(self.frame, image=img, command=command)
-        b.image = img
+        try:
+            img = LoadImage(filename)
+            b = Tkinter.Button(self.frame, image=img, command=command)
+            b.image = img
+        except Exception:
+            b = Tkinter.Button(self.frame, text=filename, command=command)
         b.pack(side=Tkinter.LEFT)
         self.buttons[name] = b
         
@@ -128,6 +134,12 @@ class App():
             pos = self.filesize - 2048
         self.mlog.f.seek(pos)
         self.find_message()
+
+    def status(self):
+        '''show status'''
+        for m in sorted(self.mlog.messages.keys()):
+            print(str(self.mlog.messages[m]))
+        
 
 
     def find_message(self):
@@ -218,6 +230,9 @@ class App():
 
         if msg.get_type() == 'STATUSTEXT':
             print("APM: %s" % msg.text)
+
+        if msg.get_type() == 'SYS_STATUS':
+            self.flightmode.configure(text=self.mlog.flightmode)
 
         if msg.get_type() == "BAD_DATA":
             if mavutil.all_printable(msg.data):
