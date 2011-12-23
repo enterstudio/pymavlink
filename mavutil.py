@@ -6,7 +6,7 @@ Copyright Andrew Tridgell 2011
 Released under GNU GPL version 3 or later
 '''
 
-import socket, math, struct, time, os, fnmatch, array, sys
+import socket, math, struct, time, os, fnmatch, array, sys, errno
 from math import *
 from mavextra import *
 
@@ -284,7 +284,7 @@ class mavudp(mavfile):
         try:
             data, self.last_address = self.port.recvfrom(300)
         except socket.error as e:
-            if e.errno in [ 11, 35 ]:
+            if e.errno in [ errno.EAGAIN, errno.EWOULDBLOCK ]:
                 return ""
             raise
         return data
@@ -336,7 +336,7 @@ class mavtcp(mavfile):
         try:
             data = self.port.recv(n)
         except socket.error as e:
-            if e.errno in [ 11, 35 ]:
+            if e.errno in [ errno.EAGAIN, errno.EWOULDBLOCK ]:
                 return ""
             raise
         return data
