@@ -8,7 +8,7 @@ Useful for visualising flights
 '''
 
 import sys, time, os, struct
-import Tkinter, PIL
+import Tkinter
 
 # allow import from the parent directory, where mavlink.py is
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
@@ -41,10 +41,9 @@ filename = args[0]
 
 def LoadImage(filename):
     '''return an image from the images/ directory'''
-    from PIL import ImageTk, Image
     app_dir = os.path.dirname(os.path.realpath(__file__))
     path = os.path.join(app_dir, 'images', filename)
-    return ImageTk.PhotoImage(Image.open(path))
+    return Tkinter.PhotoImage(file=path)
 
 
 class App():
@@ -92,10 +91,10 @@ class App():
         self.playback.insert(0, 1)
 
         self.buttons = {}
-        self.button('quit', 'gtk-quit.png', self.frame.quit)
-        self.button('pause', 'media-playback-pause.png', self.pause)
-        self.button('rewind', 'media-seek-backward.png', self.rewind)
-        self.button('forward', 'media-seek-forward.png', self.forward)
+        self.button('quit', 'gtk-quit.gif', self.frame.quit)
+        self.button('pause', 'media-playback-pause.gif', self.pause)
+        self.button('rewind', 'media-seek-backward.gif', self.rewind)
+        self.button('forward', 'media-seek-forward.gif', self.forward)
         self.button('status', 'Status', self.status)
         self.flightmode = Tkinter.Label(self.frame,text="")
         self.flightmode.pack(side=Tkinter.RIGHT)
