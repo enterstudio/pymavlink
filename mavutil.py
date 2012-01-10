@@ -6,7 +6,7 @@ Copyright Andrew Tridgell 2011
 Released under GNU GPL version 3 or later
 '''
 
-import socket, math, struct, time, os, fnmatch, array, sys
+import socket, math, struct, time, os, fnmatch, array, sys, errno
 from math import *
 from mavextra import *
 
@@ -284,7 +284,7 @@ class mavudp(mavfile):
         try:
             data, self.last_address = self.port.recvfrom(300)
         except socket.error as e:
-            if e.errno in [ 11, 35 ]:
+            if e.errno in [ errno.EAGAIN, errno.EWOULDBLOCK ]:
                 return ""
             raise
         return data
@@ -336,7 +336,7 @@ class mavtcp(mavfile):
         try:
             data = self.port.recv(n)
         except socket.error as e:
-            if e.errno in [ 11, 35 ]:
+            if e.errno in [ errno.EAGAIN, errno.EWOULDBLOCK ]:
                 return ""
             raise
         return data
@@ -359,8 +359,6 @@ class mavlogfile(mavfile):
         self.planner_format = planner_format
         self.notimestamps = notimestamps
         self._two64 = math.pow(2.0, 63)
-        if planner_format is None and self.filename.endswith(".tlog"):
-            self.planner_format = True
         mode = 'rb'
         if self.writeable:
             if append:
@@ -489,7 +487,11 @@ def is_printable(c):
     global have_ascii
     if have_ascii:
         return ascii.isprint(c)
-    return ord(c) >= 32 and ord(c) <= 126
+    if isinstance(c, int):
+        ic = c
+    else:
+        ic = ord(c)
+    return ic >= 32 and ic <= 126
 
 def all_printable(buf):
     '''see if a string is all printable'''
@@ -603,6 +605,7 @@ def mode_string_v09(msg):
         (101,             MAV_NAV_VECTOR)    : "ACRO",
         (102,             MAV_NAV_VECTOR)    : "ALT_HOLD",
         (107,             MAV_NAV_VECTOR)    : "CIRCLE",
+        (109,             MAV_NAV_VECTOR)    : "LAND",
         }
     if cmode in mapping:
         return mapping[cmode]
