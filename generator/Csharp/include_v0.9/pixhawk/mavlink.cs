@@ -8,7 +8,7 @@ namespace ArdupilotMega
     #if !MAVLINK10
     partial class MAVLink
     {
-        public const string MAVLINK_BUILD_DATE = "Fri Mar  9 22:46:24 2012";
+        public const string MAVLINK_BUILD_DATE = "Fri Mar  9 23:09:43 2012";
         public const string MAVLINK_WIRE_PROTOCOL_VERSION = "0.9";
         public const int MAVLINK_MAX_DIALECT_PAYLOAD_SIZE = 255;
 

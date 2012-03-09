@@ -8,9 +8,9 @@ namespace ArdupilotMega
     #if !MAVLINK10
     partial class MAVLink
     {
-        public const string MAVLINK_BUILD_DATE = "Fri Mar  9 23:09:44 2012";
+        public const string MAVLINK_BUILD_DATE = "Fri Mar  9 23:09:42 2012";
         public const string MAVLINK_WIRE_PROTOCOL_VERSION = "0.9";
-        public const int MAVLINK_MAX_DIALECT_PAYLOAD_SIZE = 30;
+        public const int MAVLINK_MAX_DIALECT_PAYLOAD_SIZE = 255;
 
         public const int MAVLINK_LITTLE_ENDIAN = 1;
         public const int MAVLINK_BIG_ENDIAN = 0;
@@ -27,191 +27,530 @@ namespace ArdupilotMega
         
         public byte packetcount = 0;
         
-        public byte[] MAVLINK_MESSAGE_LENGTHS = new byte[] {3, 4, 8, 14, 8, 28, 3, 32, 0, 2, 3, 2, 2, 0, 0, 0, 0, 0, 0, 0, 19, 2, 23, 21, 0, 37, 26, 101, 26, 16, 32, 32, 37, 32, 11, 17, 17, 16, 18, 36, 4, 4, 2, 2, 4, 2, 2, 3, 14, 12, 18, 16, 8, 27, 25, 18, 18, 24, 24, 0, 0, 0, 26, 16, 36, 5, 6, 56, 26, 21, 18, 0, 0, 18, 20, 20, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 10, 24, 18, 0, 0, 30, 24, 0, 7, 13, 3, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 14, 14, 51, 5};
+        public byte[] MAVLINK_MESSAGE_LENGTHS = new byte[] {3, 4, 8, 14, 8, 28, 3, 32, 0, 2, 3, 2, 2, 0, 0, 0, 0, 0, 0, 0, 19, 2, 23, 21, 0, 37, 26, 101, 26, 16, 32, 32, 37, 32, 11, 17, 17, 16, 18, 36, 4, 4, 2, 2, 4, 2, 2, 3, 14, 12, 18, 16, 8, 27, 25, 18, 18, 24, 24, 0, 0, 0, 26, 16, 36, 5, 6, 56, 26, 21, 18, 0, 0, 18, 20, 20, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 52, 1, 92, 0, 32, 32, 20, 20, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 26, 16, 0, 0, 0, 0, 0, 0, 0, 4, 255, 12, 6, 0, 0, 0, 0, 0, 0, 106, 43, 55, 8, 255, 53, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 14, 14, 51, 5};
 
-        public byte[] MAVLINK_MESSAGE_CRCS = new byte[] {72, 39, 190, 92, 191, 217, 104, 119, 0, 219, 60, 186, 10, 0, 0, 0, 0, 0, 0, 0, 89, 159, 162, 121, 0, 149, 222, 110, 179, 136, 66, 126, 185, 147, 112, 252, 162, 215, 229, 128, 9, 106, 101, 213, 4, 229, 21, 214, 215, 14, 206, 50, 157, 126, 108, 213, 95, 5, 127, 0, 0, 0, 57, 126, 130, 119, 193, 191, 236, 158, 143, 0, 0, 104, 123, 131, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 174, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 155, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 150, 232, 168, 2, 0, 0, 120, 167, 0, 16, 2, 52, 0, 202, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 178, 224, 60, 106, 7};
+        public byte[] MAVLINK_MESSAGE_CRCS = new byte[] {72, 39, 190, 92, 191, 217, 104, 119, 0, 219, 60, 186, 10, 0, 0, 0, 0, 0, 0, 0, 89, 159, 162, 121, 0, 149, 222, 110, 179, 136, 66, 126, 185, 147, 112, 252, 162, 215, 229, 128, 9, 106, 101, 213, 4, 229, 21, 214, 215, 14, 206, 50, 157, 126, 108, 213, 95, 5, 127, 0, 0, 0, 57, 126, 130, 119, 193, 191, 236, 158, 143, 0, 0, 104, 123, 131, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 174, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 155, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 204, 86, 95, 49, 0, 158, 56, 208, 218, 115, 0, 0, 0, 0, 0, 0, 0, 0, 0, 220, 136, 140, 0, 0, 0, 0, 0, 0, 0, 153, 110, 92, 188, 0, 0, 0, 0, 0, 0, 106, 154, 83, 98, 223, 254, 0, 0, 0, 0, 84, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 178, 224, 60, 106, 7};
 
-        public Type[] MAVLINK_MESSAGE_INFO = new Type[] {typeof( mavlink_heartbeat_t ), typeof( mavlink_boot_t ), typeof( mavlink_system_time_t ), typeof( mavlink_ping_t ), typeof( mavlink_system_time_utc_t ), typeof( mavlink_change_operator_control_t ), typeof( mavlink_change_operator_control_ack_t ), typeof( mavlink_auth_key_t ), null, typeof( mavlink_action_ack_t ), typeof( mavlink_action_t ), typeof( mavlink_set_mode_t ), typeof( mavlink_set_nav_mode_t ), null, null, null, null, null, null, null, typeof( mavlink_param_request_read_t ), typeof( mavlink_param_request_list_t ), typeof( mavlink_param_value_t ), typeof( mavlink_param_set_t ), null, typeof( mavlink_gps_raw_int_t ), typeof( mavlink_scaled_imu_t ), typeof( mavlink_gps_status_t ), typeof( mavlink_raw_imu_t ), typeof( mavlink_raw_pressure_t ), typeof( mavlink_attitude_t ), typeof( mavlink_local_position_t ), typeof( mavlink_gps_raw_t ), typeof( mavlink_global_position_t ), typeof( mavlink_sys_status_t ), typeof( mavlink_rc_channels_raw_t ), typeof( mavlink_rc_channels_scaled_t ), typeof( mavlink_servo_output_raw_t ), typeof( mavlink_scaled_pressure_t ), typeof( mavlink_waypoint_t ), typeof( mavlink_waypoint_request_t ), typeof( mavlink_waypoint_set_current_t ), typeof( mavlink_waypoint_current_t ), typeof( mavlink_waypoint_request_list_t ), typeof( mavlink_waypoint_count_t ), typeof( mavlink_waypoint_clear_all_t ), typeof( mavlink_waypoint_reached_t ), typeof( mavlink_waypoint_ack_t ), typeof( mavlink_gps_set_global_origin_t ), typeof( mavlink_gps_local_origin_set_t ), typeof( mavlink_local_position_setpoint_set_t ), typeof( mavlink_local_position_setpoint_t ), typeof( mavlink_control_status_t ), typeof( mavlink_safety_set_allowed_area_t ), typeof( mavlink_safety_allowed_area_t ), typeof( mavlink_set_roll_pitch_yaw_thrust_t ), typeof( mavlink_set_roll_pitch_yaw_speed_thrust_t ), typeof( mavlink_roll_pitch_yaw_thrust_setpoint_t ), typeof( mavlink_roll_pitch_yaw_speed_thrust_setpoint_t ), null, null, null, typeof( mavlink_nav_controller_output_t ), typeof( mavlink_position_target_t ), typeof( mavlink_state_correction_t ), typeof( mavlink_set_altitude_t ), typeof( mavlink_request_data_stream_t ), typeof( mavlink_hil_state_t ), typeof( mavlink_hil_controls_t ), typeof( mavlink_manual_control_t ), typeof( mavlink_rc_channels_override_t ), null, null, typeof( mavlink_global_position_int_t ), typeof( mavlink_vfr_hud_t ), typeof( mavlink_command_t ), typeof( mavlink_command_ack_t ), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, typeof( mavlink_optical_flow_t ), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, typeof( mavlink_object_detection_event_t ), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, typeof( mavlink_cpu_load_t ), typeof( mavlink_air_data_t ), typeof( mavlink_sensor_bias_t ), typeof( mavlink_diagnostic_t ), null, null, typeof( mavlink_slugs_navigation_t ), typeof( mavlink_data_log_t ), null, typeof( mavlink_gps_date_time_t ), typeof( mavlink_mid_lvl_cmds_t ), typeof( mavlink_ctrl_srfc_pt_t ), null, typeof( mavlink_slugs_action_t ), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, typeof( mavlink_debug_vect_t ), typeof( mavlink_named_value_float_t ), typeof( mavlink_named_value_int_t ), typeof( mavlink_statustext_t ), typeof( mavlink_debug_t )};
+        public Type[] MAVLINK_MESSAGE_INFO = new Type[] {typeof( mavlink_heartbeat_t ), typeof( mavlink_boot_t ), typeof( mavlink_system_time_t ), typeof( mavlink_ping_t ), typeof( mavlink_system_time_utc_t ), typeof( mavlink_change_operator_control_t ), typeof( mavlink_change_operator_control_ack_t ), typeof( mavlink_auth_key_t ), null, typeof( mavlink_action_ack_t ), typeof( mavlink_action_t ), typeof( mavlink_set_mode_t ), typeof( mavlink_set_nav_mode_t ), null, null, null, null, null, null, null, typeof( mavlink_param_request_read_t ), typeof( mavlink_param_request_list_t ), typeof( mavlink_param_value_t ), typeof( mavlink_param_set_t ), null, typeof( mavlink_gps_raw_int_t ), typeof( mavlink_scaled_imu_t ), typeof( mavlink_gps_status_t ), typeof( mavlink_raw_imu_t ), typeof( mavlink_raw_pressure_t ), typeof( mavlink_attitude_t ), typeof( mavlink_local_position_t ), typeof( mavlink_gps_raw_t ), typeof( mavlink_global_position_t ), typeof( mavlink_sys_status_t ), typeof( mavlink_rc_channels_raw_t ), typeof( mavlink_rc_channels_scaled_t ), typeof( mavlink_servo_output_raw_t ), typeof( mavlink_scaled_pressure_t ), typeof( mavlink_waypoint_t ), typeof( mavlink_waypoint_request_t ), typeof( mavlink_waypoint_set_current_t ), typeof( mavlink_waypoint_current_t ), typeof( mavlink_waypoint_request_list_t ), typeof( mavlink_waypoint_count_t ), typeof( mavlink_waypoint_clear_all_t ), typeof( mavlink_waypoint_reached_t ), typeof( mavlink_waypoint_ack_t ), typeof( mavlink_gps_set_global_origin_t ), typeof( mavlink_gps_local_origin_set_t ), typeof( mavlink_local_position_setpoint_set_t ), typeof( mavlink_local_position_setpoint_t ), typeof( mavlink_control_status_t ), typeof( mavlink_safety_set_allowed_area_t ), typeof( mavlink_safety_allowed_area_t ), typeof( mavlink_set_roll_pitch_yaw_thrust_t ), typeof( mavlink_set_roll_pitch_yaw_speed_thrust_t ), typeof( mavlink_roll_pitch_yaw_thrust_setpoint_t ), typeof( mavlink_roll_pitch_yaw_speed_thrust_setpoint_t ), null, null, null, typeof( mavlink_nav_controller_output_t ), typeof( mavlink_position_target_t ), typeof( mavlink_state_correction_t ), typeof( mavlink_set_altitude_t ), typeof( mavlink_request_data_stream_t ), typeof( mavlink_hil_state_t ), typeof( mavlink_hil_controls_t ), typeof( mavlink_manual_control_t ), typeof( mavlink_rc_channels_override_t ), null, null, typeof( mavlink_global_position_int_t ), typeof( mavlink_vfr_hud_t ), typeof( mavlink_command_t ), typeof( mavlink_command_ack_t ), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, typeof( mavlink_optical_flow_t ), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, typeof( mavlink_object_detection_event_t ), null, null, null, null, null, null, null, null, null, null, typeof( mavlink_set_cam_shutter_t ), typeof( mavlink_image_triggered_t ), typeof( mavlink_image_trigger_control_t ), typeof( mavlink_image_available_t ), null, typeof( mavlink_vision_position_estimate_t ), typeof( mavlink_vicon_position_estimate_t ), typeof( mavlink_vision_speed_estimate_t ), typeof( mavlink_position_control_setpoint_set_t ), typeof( mavlink_position_control_offset_set_t ), null, null, null, null, null, null, null, null, null, typeof( mavlink_position_control_setpoint_t ), typeof( mavlink_marker_t ), typeof( mavlink_raw_aux_t ), null, null, null, null, null, null, null, typeof( mavlink_watchdog_heartbeat_t ), typeof( mavlink_watchdog_process_info_t ), typeof( mavlink_watchdog_process_status_t ), typeof( mavlink_watchdog_command_t ), null, null, null, null, null, null, typeof( mavlink_pattern_detected_t ), typeof( mavlink_point_of_interest_t ), typeof( mavlink_point_of_interest_connection_t ), typeof( mavlink_data_transmission_handshake_t ), typeof( mavlink_encapsulated_data_t ), typeof( mavlink_brief_feature_t ), null, null, null, null, typeof( mavlink_attitude_control_t ), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, typeof( mavlink_debug_vect_t ), typeof( mavlink_named_value_float_t ), typeof( mavlink_named_value_int_t ), typeof( mavlink_statustext_t ), typeof( mavlink_debug_t )};
 
         public const byte MAVLINK_VERSION = 2;
     
         
+        /** @brief Content Types for data transmission handshake */
+        public enum DATA_TYPES
+        {
+    	///<summary>  | </summary>
+            DATA_TYPE_JPEG_IMAGE=1, 
+        	///<summary>  | </summary>
+            DATA_TYPE_RAW_IMAGE=2, 
+        	///<summary>  | </summary>
+            DATA_TYPE_KINECT=3, 
+        	///<summary>  | </summary>
+            ENUM_END=4, 
+        
+        };
+        
     
 
-    public const byte MAVLINK_MSG_ID_CPU_LOAD = 170;
-    [StructLayout(LayoutKind.Sequential,Pack=1,Size=4)]
-    public struct mavlink_cpu_load_t
+    public const byte MAVLINK_MSG_ID_SET_CAM_SHUTTER = 151;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=11)]
+    public struct mavlink_set_cam_shutter_t
     {
-        /// <summary> Sensor DSC Load </summary>
-        public  byte sensLoad;
-            /// <summary> Control DSC Load </summary>
-        public  byte ctrlLoad;
-            /// <summary> Battery Voltage in millivolts </summary>
-        public  UInt16 batVolt;
+        /// <summary> Camera id </summary>
+        public  byte cam_no;
+            /// <summary> Camera mode: 0 = auto, 1 = manual </summary>
+        public  byte cam_mode;
+            /// <summary> Trigger pin, 0-3 for PtGrey FireFly </summary>
+        public  byte trigger_pin;
+            /// <summary> Shutter interval, in microseconds </summary>
+        public  UInt16 interval;
+            /// <summary> Exposure time, in microseconds </summary>
+        public  UInt16 exposure;
+            /// <summary> Camera gain </summary>
+        public  Single gain;
     
     };
 
 
-    public const byte MAVLINK_MSG_ID_AIR_DATA = 171;
-    [StructLayout(LayoutKind.Sequential,Pack=1,Size=10)]
-    public struct mavlink_air_data_t
+    public const byte MAVLINK_MSG_ID_IMAGE_TRIGGERED = 152;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=52)]
+    public struct mavlink_image_triggered_t
     {
-        /// <summary> Dynamic pressure (Pa) </summary>
-        public  Single dynamicPressure;
-            /// <summary> Static pressure (Pa) </summary>
-        public  Single staticPressure;
-            /// <summary> Board temperature </summary>
-        public  UInt16 temperature;
+        /// <summary> Timestamp </summary>
+        public  UInt64 timestamp;
+            /// <summary> IMU seq </summary>
+        public  UInt32 seq;
+            /// <summary> Roll angle in rad </summary>
+        public  Single roll;
+            /// <summary> Pitch angle in rad </summary>
+        public  Single pitch;
+            /// <summary> Yaw angle in rad </summary>
+        public  Single yaw;
+            /// <summary> Local frame Z coordinate (height over ground) </summary>
+        public  Single local_z;
+            /// <summary> GPS X coordinate </summary>
+        public  Single lat;
+            /// <summary> GPS Y coordinate </summary>
+        public  Single lon;
+            /// <summary> Global frame altitude </summary>
+        public  Single alt;
+            /// <summary> Ground truth X </summary>
+        public  Single ground_x;
+            /// <summary> Ground truth Y </summary>
+        public  Single ground_y;
+            /// <summary> Ground truth Z </summary>
+        public  Single ground_z;
     
     };
 
 
-    public const byte MAVLINK_MSG_ID_SENSOR_BIAS = 172;
-    [StructLayout(LayoutKind.Sequential,Pack=1,Size=24)]
-    public struct mavlink_sensor_bias_t
+    public const byte MAVLINK_MSG_ID_IMAGE_TRIGGER_CONTROL = 153;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=1)]
+    public struct mavlink_image_trigger_control_t
     {
-        /// <summary> Accelerometer X bias (m/s) </summary>
-        public  Single axBias;
-            /// <summary> Accelerometer Y bias (m/s) </summary>
-        public  Single ayBias;
-            /// <summary> Accelerometer Z bias (m/s) </summary>
-        public  Single azBias;
-            /// <summary> Gyro X bias (rad/s) </summary>
-        public  Single gxBias;
-            /// <summary> Gyro Y bias (rad/s) </summary>
-        public  Single gyBias;
-            /// <summary> Gyro Z bias (rad/s) </summary>
-        public  Single gzBias;
+        /// <summary> 0 to disable, 1 to enable </summary>
+        public  byte enable;
     
     };
 
 
-    public const byte MAVLINK_MSG_ID_DIAGNOSTIC = 173;
+    public const byte MAVLINK_MSG_ID_IMAGE_AVAILABLE = 154;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=92)]
+    public struct mavlink_image_available_t
+    {
+        /// <summary> Camera id </summary>
+        public  UInt64 cam_id;
+            /// <summary> Camera # (starts with 0) </summary>
+        public  byte cam_no;
+            /// <summary> Timestamp </summary>
+        public  UInt64 timestamp;
+            /// <summary> Until which timestamp this buffer will stay valid </summary>
+        public  UInt64 valid_until;
+            /// <summary> The image sequence number </summary>
+        public  UInt32 img_seq;
+            /// <summary> Position of the image in the buffer, starts with 0 </summary>
+        public  UInt32 img_buf_index;
+            /// <summary> Image width </summary>
+        public  UInt16 width;
+            /// <summary> Image height </summary>
+        public  UInt16 height;
+            /// <summary> Image depth </summary>
+        public  UInt16 depth;
+            /// <summary> Image channels </summary>
+        public  byte channels;
+            /// <summary> Shared memory area key </summary>
+        public  UInt32 key;
+            /// <summary> Exposure time, in microseconds </summary>
+        public  UInt32 exposure;
+            /// <summary> Camera gain </summary>
+        public  Single gain;
+            /// <summary> Roll angle in rad </summary>
+        public  Single roll;
+            /// <summary> Pitch angle in rad </summary>
+        public  Single pitch;
+            /// <summary> Yaw angle in rad </summary>
+        public  Single yaw;
+            /// <summary> Local frame Z coordinate (height over ground) </summary>
+        public  Single local_z;
+            /// <summary> GPS X coordinate </summary>
+        public  Single lat;
+            /// <summary> GPS Y coordinate </summary>
+        public  Single lon;
+            /// <summary> Global frame altitude </summary>
+        public  Single alt;
+            /// <summary> Ground truth X </summary>
+        public  Single ground_x;
+            /// <summary> Ground truth Y </summary>
+        public  Single ground_y;
+            /// <summary> Ground truth Z </summary>
+        public  Single ground_z;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_VISION_POSITION_ESTIMATE = 156;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=32)]
+    public struct mavlink_vision_position_estimate_t
+    {
+        /// <summary> Timestamp (milliseconds) </summary>
+        public  UInt64 usec;
+            /// <summary> Global X position </summary>
+        public  Single x;
+            /// <summary> Global Y position </summary>
+        public  Single y;
+            /// <summary> Global Z position </summary>
+        public  Single z;
+            /// <summary> Roll angle in rad </summary>
+        public  Single roll;
+            /// <summary> Pitch angle in rad </summary>
+        public  Single pitch;
+            /// <summary> Yaw angle in rad </summary>
+        public  Single yaw;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE = 157;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=32)]
+    public struct mavlink_vicon_position_estimate_t
+    {
+        /// <summary> Timestamp (milliseconds) </summary>
+        public  UInt64 usec;
+            /// <summary> Global X position </summary>
+        public  Single x;
+            /// <summary> Global Y position </summary>
+        public  Single y;
+            /// <summary> Global Z position </summary>
+        public  Single z;
+            /// <summary> Roll angle in rad </summary>
+        public  Single roll;
+            /// <summary> Pitch angle in rad </summary>
+        public  Single pitch;
+            /// <summary> Yaw angle in rad </summary>
+        public  Single yaw;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE = 158;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=20)]
+    public struct mavlink_vision_speed_estimate_t
+    {
+        /// <summary> Timestamp (milliseconds) </summary>
+        public  UInt64 usec;
+            /// <summary> Global X speed </summary>
+        public  Single x;
+            /// <summary> Global Y speed </summary>
+        public  Single y;
+            /// <summary> Global Z speed </summary>
+        public  Single z;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_POSITION_CONTROL_SETPOINT_SET = 159;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=20)]
+    public struct mavlink_position_control_setpoint_set_t
+    {
+        /// <summary> System ID </summary>
+        public  byte target_system;
+            /// <summary> Component ID </summary>
+        public  byte target_component;
+            /// <summary> ID of waypoint, 0 for plain position </summary>
+        public  UInt16 id;
+            /// <summary> x position </summary>
+        public  Single x;
+            /// <summary> y position </summary>
+        public  Single y;
+            /// <summary> z position </summary>
+        public  Single z;
+            /// <summary> yaw orientation in radians, 0 = NORTH </summary>
+        public  Single yaw;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_POSITION_CONTROL_OFFSET_SET = 160;
     [StructLayout(LayoutKind.Sequential,Pack=1,Size=18)]
-    public struct mavlink_diagnostic_t
+    public struct mavlink_position_control_offset_set_t
     {
-        /// <summary> Diagnostic float 1 </summary>
-        public  Single diagFl1;
-            /// <summary> Diagnostic float 2 </summary>
-        public  Single diagFl2;
-            /// <summary> Diagnostic float 3 </summary>
-        public  Single diagFl3;
-            /// <summary> Diagnostic short 1 </summary>
-        public  Int16 diagSh1;
-            /// <summary> Diagnostic short 2 </summary>
-        public  Int16 diagSh2;
-            /// <summary> Diagnostic short 3 </summary>
-        public  Int16 diagSh3;
+        /// <summary> System ID </summary>
+        public  byte target_system;
+            /// <summary> Component ID </summary>
+        public  byte target_component;
+            /// <summary> x position offset </summary>
+        public  Single x;
+            /// <summary> y position offset </summary>
+        public  Single y;
+            /// <summary> z position offset </summary>
+        public  Single z;
+            /// <summary> yaw orientation offset in radians, 0 = NORTH </summary>
+        public  Single yaw;
     
     };
 
 
-    public const byte MAVLINK_MSG_ID_SLUGS_NAVIGATION = 176;
-    [StructLayout(LayoutKind.Sequential,Pack=1,Size=30)]
-    public struct mavlink_slugs_navigation_t
+    public const byte MAVLINK_MSG_ID_POSITION_CONTROL_SETPOINT = 170;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=18)]
+    public struct mavlink_position_control_setpoint_t
     {
-        /// <summary> Measured Airspeed prior to the Nav Filter </summary>
-        public  Single u_m;
-            /// <summary> Commanded Roll </summary>
-        public  Single phi_c;
-            /// <summary> Commanded Pitch </summary>
-        public  Single theta_c;
-            /// <summary> Commanded Turn rate </summary>
-        public  Single psiDot_c;
-            /// <summary> Y component of the body acceleration </summary>
-        public  Single ay_body;
-            /// <summary> Total Distance to Run on this leg of Navigation </summary>
-        public  Single totalDist;
-            /// <summary> Remaining distance to Run on this leg of Navigation </summary>
-        public  Single dist2Go;
-            /// <summary> Origin WP </summary>
-        public  byte fromWP;
-            /// <summary> Destination WP </summary>
-        public  byte toWP;
+        /// <summary> ID of waypoint, 0 for plain position </summary>
+        public  UInt16 id;
+            /// <summary> x position </summary>
+        public  Single x;
+            /// <summary> y position </summary>
+        public  Single y;
+            /// <summary> z position </summary>
+        public  Single z;
+            /// <summary> yaw orientation in radians, 0 = NORTH </summary>
+        public  Single yaw;
     
     };
 
 
-    public const byte MAVLINK_MSG_ID_DATA_LOG = 177;
-    [StructLayout(LayoutKind.Sequential,Pack=1,Size=24)]
-    public struct mavlink_data_log_t
+    public const byte MAVLINK_MSG_ID_MARKER = 171;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=26)]
+    public struct mavlink_marker_t
     {
-        /// <summary> Log value 1  </summary>
-        public  Single fl_1;
-            /// <summary> Log value 2  </summary>
-        public  Single fl_2;
-            /// <summary> Log value 3  </summary>
-        public  Single fl_3;
-            /// <summary> Log value 4  </summary>
-        public  Single fl_4;
-            /// <summary> Log value 5  </summary>
-        public  Single fl_5;
-            /// <summary> Log value 6  </summary>
-        public  Single fl_6;
+        /// <summary> ID </summary>
+        public  UInt16 id;
+            /// <summary> x position </summary>
+        public  Single x;
+            /// <summary> y position </summary>
+        public  Single y;
+            /// <summary> z position </summary>
+        public  Single z;
+            /// <summary> roll orientation </summary>
+        public  Single roll;
+            /// <summary> pitch orientation </summary>
+        public  Single pitch;
+            /// <summary> yaw orientation </summary>
+        public  Single yaw;
     
     };
 
 
-    public const byte MAVLINK_MSG_ID_GPS_DATE_TIME = 179;
-    [StructLayout(LayoutKind.Sequential,Pack=1,Size=7)]
-    public struct mavlink_gps_date_time_t
+    public const byte MAVLINK_MSG_ID_RAW_AUX = 172;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=16)]
+    public struct mavlink_raw_aux_t
     {
-        /// <summary> Year reported by Gps  </summary>
-        public  byte year;
-            /// <summary> Month reported by Gps  </summary>
-        public  byte month;
-            /// <summary> Day reported by Gps  </summary>
-        public  byte day;
-            /// <summary> Hour reported by Gps  </summary>
-        public  byte hour;
-            /// <summary> Min reported by Gps  </summary>
-        public  byte min;
-            /// <summary> Sec reported by Gps   </summary>
-        public  byte sec;
-            /// <summary> Visible sattelites reported by Gps   </summary>
-        public  byte visSat;
+        /// <summary> ADC1 (J405 ADC3, LPC2148 AD0.6) </summary>
+        public  UInt16 adc1;
+            /// <summary> ADC2 (J405 ADC5, LPC2148 AD0.2) </summary>
+        public  UInt16 adc2;
+            /// <summary> ADC3 (J405 ADC6, LPC2148 AD0.1) </summary>
+        public  UInt16 adc3;
+            /// <summary> ADC4 (J405 ADC7, LPC2148 AD1.3) </summary>
+        public  UInt16 adc4;
+            /// <summary> Battery voltage </summary>
+        public  UInt16 vbat;
+            /// <summary> Temperature (degrees celcius) </summary>
+        public  Int16 temp;
+            /// <summary> Barometric pressure (hecto Pascal) </summary>
+        public  Int32 baro;
     
     };
 
 
-    public const byte MAVLINK_MSG_ID_MID_LVL_CMDS = 180;
-    [StructLayout(LayoutKind.Sequential,Pack=1,Size=13)]
-    public struct mavlink_mid_lvl_cmds_t
-    {
-        /// <summary> The system setting the commands </summary>
-        public  byte target;
-            /// <summary> Commanded Airspeed </summary>
-        public  Single hCommand;
-            /// <summary> Log value 2  </summary>
-        public  Single uCommand;
-            /// <summary> Log value 3  </summary>
-        public  Single rCommand;
-    
-    };
-
-
-    public const byte MAVLINK_MSG_ID_CTRL_SRFC_PT = 181;
-    [StructLayout(LayoutKind.Sequential,Pack=1,Size=3)]
-    public struct mavlink_ctrl_srfc_pt_t
-    {
-        /// <summary> The system setting the commands </summary>
-        public  byte target;
-            /// <summary> Bitfield containing the PT configuration </summary>
-        public  UInt16 bitfieldPt;
-    
-    };
-
-
-    public const byte MAVLINK_MSG_ID_SLUGS_ACTION = 183;
+    public const byte MAVLINK_MSG_ID_WATCHDOG_HEARTBEAT = 180;
     [StructLayout(LayoutKind.Sequential,Pack=1,Size=4)]
-    public struct mavlink_slugs_action_t
+    public struct mavlink_watchdog_heartbeat_t
     {
-        /// <summary> The system reporting the action </summary>
+        /// <summary> Watchdog ID </summary>
+        public  UInt16 watchdog_id;
+            /// <summary> Number of processes </summary>
+        public  UInt16 process_count;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_WATCHDOG_PROCESS_INFO = 181;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=255)]
+    public struct mavlink_watchdog_process_info_t
+    {
+        /// <summary> Watchdog ID </summary>
+        public  UInt16 watchdog_id;
+            /// <summary> Process ID </summary>
+        public  UInt16 process_id;
+            /// <summary> Process name </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=100)]
+		public string name;
+            /// <summary> Process arguments </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=147)]
+		public string arguments;
+            /// <summary> Timeout (seconds) </summary>
+        public  Int32 timeout;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_WATCHDOG_PROCESS_STATUS = 182;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=12)]
+    public struct mavlink_watchdog_process_status_t
+    {
+        /// <summary> Watchdog ID </summary>
+        public  UInt16 watchdog_id;
+            /// <summary> Process ID </summary>
+        public  UInt16 process_id;
+            /// <summary> Is running / finished / suspended / crashed </summary>
+        public  byte state;
+            /// <summary> Is muted </summary>
+        public  byte muted;
+            /// <summary> PID </summary>
+        public  Int32 pid;
+            /// <summary> Number of crashes </summary>
+        public  UInt16 crashes;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_WATCHDOG_COMMAND = 183;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=6)]
+    public struct mavlink_watchdog_command_t
+    {
+        /// <summary> Target system ID </summary>
+        public  byte target_system_id;
+            /// <summary> Watchdog ID </summary>
+        public  UInt16 watchdog_id;
+            /// <summary> Process ID </summary>
+        public  UInt16 process_id;
+            /// <summary> Command ID </summary>
+        public  byte command_id;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_PATTERN_DETECTED = 190;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=106)]
+    public struct mavlink_pattern_detected_t
+    {
+        /// <summary> 0: Pattern, 1: Letter </summary>
+        public  byte type;
+            /// <summary> Confidence of detection </summary>
+        public  Single confidence;
+            /// <summary> Pattern file name </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=100)]
+		public string file;
+            /// <summary> Accepted as true detection, 0 no, 1 yes </summary>
+        public  byte detected;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_POINT_OF_INTEREST = 191;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=43)]
+    public struct mavlink_point_of_interest_t
+    {
+        /// <summary> 0: Notice, 1: Warning, 2: Critical, 3: Emergency, 4: Debug </summary>
+        public  byte type;
+            /// <summary> 0: blue, 1: yellow, 2: red, 3: orange, 4: green, 5: magenta </summary>
+        public  byte color;
+            /// <summary> 0: global, 1:local </summary>
+        public  byte coordinate_system;
+            /// <summary> 0: no timeout, >1: timeout in seconds </summary>
+        public  UInt16 timeout;
+            /// <summary> X Position </summary>
+        public  Single x;
+            /// <summary> Y Position </summary>
+        public  Single y;
+            /// <summary> Z Position </summary>
+        public  Single z;
+            /// <summary> POI name </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=26)]
+		public string name;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_POINT_OF_INTEREST_CONNECTION = 192;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=55)]
+    public struct mavlink_point_of_interest_connection_t
+    {
+        /// <summary> 0: Notice, 1: Warning, 2: Critical, 3: Emergency, 4: Debug </summary>
+        public  byte type;
+            /// <summary> 0: blue, 1: yellow, 2: red, 3: orange, 4: green, 5: magenta </summary>
+        public  byte color;
+            /// <summary> 0: global, 1:local </summary>
+        public  byte coordinate_system;
+            /// <summary> 0: no timeout, >1: timeout in seconds </summary>
+        public  UInt16 timeout;
+            /// <summary> X1 Position </summary>
+        public  Single xp1;
+            /// <summary> Y1 Position </summary>
+        public  Single yp1;
+            /// <summary> Z1 Position </summary>
+        public  Single zp1;
+            /// <summary> X2 Position </summary>
+        public  Single xp2;
+            /// <summary> Y2 Position </summary>
+        public  Single yp2;
+            /// <summary> Z2 Position </summary>
+        public  Single zp2;
+            /// <summary> POI connection name </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=26)]
+		public string name;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE = 193;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=8)]
+    public struct mavlink_data_transmission_handshake_t
+    {
+        /// <summary> type of requested/acknowledged data (as defined in ENUM DATA_TYPES in mavlink/include/mavlink_types.h) </summary>
+        public  byte type;
+            /// <summary> total data size in bytes (set on ACK only) </summary>
+        public  UInt32 size;
+            /// <summary> number of packets beeing sent (set on ACK only) </summary>
+        public  byte packets;
+            /// <summary> payload size per packet (normally 253 byte, see DATA field size in message ENCAPSULATED_DATA) (set on ACK only) </summary>
+        public  byte payload;
+            /// <summary> JPEG quality out of [1,100] </summary>
+        public  byte jpg_quality;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_ENCAPSULATED_DATA = 194;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=255)]
+    public struct mavlink_encapsulated_data_t
+    {
+        /// <summary> sequence number (starting with 0 on every transmission) </summary>
+        public  UInt16 seqnr;
+            /// <summary> image data bytes </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=253)]
+		public byte[] data;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_BRIEF_FEATURE = 195;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=53)]
+    public struct mavlink_brief_feature_t
+    {
+        /// <summary> x position in m </summary>
+        public  Single x;
+            /// <summary> y position in m </summary>
+        public  Single y;
+            /// <summary> z position in m </summary>
+        public  Single z;
+            /// <summary> Orientation assignment 0: false, 1:true </summary>
+        public  byte orientation_assignment;
+            /// <summary> Size in pixels </summary>
+        public  UInt16 size;
+            /// <summary> Orientation </summary>
+        public  UInt16 orientation;
+            /// <summary> Descriptor </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=32)]
+		public byte[] descriptor;
+            /// <summary> Harris operator response at this location </summary>
+        public  Single response;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_ATTITUDE_CONTROL = 200;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=21)]
+    public struct mavlink_attitude_control_t
+    {
+        /// <summary> The system to be controlled </summary>
         public  byte target;
-            /// <summary> Action ID. See apDefinitions.h in the SLUGS /clib directory for the ID names </summary>
-        public  byte actionId;
-            /// <summary> Value associated with the action </summary>
-        public  UInt16 actionVal;
+            /// <summary> roll </summary>
+        public  Single roll;
+            /// <summary> pitch </summary>
+        public  Single pitch;
+            /// <summary> yaw </summary>
+        public  Single yaw;
+            /// <summary> thrust </summary>
+        public  Single thrust;
+            /// <summary> roll control enabled auto:0, manual:1 </summary>
+        public  byte roll_manual;
+            /// <summary> pitch auto:0, manual:1 </summary>
+        public  byte pitch_manual;
+            /// <summary> yaw auto:0, manual:1 </summary>
+        public  byte yaw_manual;
+            /// <summary> thrust auto:0, manual:1 </summary>
+        public  byte thrust_manual;
     
     };
 
