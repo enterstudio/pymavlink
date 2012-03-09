@@ -4,9 +4,9 @@
 
 typedef struct __mavlink_air_data_t
 {
- float dynamicPressure; ///< Dynamic pressure (Pa)
- float staticPressure; ///< Static pressure (Pa)
- uint16_t temperature; ///< Board temperature
+ Single dynamicPressure; ///< Dynamic pressure (Pa)
+ Single staticPressure; ///< Static pressure (Pa)
+ UInt16 temperature; ///< Board temperature
 } mavlink_air_data_t;
 
 #define MAVLINK_MSG_ID_AIR_DATA_LEN 10
@@ -36,13 +36,13 @@ typedef struct __mavlink_air_data_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_air_data_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       float dynamicPressure, float staticPressure, uint16_t temperature)
+						       Single dynamicPressure, Single staticPressure, UInt16 temperature)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[10];
-	_mav_put_float(buf, 0, dynamicPressure);
-	_mav_put_float(buf, 4, staticPressure);
-	_mav_put_uint16_t(buf, 8, temperature);
+	_mav_put_Single(buf, 0, dynamicPressure);
+	_mav_put_Single(buf, 4, staticPressure);
+	_mav_put_UInt16(buf, 8, temperature);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 10);
 #else
@@ -71,13 +71,13 @@ static inline uint16_t mavlink_msg_air_data_pack(uint8_t system_id, uint8_t comp
  */
 static inline uint16_t mavlink_msg_air_data_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           float dynamicPressure,float staticPressure,uint16_t temperature)
+						           Single dynamicPressure,Single staticPressure,UInt16 temperature)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[10];
-	_mav_put_float(buf, 0, dynamicPressure);
-	_mav_put_float(buf, 4, staticPressure);
-	_mav_put_uint16_t(buf, 8, temperature);
+	_mav_put_Single(buf, 0, dynamicPressure);
+	_mav_put_Single(buf, 4, staticPressure);
+	_mav_put_UInt16(buf, 8, temperature);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 10);
 #else
@@ -116,13 +116,13 @@ static inline uint16_t mavlink_msg_air_data_encode(uint8_t system_id, uint8_t co
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_air_data_send(mavlink_channel_t chan, float dynamicPressure, float staticPressure, uint16_t temperature)
+static inline void mavlink_msg_air_data_send(mavlink_channel_t chan, Single dynamicPressure, Single staticPressure, UInt16 temperature)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[10];
-	_mav_put_float(buf, 0, dynamicPressure);
-	_mav_put_float(buf, 4, staticPressure);
-	_mav_put_uint16_t(buf, 8, temperature);
+	_mav_put_Single(buf, 0, dynamicPressure);
+	_mav_put_Single(buf, 4, staticPressure);
+	_mav_put_UInt16(buf, 8, temperature);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AIR_DATA, buf, 10, 232);
 #else
@@ -145,9 +145,9 @@ static inline void mavlink_msg_air_data_send(mavlink_channel_t chan, float dynam
  *
  * @return Dynamic pressure (Pa)
  */
-static inline float mavlink_msg_air_data_get_dynamicPressure(const mavlink_message_t* msg)
+static inline Single mavlink_msg_air_data_get_dynamicPressure(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  0);
+	return _MAV_RETURN_Single(msg,  0);
 }
 
 /**
@@ -155,9 +155,9 @@ static inline float mavlink_msg_air_data_get_dynamicPressure(const mavlink_messa
  *
  * @return Static pressure (Pa)
  */
-static inline float mavlink_msg_air_data_get_staticPressure(const mavlink_message_t* msg)
+static inline Single mavlink_msg_air_data_get_staticPressure(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  4);
+	return _MAV_RETURN_Single(msg,  4);
 }
 
 /**
@@ -165,9 +165,9 @@ static inline float mavlink_msg_air_data_get_staticPressure(const mavlink_messag
  *
  * @return Board temperature
  */
-static inline uint16_t mavlink_msg_air_data_get_temperature(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_air_data_get_temperature(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  8);
+	return _MAV_RETURN_UInt16(msg,  8);
 }
 
 /**

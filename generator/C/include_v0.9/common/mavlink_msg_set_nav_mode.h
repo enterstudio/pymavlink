@@ -4,8 +4,8 @@
 
 typedef struct __mavlink_set_nav_mode_t
 {
- uint8_t target; ///< The system setting the mode
- uint8_t nav_mode; ///< The new navigation mode
+ byte target; ///< The system setting the mode
+ byte nav_mode; ///< The new navigation mode
 } mavlink_set_nav_mode_t;
 
 #define MAVLINK_MSG_ID_SET_NAV_MODE_LEN 2
@@ -33,12 +33,12 @@ typedef struct __mavlink_set_nav_mode_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_set_nav_mode_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t target, uint8_t nav_mode)
+						       byte target, byte nav_mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[2];
-	_mav_put_uint8_t(buf, 0, target);
-	_mav_put_uint8_t(buf, 1, nav_mode);
+	_mav_put_byte(buf, 0, target);
+	_mav_put_byte(buf, 1, nav_mode);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 2);
 #else
@@ -65,12 +65,12 @@ static inline uint16_t mavlink_msg_set_nav_mode_pack(uint8_t system_id, uint8_t 
  */
 static inline uint16_t mavlink_msg_set_nav_mode_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint8_t target,uint8_t nav_mode)
+						           byte target,byte nav_mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[2];
-	_mav_put_uint8_t(buf, 0, target);
-	_mav_put_uint8_t(buf, 1, nav_mode);
+	_mav_put_byte(buf, 0, target);
+	_mav_put_byte(buf, 1, nav_mode);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 2);
 #else
@@ -107,12 +107,12 @@ static inline uint16_t mavlink_msg_set_nav_mode_encode(uint8_t system_id, uint8_
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_set_nav_mode_send(mavlink_channel_t chan, uint8_t target, uint8_t nav_mode)
+static inline void mavlink_msg_set_nav_mode_send(mavlink_channel_t chan, byte target, byte nav_mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[2];
-	_mav_put_uint8_t(buf, 0, target);
-	_mav_put_uint8_t(buf, 1, nav_mode);
+	_mav_put_byte(buf, 0, target);
+	_mav_put_byte(buf, 1, nav_mode);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_NAV_MODE, buf, 2);
 #else
@@ -134,9 +134,9 @@ static inline void mavlink_msg_set_nav_mode_send(mavlink_channel_t chan, uint8_t
  *
  * @return The system setting the mode
  */
-static inline uint8_t mavlink_msg_set_nav_mode_get_target(const mavlink_message_t* msg)
+static inline byte mavlink_msg_set_nav_mode_get_target(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  0);
+	return _MAV_RETURN_byte(msg,  0);
 }
 
 /**
@@ -144,9 +144,9 @@ static inline uint8_t mavlink_msg_set_nav_mode_get_target(const mavlink_message_
  *
  * @return The new navigation mode
  */
-static inline uint8_t mavlink_msg_set_nav_mode_get_nav_mode(const mavlink_message_t* msg)
+static inline byte mavlink_msg_set_nav_mode_get_nav_mode(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  1);
+	return _MAV_RETURN_byte(msg,  1);
 }
 
 /**

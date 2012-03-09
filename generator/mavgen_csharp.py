@@ -11,57 +11,6 @@ import mavparse, mavtemplate
 
 t = mavtemplate.MAVTemplate()
 
-
-
-def generate_version_h(directory, xml):
-    '''generate version.h'''
-    f = open(os.path.join(directory, "version.cs"), mode='w')
-    t.write(f,'''
-/** @file
- *	@brief MAVLink comm protocol built from ${basename}.xml
- *	@see http://pixhawk.ethz.ch/software/mavlink
- */
- 
- using System;
-
-public partial class Mavlink
-{
-    public const string MAVLINK_BUILD_DATE = "${parse_time}";
-    public const string MAVLINK_WIRE_PROTOCOL_VERSION = "${wire_protocol_version}";
-    public const int MAVLINK_MAX_DIALECT_PAYLOAD_SIZE = ${largest_payload};
-}
-''', xml)
-    f.close()
-
-def generate_mavlink_h(directory, xml):
-    '''generate mavlink.h'''
-    f = open(os.path.join(directory, "mavlink.cs"), mode='w')
-    t.write(f,'''
-/** @file
- *	@brief MAVLink comm protocol built from ${basename}.xml
- *	@see http://pixhawk.ethz.ch/software/mavlink
- */
- using System;
- 
-public partial class Mavlink
-{
-    public const int MAVLINK_LITTLE_ENDIAN = 1;
-
-    public const byte MAVLINK_STX = ${protocol_marker};
-
-    public const byte MAVLINK_ENDIAN = ${mavlink_endian};
-
-    public const bool MAVLINK_ALIGNED_FIELDS = (${aligned_fields_define} == 1);
-
-    public const byte MAVLINK_CRC_EXTRA = ${crc_extra_define};
-    
-    public const bool MAVLINK_NEED_BYTE_SWAP = (MAVLINK_ENDIAN == MAVLINK_LITTLE_ENDIAN);
-    
-    public byte packetcount = 0;
-}
-''', xml)
-    f.close()
-
 def generate_main_h(directory, xml):
     '''generate main header per XML file'''
     f = open(os.path.join(directory, xml.basename + ".cs"), mode='w')
@@ -78,13 +27,6 @@ def generate_main_h(directory, xml):
 public partial class Mavlink
 {
 
-    public byte[] MAVLINK_MESSAGE_LENGTHS = new byte[] {${message_lengths_array}};
-
-    public byte[] MAVLINK_MESSAGE_CRCS = new byte[] {${message_crcs_array}};
-
-    public Type[] MAVLINK_MESSAGE_INFO = new Type[] {${message_info_array}};
-
-    public const byte MAVLINK_VERSION = ${version};
     
     public static byte getByte(byte[] msg, int offset) 
     {
@@ -362,211 +304,8 @@ ${{entry:	///<summary> ${description} |${{param:${description}| }} </summary>
 ''', xml)
 
     f.close()
-             
-
-def generate_message_h(directory, m):
-    '''generate per-message header for a XML file'''
-    f = open(os.path.join(directory, 'mavlink_msg_%s.cs' % m.name_lower), mode='w')
-    t.write(f, '''
-// MESSAGE ${name} PACKING
-using System;
-using System.Runtime.InteropServices;
-
-public partial class Mavlink
-{
-
-    public const byte MAVLINK_MSG_ID_${name} = ${id};
-
-    [StructLayout(LayoutKind.Sequential,Pack=1)]
-    public struct mavlink_${name_lower}_t
-    {
-${{ordered_fields:        /// <summary>
-        /// ${description}
-        /// </summary>
-        ${array_prefix} ${type} ${name}${array_suffix};
-    }}
-    };
-
-/// <summary>
-/// * @brief Pack a ${name_lower} message
-/// * @param system_id ID of this system
-/// * @param component_id ID of this component (e.g. 200 for IMU)
-/// * @param msg The MAVLink message to compress the data into
-/// *
-${{arg_fields:/// * @param ${name} ${description}
-}}
-/// * @return length of the message in bytes (excluding serial stream start sign)
-/// </summary>
- 
-public static UInt16 mavlink_msg_${name_lower}_pack(byte system_id, byte component_id, byte[] msg,
-                              ${{arg_fields: ${type} ${name},}})
-{
-if (MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS) {
-${{scalar_fields:	Array.Copy(BitConverter.GetBytes(${putname}),0,msg,${wire_offset},sizeof(${type}));
-}}
-${{array_fields:	Array.Copy(toArray(${name}),0,msg,${wire_offset},${array_length});
-}}
-} else {
-    mavlink_${name_lower}_t packet = new mavlink_${name_lower}_t();
-${{scalar_fields:	packet.${name} = ${putname};
-}}
-${{array_fields:	packet.${name} = ${putname};
-}}
-        
-        int len = ${wire_length};
-        msg = new byte[len];
-        IntPtr ptr = Marshal.AllocHGlobal(len);
-        Marshal.StructureToPtr(packet, ptr, true);
-        Marshal.Copy(ptr, msg, 0, len);
-        Marshal.FreeHGlobal(ptr);
-}
-
-    //msg.msgid = MAVLINK_MSG_ID_${name};
-    //return mavlink_finalize_message(msg, system_id, component_id, ${wire_length}${crc_extra_arg});
-    return 0;
-}
-
-/**
- * @brief Pack a ${name_lower} message on a channel
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param chan The MAVLink channel this message was sent over
- * @param msg The MAVLink message to compress the data into
-${{arg_fields: * @param ${name} ${description}
-}}
- * @return length of the message in bytes (excluding serial stream start sign)
- */
- /*
-static inline uint16_t mavlink_msg_${name_lower}_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
-                               mavlink_message_t* msg,
-                                   ${{arg_fields:${array_const}${type} ${array_prefix}${name},}})
-{
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    char buf[${wire_length}];
-${{scalar_fields:	_mav_put_${type}(buf, ${wire_offset}, ${putname});
-}}
-${{array_fields:	_mav_put_${type}_array(buf, ${wire_offset}, ${name}, ${array_length});
-}}
-        memcpy(_MAV_PAYLOAD(msg), buf, ${wire_length});
-#else
-    mavlink_${name_lower}_t packet;
-${{scalar_fields:	packet.${name} = ${putname};
-}}
-${{array_fields:	memcpy(packet.${name}, ${name}, sizeof(${type})*${array_length});
-}}
-        memcpy(_MAV_PAYLOAD(msg), &packet, ${wire_length});
-#endif
-
-    msg->msgid = MAVLINK_MSG_ID_${name};
-    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, ${wire_length}${crc_extra_arg});
-}
-*/
-/**
- * @brief Encode a ${name_lower} struct into a message
- *
- * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 for IMU)
- * @param msg The MAVLink message to compress the data into
- * @param ${name_lower} C-struct to read the message contents from
- *//*
-static inline uint16_t mavlink_msg_${name_lower}_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_${name_lower}_t* ${name_lower})
-{
-    return mavlink_msg_${name_lower}_pack(system_id, component_id, msg,${{arg_fields: ${name_lower}->${name},}});
-}
-*/
-/**
- * @brief Send a ${name_lower} message
- * @param chan MAVLink channel to send the message
- *
-${{arg_fields: * @param ${name} ${description}
-}}
- *//*
-#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
-
-static inline void mavlink_msg_${name_lower}_send(mavlink_channel_t chan,${{arg_fields: ${array_const}${type} ${array_prefix}${name},}})
-{
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    char buf[${wire_length}];
-${{scalar_fields:	_mav_put_${type}(buf, ${wire_offset}, ${putname});
-}}
-${{array_fields:	_mav_put_${type}_array(buf, ${wire_offset}, ${name}, ${array_length});
-}}
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_${name}, buf, ${wire_length}${crc_extra_arg});
-#else
-    mavlink_${name_lower}_t packet;
-${{scalar_fields:	packet.${name} = ${putname};
-}}
-${{array_fields:	memcpy(packet.${name}, ${name}, sizeof(${type})*${array_length});
-}}
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_${name}, (const char *)&packet, ${wire_length}${crc_extra_arg});
-#endif
-}
-
-#endif
-*/
-// MESSAGE ${name} UNPACKING
-
-${{fields:
-/**
- * @brief Get field ${name} from ${name_lower} message
- *
- * @return ${description}
- */
-public static ${return_type} mavlink_msg_${name_lower}_get_${name}(byte[] msg)
-{
-    return ${array_tag}(msg, ${array_return_arg} ${wire_offset});
-}
-}}
-
-/**
- * @brief Decode a ${name_lower} message into a struct
- *
- * @param msg The message to decode
- * @param ${name_lower} C-struct to decode the message contents into
- */
-public static void mavlink_msg_${name_lower}_decode(byte[] msg, ref mavlink_${name_lower}_t ${name_lower})
-{
-    if (MAVLINK_NEED_BYTE_SWAP) {
-    ${{ordered_fields:	${decode_left}mavlink_msg_${name_lower}_get_${name}(msg${decode_right});
-    }}
-    } else {
-        int len = ${wire_length}; //Marshal.SizeOf(${name_lower});
-        IntPtr i = Marshal.AllocHGlobal(len);
-        Marshal.Copy(msg, 0, i, len);
-        ${name_lower} = (mavlink_${name_lower}_t)Marshal.PtrToStructure(i, ((object)${name_lower}).GetType());
-        Marshal.FreeHGlobal(i);
-    }
-}
-
-}
-''', m)
-    f.close()
-
-def copy_fixed_headers(directory, xml):
-    '''copy the fixed protocol headers to the target directory'''
-    import shutil
-    hlist = [ 'protocol.h', 'mavlink_helpers.h', 'mavlink_types.h', 'checksum.h' ]
-    basepath = os.path.dirname(os.path.realpath(__file__))
-    srcpath = os.path.join(basepath, 'C/include_v%s' % xml.wire_protocol_version)
-    print("Copying fixed headers")
-    for h in hlist:
-        src = os.path.realpath(os.path.join(srcpath, h))
-        dest = os.path.realpath(os.path.join(directory, h))
-        if src == dest:
-            continue
-        shutil.copy(src, dest)
-
-class mav_include(object):
-    def __init__(self, base):
-        self.base = base
-
-def generate_one(basename, xml):
-    '''generate headers for one XML file'''
-
-    directory = os.path.join(basename, xml.basename)
-
-    print("Generating CSharp implementation in directory %s" % directory)
-    mavparse.mkdir_p(directory)
+    
+def generate_message_header(f, xml):
 
     if xml.little_endian:
         xml.mavlink_endian = "MAVLINK_LITTLE_ENDIAN"
@@ -610,6 +349,109 @@ def generate_one(basename, xml):
             #xml.message_info_array += '{"EMPTY",0,{}}, '
             xml.message_info_array += 'null, '
     xml.message_info_array = xml.message_info_array[:-2]
+    
+
+    # add some extra field attributes for convenience with arrays
+    for m in xml.enum:
+        m.description = m.description.replace("\n"," ")
+        m.description = m.description.replace("\r"," ")
+        for fe in m.entry:
+            fe.description = fe.description.replace("\n"," ")
+            fe.description = fe.description.replace("\r"," ")
+            fe.name = fe.name.replace(m.name + "_","")
+    
+    if xml.version == "0.9":
+        text = "#if !MAVLINK10";
+    else:
+        text = "#if MAVLINK10";
+    t.write(f, '''
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Runtime.InteropServices;
+
+namespace ArdupilotMega
+{
+    #if !MAVLINK10
+    partial class MAVLink
+    {
+        public const string MAVLINK_BUILD_DATE = "${parse_time}";
+        public const string MAVLINK_WIRE_PROTOCOL_VERSION = "${wire_protocol_version}";
+        public const int MAVLINK_MAX_DIALECT_PAYLOAD_SIZE = ${largest_payload};
+
+        public const int MAVLINK_LITTLE_ENDIAN = 1;
+        public const int MAVLINK_BIG_ENDIAN = 0;
+
+        public const byte MAVLINK_STX = ${protocol_marker};
+
+        public const byte MAVLINK_ENDIAN = ${mavlink_endian};
+
+        public const bool MAVLINK_ALIGNED_FIELDS = (${aligned_fields_define} == 1);
+
+        public const byte MAVLINK_CRC_EXTRA = ${crc_extra_define};
+        
+        public const bool MAVLINK_NEED_BYTE_SWAP = (MAVLINK_ENDIAN == MAVLINK_LITTLE_ENDIAN);
+        
+        public byte packetcount = 0;
+        
+        public byte[] MAVLINK_MESSAGE_LENGTHS = new byte[] {${message_lengths_array}};
+
+        public byte[] MAVLINK_MESSAGE_CRCS = new byte[] {${message_crcs_array}};
+
+        public Type[] MAVLINK_MESSAGE_INFO = new Type[] {${message_info_array}};
+
+        public const byte MAVLINK_VERSION = ${version};
+    
+        ${{enum:
+        /** @brief ${description} */
+        public enum ${name}
+        {
+    ${{entry:	///<summary> ${description} |${{param:${description}| }} </summary>
+            ${name}=${value}, 
+        }}
+        };
+        }}
+    
+''', xml)
+
+def generate_message_footer(f, xml):
+    t.write(f, '''
+     }
+     #endif
+}
+''', xml)
+    f.close()
+             
+
+def generate_message_h(f, directory, m):
+    '''generate per-message header for a XML file'''
+    #f = open(os.path.join(directory, 'mavlink_msg_%s.cs' % m.name_lower), mode='w')
+    t.write(f, '''
+
+    public const byte MAVLINK_MSG_ID_${name} = ${id};
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=${wire_length})]
+    public struct mavlink_${name_lower}_t
+    {
+${{ordered_fields:        /// <summary> ${description} </summary>
+        ${array_prefix} ${type} ${name}${array_suffix};
+    }}
+    };
+
+''', m)
+#    f.close()
+
+
+class mav_include(object):
+    def __init__(self, base):
+        self.base = base
+
+def generate_one(fh, basename, xml):
+    '''generate headers for one XML file'''
+
+    directory = os.path.join(basename, xml.basename)
+
+    print("Generating CSharp implementation in directory %s" % directory)
+    mavparse.mkdir_p(directory)
 
     # add some extra field attributes for convenience with arrays
     for m in xml.message:
@@ -623,9 +465,11 @@ def generate_one(basename, xml):
 #                f.c_print_format = 'null'
 #            else:
 #                f.c_print_format = '"%s"' % f.print_format
+            f.description = f.description.replace("\n"," ")
+            f.description = f.description.replace("\r","")
             if f.array_length != 0:
                 f.array_suffix = ''
-                f.array_prefix = '[MarshalAs(UnmanagedType.ByValArray,SizeConst=%u)]\n public' % f.array_length
+                f.array_prefix = '[MarshalAs(UnmanagedType.ByValArray,SizeConst=%u)]\n\t\tpublic' % f.array_length
                 f.array_arg = ', %u' % f.array_length
                 f.array_return_arg = '%u, ' % (f.array_length)
                 f.array_tag = ''
@@ -708,16 +552,29 @@ def generate_one(basename, xml):
             else:
                 f.putname = f.const_value
 
-    generate_mavlink_h(directory, xml)
+#    generate_mavlink_h(directory, xml)
 #    generate_version_h(directory, xml)
-    generate_main_h(directory, xml)
+#    generate_main_h(directory, xml)
+
+    
     for m in xml.message:
-        generate_message_h(directory, m)
+        generate_message_h(fh, directory, m)
+        
+
 
 
 def generate(basename, xml_list):
     '''generate complete MAVLink C implemenation'''
+    
+    directory = os.path.join(basename, xml_list[0].basename)
 
+    f = open(os.path.join(directory, "mavlink.cs"), mode='w')
+    
+    generate_message_header(f, xml_list[0])
+    
     for xml in xml_list:
-        generate_one(basename, xml)
-    copy_fixed_headers(basename, xml_list[0])
+        generate_one(f, basename, xml)
+#    copy_fixed_headers(basename, xml_list[0])
+        
+    generate_message_footer(f,xml)
+    

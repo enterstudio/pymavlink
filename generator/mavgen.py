@@ -23,8 +23,8 @@ parser.add_option("--lang", dest="language", default="python", help="language to
 parser.add_option("--wire-protocol", dest="wire_protocol", default=mavparse.PROTOCOL_0_9, help="wire protocol version")
 (opts, args) = parser.parse_args()
 
-if len(args) < 1:
-    parser.error("You must supply at least one MAVLink XML protocol definition")
+#if len(args) < 1:
+#    parser.error("You must supply at least one MAVLink XML protocol definition")
     
 
 xml = []
@@ -53,6 +53,8 @@ if mavparse.check_duplicates(xml):
 
 print("Found %u MAVLink message types in %u XML files" % (
     mavparse.total_msgs(xml), len(xml)))
+
+mavgen_csharp.generate(opts.output, xml)
 
 if opts.language == 'python':
     mavgen_python.generate(opts.output, xml)

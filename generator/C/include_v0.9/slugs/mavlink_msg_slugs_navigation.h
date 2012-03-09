@@ -4,15 +4,15 @@
 
 typedef struct __mavlink_slugs_navigation_t
 {
- float u_m; ///< Measured Airspeed prior to the Nav Filter
- float phi_c; ///< Commanded Roll
- float theta_c; ///< Commanded Pitch
- float psiDot_c; ///< Commanded Turn rate
- float ay_body; ///< Y component of the body acceleration
- float totalDist; ///< Total Distance to Run on this leg of Navigation
- float dist2Go; ///< Remaining distance to Run on this leg of Navigation
- uint8_t fromWP; ///< Origin WP
- uint8_t toWP; ///< Destination WP
+ Single u_m; ///< Measured Airspeed prior to the Nav Filter
+ Single phi_c; ///< Commanded Roll
+ Single theta_c; ///< Commanded Pitch
+ Single psiDot_c; ///< Commanded Turn rate
+ Single ay_body; ///< Y component of the body acceleration
+ Single totalDist; ///< Total Distance to Run on this leg of Navigation
+ Single dist2Go; ///< Remaining distance to Run on this leg of Navigation
+ byte fromWP; ///< Origin WP
+ byte toWP; ///< Destination WP
 } mavlink_slugs_navigation_t;
 
 #define MAVLINK_MSG_ID_SLUGS_NAVIGATION_LEN 30
@@ -54,19 +54,19 @@ typedef struct __mavlink_slugs_navigation_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_slugs_navigation_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       float u_m, float phi_c, float theta_c, float psiDot_c, float ay_body, float totalDist, float dist2Go, uint8_t fromWP, uint8_t toWP)
+						       Single u_m, Single phi_c, Single theta_c, Single psiDot_c, Single ay_body, Single totalDist, Single dist2Go, byte fromWP, byte toWP)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[30];
-	_mav_put_float(buf, 0, u_m);
-	_mav_put_float(buf, 4, phi_c);
-	_mav_put_float(buf, 8, theta_c);
-	_mav_put_float(buf, 12, psiDot_c);
-	_mav_put_float(buf, 16, ay_body);
-	_mav_put_float(buf, 20, totalDist);
-	_mav_put_float(buf, 24, dist2Go);
-	_mav_put_uint8_t(buf, 28, fromWP);
-	_mav_put_uint8_t(buf, 29, toWP);
+	_mav_put_Single(buf, 0, u_m);
+	_mav_put_Single(buf, 4, phi_c);
+	_mav_put_Single(buf, 8, theta_c);
+	_mav_put_Single(buf, 12, psiDot_c);
+	_mav_put_Single(buf, 16, ay_body);
+	_mav_put_Single(buf, 20, totalDist);
+	_mav_put_Single(buf, 24, dist2Go);
+	_mav_put_byte(buf, 28, fromWP);
+	_mav_put_byte(buf, 29, toWP);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 30);
 #else
@@ -107,19 +107,19 @@ static inline uint16_t mavlink_msg_slugs_navigation_pack(uint8_t system_id, uint
  */
 static inline uint16_t mavlink_msg_slugs_navigation_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           float u_m,float phi_c,float theta_c,float psiDot_c,float ay_body,float totalDist,float dist2Go,uint8_t fromWP,uint8_t toWP)
+						           Single u_m,Single phi_c,Single theta_c,Single psiDot_c,Single ay_body,Single totalDist,Single dist2Go,byte fromWP,byte toWP)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[30];
-	_mav_put_float(buf, 0, u_m);
-	_mav_put_float(buf, 4, phi_c);
-	_mav_put_float(buf, 8, theta_c);
-	_mav_put_float(buf, 12, psiDot_c);
-	_mav_put_float(buf, 16, ay_body);
-	_mav_put_float(buf, 20, totalDist);
-	_mav_put_float(buf, 24, dist2Go);
-	_mav_put_uint8_t(buf, 28, fromWP);
-	_mav_put_uint8_t(buf, 29, toWP);
+	_mav_put_Single(buf, 0, u_m);
+	_mav_put_Single(buf, 4, phi_c);
+	_mav_put_Single(buf, 8, theta_c);
+	_mav_put_Single(buf, 12, psiDot_c);
+	_mav_put_Single(buf, 16, ay_body);
+	_mav_put_Single(buf, 20, totalDist);
+	_mav_put_Single(buf, 24, dist2Go);
+	_mav_put_byte(buf, 28, fromWP);
+	_mav_put_byte(buf, 29, toWP);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 30);
 #else
@@ -170,19 +170,19 @@ static inline uint16_t mavlink_msg_slugs_navigation_encode(uint8_t system_id, ui
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_slugs_navigation_send(mavlink_channel_t chan, float u_m, float phi_c, float theta_c, float psiDot_c, float ay_body, float totalDist, float dist2Go, uint8_t fromWP, uint8_t toWP)
+static inline void mavlink_msg_slugs_navigation_send(mavlink_channel_t chan, Single u_m, Single phi_c, Single theta_c, Single psiDot_c, Single ay_body, Single totalDist, Single dist2Go, byte fromWP, byte toWP)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[30];
-	_mav_put_float(buf, 0, u_m);
-	_mav_put_float(buf, 4, phi_c);
-	_mav_put_float(buf, 8, theta_c);
-	_mav_put_float(buf, 12, psiDot_c);
-	_mav_put_float(buf, 16, ay_body);
-	_mav_put_float(buf, 20, totalDist);
-	_mav_put_float(buf, 24, dist2Go);
-	_mav_put_uint8_t(buf, 28, fromWP);
-	_mav_put_uint8_t(buf, 29, toWP);
+	_mav_put_Single(buf, 0, u_m);
+	_mav_put_Single(buf, 4, phi_c);
+	_mav_put_Single(buf, 8, theta_c);
+	_mav_put_Single(buf, 12, psiDot_c);
+	_mav_put_Single(buf, 16, ay_body);
+	_mav_put_Single(buf, 20, totalDist);
+	_mav_put_Single(buf, 24, dist2Go);
+	_mav_put_byte(buf, 28, fromWP);
+	_mav_put_byte(buf, 29, toWP);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SLUGS_NAVIGATION, buf, 30);
 #else
@@ -211,9 +211,9 @@ static inline void mavlink_msg_slugs_navigation_send(mavlink_channel_t chan, flo
  *
  * @return Measured Airspeed prior to the Nav Filter
  */
-static inline float mavlink_msg_slugs_navigation_get_u_m(const mavlink_message_t* msg)
+static inline Single mavlink_msg_slugs_navigation_get_u_m(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  0);
+	return _MAV_RETURN_Single(msg,  0);
 }
 
 /**
@@ -221,9 +221,9 @@ static inline float mavlink_msg_slugs_navigation_get_u_m(const mavlink_message_t
  *
  * @return Commanded Roll
  */
-static inline float mavlink_msg_slugs_navigation_get_phi_c(const mavlink_message_t* msg)
+static inline Single mavlink_msg_slugs_navigation_get_phi_c(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  4);
+	return _MAV_RETURN_Single(msg,  4);
 }
 
 /**
@@ -231,9 +231,9 @@ static inline float mavlink_msg_slugs_navigation_get_phi_c(const mavlink_message
  *
  * @return Commanded Pitch
  */
-static inline float mavlink_msg_slugs_navigation_get_theta_c(const mavlink_message_t* msg)
+static inline Single mavlink_msg_slugs_navigation_get_theta_c(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  8);
+	return _MAV_RETURN_Single(msg,  8);
 }
 
 /**
@@ -241,9 +241,9 @@ static inline float mavlink_msg_slugs_navigation_get_theta_c(const mavlink_messa
  *
  * @return Commanded Turn rate
  */
-static inline float mavlink_msg_slugs_navigation_get_psiDot_c(const mavlink_message_t* msg)
+static inline Single mavlink_msg_slugs_navigation_get_psiDot_c(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  12);
+	return _MAV_RETURN_Single(msg,  12);
 }
 
 /**
@@ -251,9 +251,9 @@ static inline float mavlink_msg_slugs_navigation_get_psiDot_c(const mavlink_mess
  *
  * @return Y component of the body acceleration
  */
-static inline float mavlink_msg_slugs_navigation_get_ay_body(const mavlink_message_t* msg)
+static inline Single mavlink_msg_slugs_navigation_get_ay_body(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  16);
+	return _MAV_RETURN_Single(msg,  16);
 }
 
 /**
@@ -261,9 +261,9 @@ static inline float mavlink_msg_slugs_navigation_get_ay_body(const mavlink_messa
  *
  * @return Total Distance to Run on this leg of Navigation
  */
-static inline float mavlink_msg_slugs_navigation_get_totalDist(const mavlink_message_t* msg)
+static inline Single mavlink_msg_slugs_navigation_get_totalDist(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  20);
+	return _MAV_RETURN_Single(msg,  20);
 }
 
 /**
@@ -271,9 +271,9 @@ static inline float mavlink_msg_slugs_navigation_get_totalDist(const mavlink_mes
  *
  * @return Remaining distance to Run on this leg of Navigation
  */
-static inline float mavlink_msg_slugs_navigation_get_dist2Go(const mavlink_message_t* msg)
+static inline Single mavlink_msg_slugs_navigation_get_dist2Go(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  24);
+	return _MAV_RETURN_Single(msg,  24);
 }
 
 /**
@@ -281,9 +281,9 @@ static inline float mavlink_msg_slugs_navigation_get_dist2Go(const mavlink_messa
  *
  * @return Origin WP
  */
-static inline uint8_t mavlink_msg_slugs_navigation_get_fromWP(const mavlink_message_t* msg)
+static inline byte mavlink_msg_slugs_navigation_get_fromWP(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  28);
+	return _MAV_RETURN_byte(msg,  28);
 }
 
 /**
@@ -291,9 +291,9 @@ static inline uint8_t mavlink_msg_slugs_navigation_get_fromWP(const mavlink_mess
  *
  * @return Destination WP
  */
-static inline uint8_t mavlink_msg_slugs_navigation_get_toWP(const mavlink_message_t* msg)
+static inline byte mavlink_msg_slugs_navigation_get_toWP(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  29);
+	return _MAV_RETURN_byte(msg,  29);
 }
 
 /**

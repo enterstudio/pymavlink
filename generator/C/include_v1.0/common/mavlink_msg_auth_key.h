@@ -4,7 +4,7 @@
 
 typedef struct __mavlink_auth_key_t
 {
- char key[32]; ///< key
+ string key[32]; ///< key
 } mavlink_auth_key_t;
 
 #define MAVLINK_MSG_ID_AUTH_KEY_LEN 32
@@ -30,17 +30,17 @@ typedef struct __mavlink_auth_key_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_auth_key_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       const char *key)
+						       const string *key)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[32];
 
-	_mav_put_char_array(buf, 0, key, 32);
+	_mav_put_string_array(buf, 0, key, 32);
         memcpy(_MAV_PAYLOAD(msg), buf, 32);
 #else
 	mavlink_auth_key_t packet;
 
-	memcpy(packet.key, key, sizeof(char)*32);
+	mav_array_memcpy(packet.key, key, sizeof(string)*32);
         memcpy(_MAV_PAYLOAD(msg), &packet, 32);
 #endif
 
@@ -59,17 +59,17 @@ static inline uint16_t mavlink_msg_auth_key_pack(uint8_t system_id, uint8_t comp
  */
 static inline uint16_t mavlink_msg_auth_key_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           const char *key)
+						           const string *key)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[32];
 
-	_mav_put_char_array(buf, 0, key, 32);
+	_mav_put_string_array(buf, 0, key, 32);
         memcpy(_MAV_PAYLOAD(msg), buf, 32);
 #else
 	mavlink_auth_key_t packet;
 
-	memcpy(packet.key, key, sizeof(char)*32);
+	mav_array_memcpy(packet.key, key, sizeof(string)*32);
         memcpy(_MAV_PAYLOAD(msg), &packet, 32);
 #endif
 
@@ -98,17 +98,17 @@ static inline uint16_t mavlink_msg_auth_key_encode(uint8_t system_id, uint8_t co
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_auth_key_send(mavlink_channel_t chan, const char *key)
+static inline void mavlink_msg_auth_key_send(mavlink_channel_t chan, const string *key)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[32];
 
-	_mav_put_char_array(buf, 0, key, 32);
+	_mav_put_string_array(buf, 0, key, 32);
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AUTH_KEY, buf, 32, 119);
 #else
 	mavlink_auth_key_t packet;
 
-	memcpy(packet.key, key, sizeof(char)*32);
+	mav_array_memcpy(packet.key, key, sizeof(string)*32);
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AUTH_KEY, (const char *)&packet, 32, 119);
 #endif
 }
@@ -123,9 +123,9 @@ static inline void mavlink_msg_auth_key_send(mavlink_channel_t chan, const char 
  *
  * @return key
  */
-static inline uint16_t mavlink_msg_auth_key_get_key(const mavlink_message_t* msg, char *key)
+static inline uint16_t mavlink_msg_auth_key_get_key(const mavlink_message_t* msg, string *key)
 {
-	return _MAV_RETURN_char_array(msg, key, 32,  0);
+	return _MAV_RETURN_string_array(msg, key, 32,  0);
 }
 
 /**

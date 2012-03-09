@@ -4,14 +4,14 @@
 
 typedef struct __mavlink_nav_controller_output_t
 {
- float nav_roll; ///< Current desired roll in degrees
- float nav_pitch; ///< Current desired pitch in degrees
- float alt_error; ///< Current altitude error in meters
- float aspd_error; ///< Current airspeed error in meters/second
- float xtrack_error; ///< Current crosstrack error on x-y plane in meters
- int16_t nav_bearing; ///< Current desired heading in degrees
- int16_t target_bearing; ///< Bearing to current MISSION/target in degrees
- uint16_t wp_dist; ///< Distance to active MISSION in meters
+ Single nav_roll; ///< Current desired roll in degrees
+ Single nav_pitch; ///< Current desired pitch in degrees
+ Single alt_error; ///< Current altitude error in meters
+ Single aspd_error; ///< Current airspeed error in meters/second
+ Single xtrack_error; ///< Current crosstrack error on x-y plane in meters
+ Int16 nav_bearing; ///< Current desired heading in degrees
+ Int16 target_bearing; ///< Bearing to current MISSION/target in degrees
+ UInt16 wp_dist; ///< Distance to active MISSION in meters
 } mavlink_nav_controller_output_t;
 
 #define MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT_LEN 26
@@ -51,18 +51,18 @@ typedef struct __mavlink_nav_controller_output_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_nav_controller_output_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       float nav_roll, float nav_pitch, int16_t nav_bearing, int16_t target_bearing, uint16_t wp_dist, float alt_error, float aspd_error, float xtrack_error)
+						       Single nav_roll, Single nav_pitch, Int16 nav_bearing, Int16 target_bearing, UInt16 wp_dist, Single alt_error, Single aspd_error, Single xtrack_error)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[26];
-	_mav_put_float(buf, 0, nav_roll);
-	_mav_put_float(buf, 4, nav_pitch);
-	_mav_put_float(buf, 8, alt_error);
-	_mav_put_float(buf, 12, aspd_error);
-	_mav_put_float(buf, 16, xtrack_error);
-	_mav_put_int16_t(buf, 20, nav_bearing);
-	_mav_put_int16_t(buf, 22, target_bearing);
-	_mav_put_uint16_t(buf, 24, wp_dist);
+	_mav_put_Single(buf, 0, nav_roll);
+	_mav_put_Single(buf, 4, nav_pitch);
+	_mav_put_Single(buf, 8, alt_error);
+	_mav_put_Single(buf, 12, aspd_error);
+	_mav_put_Single(buf, 16, xtrack_error);
+	_mav_put_Int16(buf, 20, nav_bearing);
+	_mav_put_Int16(buf, 22, target_bearing);
+	_mav_put_UInt16(buf, 24, wp_dist);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 26);
 #else
@@ -101,18 +101,18 @@ static inline uint16_t mavlink_msg_nav_controller_output_pack(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_nav_controller_output_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           float nav_roll,float nav_pitch,int16_t nav_bearing,int16_t target_bearing,uint16_t wp_dist,float alt_error,float aspd_error,float xtrack_error)
+						           Single nav_roll,Single nav_pitch,Int16 nav_bearing,Int16 target_bearing,UInt16 wp_dist,Single alt_error,Single aspd_error,Single xtrack_error)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[26];
-	_mav_put_float(buf, 0, nav_roll);
-	_mav_put_float(buf, 4, nav_pitch);
-	_mav_put_float(buf, 8, alt_error);
-	_mav_put_float(buf, 12, aspd_error);
-	_mav_put_float(buf, 16, xtrack_error);
-	_mav_put_int16_t(buf, 20, nav_bearing);
-	_mav_put_int16_t(buf, 22, target_bearing);
-	_mav_put_uint16_t(buf, 24, wp_dist);
+	_mav_put_Single(buf, 0, nav_roll);
+	_mav_put_Single(buf, 4, nav_pitch);
+	_mav_put_Single(buf, 8, alt_error);
+	_mav_put_Single(buf, 12, aspd_error);
+	_mav_put_Single(buf, 16, xtrack_error);
+	_mav_put_Int16(buf, 20, nav_bearing);
+	_mav_put_Int16(buf, 22, target_bearing);
+	_mav_put_UInt16(buf, 24, wp_dist);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 26);
 #else
@@ -161,18 +161,18 @@ static inline uint16_t mavlink_msg_nav_controller_output_encode(uint8_t system_i
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_nav_controller_output_send(mavlink_channel_t chan, float nav_roll, float nav_pitch, int16_t nav_bearing, int16_t target_bearing, uint16_t wp_dist, float alt_error, float aspd_error, float xtrack_error)
+static inline void mavlink_msg_nav_controller_output_send(mavlink_channel_t chan, Single nav_roll, Single nav_pitch, Int16 nav_bearing, Int16 target_bearing, UInt16 wp_dist, Single alt_error, Single aspd_error, Single xtrack_error)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[26];
-	_mav_put_float(buf, 0, nav_roll);
-	_mav_put_float(buf, 4, nav_pitch);
-	_mav_put_float(buf, 8, alt_error);
-	_mav_put_float(buf, 12, aspd_error);
-	_mav_put_float(buf, 16, xtrack_error);
-	_mav_put_int16_t(buf, 20, nav_bearing);
-	_mav_put_int16_t(buf, 22, target_bearing);
-	_mav_put_uint16_t(buf, 24, wp_dist);
+	_mav_put_Single(buf, 0, nav_roll);
+	_mav_put_Single(buf, 4, nav_pitch);
+	_mav_put_Single(buf, 8, alt_error);
+	_mav_put_Single(buf, 12, aspd_error);
+	_mav_put_Single(buf, 16, xtrack_error);
+	_mav_put_Int16(buf, 20, nav_bearing);
+	_mav_put_Int16(buf, 22, target_bearing);
+	_mav_put_UInt16(buf, 24, wp_dist);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT, buf, 26, 183);
 #else
@@ -200,9 +200,9 @@ static inline void mavlink_msg_nav_controller_output_send(mavlink_channel_t chan
  *
  * @return Current desired roll in degrees
  */
-static inline float mavlink_msg_nav_controller_output_get_nav_roll(const mavlink_message_t* msg)
+static inline Single mavlink_msg_nav_controller_output_get_nav_roll(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  0);
+	return _MAV_RETURN_Single(msg,  0);
 }
 
 /**
@@ -210,9 +210,9 @@ static inline float mavlink_msg_nav_controller_output_get_nav_roll(const mavlink
  *
  * @return Current desired pitch in degrees
  */
-static inline float mavlink_msg_nav_controller_output_get_nav_pitch(const mavlink_message_t* msg)
+static inline Single mavlink_msg_nav_controller_output_get_nav_pitch(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  4);
+	return _MAV_RETURN_Single(msg,  4);
 }
 
 /**
@@ -220,9 +220,9 @@ static inline float mavlink_msg_nav_controller_output_get_nav_pitch(const mavlin
  *
  * @return Current desired heading in degrees
  */
-static inline int16_t mavlink_msg_nav_controller_output_get_nav_bearing(const mavlink_message_t* msg)
+static inline Int16 mavlink_msg_nav_controller_output_get_nav_bearing(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  20);
+	return _MAV_RETURN_Int16(msg,  20);
 }
 
 /**
@@ -230,9 +230,9 @@ static inline int16_t mavlink_msg_nav_controller_output_get_nav_bearing(const ma
  *
  * @return Bearing to current MISSION/target in degrees
  */
-static inline int16_t mavlink_msg_nav_controller_output_get_target_bearing(const mavlink_message_t* msg)
+static inline Int16 mavlink_msg_nav_controller_output_get_target_bearing(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  22);
+	return _MAV_RETURN_Int16(msg,  22);
 }
 
 /**
@@ -240,9 +240,9 @@ static inline int16_t mavlink_msg_nav_controller_output_get_target_bearing(const
  *
  * @return Distance to active MISSION in meters
  */
-static inline uint16_t mavlink_msg_nav_controller_output_get_wp_dist(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_nav_controller_output_get_wp_dist(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  24);
+	return _MAV_RETURN_UInt16(msg,  24);
 }
 
 /**
@@ -250,9 +250,9 @@ static inline uint16_t mavlink_msg_nav_controller_output_get_wp_dist(const mavli
  *
  * @return Current altitude error in meters
  */
-static inline float mavlink_msg_nav_controller_output_get_alt_error(const mavlink_message_t* msg)
+static inline Single mavlink_msg_nav_controller_output_get_alt_error(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  8);
+	return _MAV_RETURN_Single(msg,  8);
 }
 
 /**
@@ -260,9 +260,9 @@ static inline float mavlink_msg_nav_controller_output_get_alt_error(const mavlin
  *
  * @return Current airspeed error in meters/second
  */
-static inline float mavlink_msg_nav_controller_output_get_aspd_error(const mavlink_message_t* msg)
+static inline Single mavlink_msg_nav_controller_output_get_aspd_error(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  12);
+	return _MAV_RETURN_Single(msg,  12);
 }
 
 /**
@@ -270,9 +270,9 @@ static inline float mavlink_msg_nav_controller_output_get_aspd_error(const mavli
  *
  * @return Current crosstrack error on x-y plane in meters
  */
-static inline float mavlink_msg_nav_controller_output_get_xtrack_error(const mavlink_message_t* msg)
+static inline Single mavlink_msg_nav_controller_output_get_xtrack_error(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  16);
+	return _MAV_RETURN_Single(msg,  16);
 }
 
 /**

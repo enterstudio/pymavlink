@@ -4,13 +4,13 @@
 
 typedef struct __mavlink_raw_aux_t
 {
- uint16_t adc1; ///< ADC1 (J405 ADC3, LPC2148 AD0.6)
- uint16_t adc2; ///< ADC2 (J405 ADC5, LPC2148 AD0.2)
- uint16_t adc3; ///< ADC3 (J405 ADC6, LPC2148 AD0.1)
- uint16_t adc4; ///< ADC4 (J405 ADC7, LPC2148 AD1.3)
- uint16_t vbat; ///< Battery voltage
- int16_t temp; ///< Temperature (degrees celcius)
- int32_t baro; ///< Barometric pressure (hecto Pascal)
+ UInt16 adc1; ///< ADC1 (J405 ADC3, LPC2148 AD0.6)
+ UInt16 adc2; ///< ADC2 (J405 ADC5, LPC2148 AD0.2)
+ UInt16 adc3; ///< ADC3 (J405 ADC6, LPC2148 AD0.1)
+ UInt16 adc4; ///< ADC4 (J405 ADC7, LPC2148 AD1.3)
+ UInt16 vbat; ///< Battery voltage
+ Int16 temp; ///< Temperature (degrees celcius)
+ Int32 baro; ///< Barometric pressure (hecto Pascal)
 } mavlink_raw_aux_t;
 
 #define MAVLINK_MSG_ID_RAW_AUX_LEN 16
@@ -48,17 +48,17 @@ typedef struct __mavlink_raw_aux_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_raw_aux_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint16_t adc1, uint16_t adc2, uint16_t adc3, uint16_t adc4, uint16_t vbat, int16_t temp, int32_t baro)
+						       UInt16 adc1, UInt16 adc2, UInt16 adc3, UInt16 adc4, UInt16 vbat, Int16 temp, Int32 baro)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[16];
-	_mav_put_uint16_t(buf, 0, adc1);
-	_mav_put_uint16_t(buf, 2, adc2);
-	_mav_put_uint16_t(buf, 4, adc3);
-	_mav_put_uint16_t(buf, 6, adc4);
-	_mav_put_uint16_t(buf, 8, vbat);
-	_mav_put_int16_t(buf, 10, temp);
-	_mav_put_int32_t(buf, 12, baro);
+	_mav_put_UInt16(buf, 0, adc1);
+	_mav_put_UInt16(buf, 2, adc2);
+	_mav_put_UInt16(buf, 4, adc3);
+	_mav_put_UInt16(buf, 6, adc4);
+	_mav_put_UInt16(buf, 8, vbat);
+	_mav_put_Int16(buf, 10, temp);
+	_mav_put_Int32(buf, 12, baro);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 16);
 #else
@@ -95,17 +95,17 @@ static inline uint16_t mavlink_msg_raw_aux_pack(uint8_t system_id, uint8_t compo
  */
 static inline uint16_t mavlink_msg_raw_aux_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint16_t adc1,uint16_t adc2,uint16_t adc3,uint16_t adc4,uint16_t vbat,int16_t temp,int32_t baro)
+						           UInt16 adc1,UInt16 adc2,UInt16 adc3,UInt16 adc4,UInt16 vbat,Int16 temp,Int32 baro)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[16];
-	_mav_put_uint16_t(buf, 0, adc1);
-	_mav_put_uint16_t(buf, 2, adc2);
-	_mav_put_uint16_t(buf, 4, adc3);
-	_mav_put_uint16_t(buf, 6, adc4);
-	_mav_put_uint16_t(buf, 8, vbat);
-	_mav_put_int16_t(buf, 10, temp);
-	_mav_put_int32_t(buf, 12, baro);
+	_mav_put_UInt16(buf, 0, adc1);
+	_mav_put_UInt16(buf, 2, adc2);
+	_mav_put_UInt16(buf, 4, adc3);
+	_mav_put_UInt16(buf, 6, adc4);
+	_mav_put_UInt16(buf, 8, vbat);
+	_mav_put_Int16(buf, 10, temp);
+	_mav_put_Int32(buf, 12, baro);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 16);
 #else
@@ -152,17 +152,17 @@ static inline uint16_t mavlink_msg_raw_aux_encode(uint8_t system_id, uint8_t com
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_raw_aux_send(mavlink_channel_t chan, uint16_t adc1, uint16_t adc2, uint16_t adc3, uint16_t adc4, uint16_t vbat, int16_t temp, int32_t baro)
+static inline void mavlink_msg_raw_aux_send(mavlink_channel_t chan, UInt16 adc1, UInt16 adc2, UInt16 adc3, UInt16 adc4, UInt16 vbat, Int16 temp, Int32 baro)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[16];
-	_mav_put_uint16_t(buf, 0, adc1);
-	_mav_put_uint16_t(buf, 2, adc2);
-	_mav_put_uint16_t(buf, 4, adc3);
-	_mav_put_uint16_t(buf, 6, adc4);
-	_mav_put_uint16_t(buf, 8, vbat);
-	_mav_put_int16_t(buf, 10, temp);
-	_mav_put_int32_t(buf, 12, baro);
+	_mav_put_UInt16(buf, 0, adc1);
+	_mav_put_UInt16(buf, 2, adc2);
+	_mav_put_UInt16(buf, 4, adc3);
+	_mav_put_UInt16(buf, 6, adc4);
+	_mav_put_UInt16(buf, 8, vbat);
+	_mav_put_Int16(buf, 10, temp);
+	_mav_put_Int32(buf, 12, baro);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_RAW_AUX, buf, 16);
 #else
@@ -189,9 +189,9 @@ static inline void mavlink_msg_raw_aux_send(mavlink_channel_t chan, uint16_t adc
  *
  * @return ADC1 (J405 ADC3, LPC2148 AD0.6)
  */
-static inline uint16_t mavlink_msg_raw_aux_get_adc1(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_raw_aux_get_adc1(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  0);
+	return _MAV_RETURN_UInt16(msg,  0);
 }
 
 /**
@@ -199,9 +199,9 @@ static inline uint16_t mavlink_msg_raw_aux_get_adc1(const mavlink_message_t* msg
  *
  * @return ADC2 (J405 ADC5, LPC2148 AD0.2)
  */
-static inline uint16_t mavlink_msg_raw_aux_get_adc2(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_raw_aux_get_adc2(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  2);
+	return _MAV_RETURN_UInt16(msg,  2);
 }
 
 /**
@@ -209,9 +209,9 @@ static inline uint16_t mavlink_msg_raw_aux_get_adc2(const mavlink_message_t* msg
  *
  * @return ADC3 (J405 ADC6, LPC2148 AD0.1)
  */
-static inline uint16_t mavlink_msg_raw_aux_get_adc3(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_raw_aux_get_adc3(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  4);
+	return _MAV_RETURN_UInt16(msg,  4);
 }
 
 /**
@@ -219,9 +219,9 @@ static inline uint16_t mavlink_msg_raw_aux_get_adc3(const mavlink_message_t* msg
  *
  * @return ADC4 (J405 ADC7, LPC2148 AD1.3)
  */
-static inline uint16_t mavlink_msg_raw_aux_get_adc4(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_raw_aux_get_adc4(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  6);
+	return _MAV_RETURN_UInt16(msg,  6);
 }
 
 /**
@@ -229,9 +229,9 @@ static inline uint16_t mavlink_msg_raw_aux_get_adc4(const mavlink_message_t* msg
  *
  * @return Battery voltage
  */
-static inline uint16_t mavlink_msg_raw_aux_get_vbat(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_raw_aux_get_vbat(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  8);
+	return _MAV_RETURN_UInt16(msg,  8);
 }
 
 /**
@@ -239,9 +239,9 @@ static inline uint16_t mavlink_msg_raw_aux_get_vbat(const mavlink_message_t* msg
  *
  * @return Temperature (degrees celcius)
  */
-static inline int16_t mavlink_msg_raw_aux_get_temp(const mavlink_message_t* msg)
+static inline Int16 mavlink_msg_raw_aux_get_temp(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  10);
+	return _MAV_RETURN_Int16(msg,  10);
 }
 
 /**
@@ -249,9 +249,9 @@ static inline int16_t mavlink_msg_raw_aux_get_temp(const mavlink_message_t* msg)
  *
  * @return Barometric pressure (hecto Pascal)
  */
-static inline int32_t mavlink_msg_raw_aux_get_baro(const mavlink_message_t* msg)
+static inline Int32 mavlink_msg_raw_aux_get_baro(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  12);
+	return _MAV_RETURN_Int32(msg,  12);
 }
 
 /**

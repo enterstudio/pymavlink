@@ -4,8 +4,8 @@
 
 typedef struct __mavlink_system_time_t
 {
- uint64_t time_unix_usec; ///< Timestamp of the master clock in microseconds since UNIX epoch.
- uint32_t time_boot_ms; ///< Timestamp of the component clock since boot time in milliseconds.
+ UInt64 time_unix_usec; ///< Timestamp of the master clock in microseconds since UNIX epoch.
+ UInt32 time_boot_ms; ///< Timestamp of the component clock since boot time in milliseconds.
 } mavlink_system_time_t;
 
 #define MAVLINK_MSG_ID_SYSTEM_TIME_LEN 12
@@ -33,12 +33,12 @@ typedef struct __mavlink_system_time_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_system_time_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint64_t time_unix_usec, uint32_t time_boot_ms)
+						       UInt64 time_unix_usec, UInt32 time_boot_ms)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[12];
-	_mav_put_uint64_t(buf, 0, time_unix_usec);
-	_mav_put_uint32_t(buf, 8, time_boot_ms);
+	_mav_put_UInt64(buf, 0, time_unix_usec);
+	_mav_put_UInt32(buf, 8, time_boot_ms);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 12);
 #else
@@ -65,12 +65,12 @@ static inline uint16_t mavlink_msg_system_time_pack(uint8_t system_id, uint8_t c
  */
 static inline uint16_t mavlink_msg_system_time_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint64_t time_unix_usec,uint32_t time_boot_ms)
+						           UInt64 time_unix_usec,UInt32 time_boot_ms)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[12];
-	_mav_put_uint64_t(buf, 0, time_unix_usec);
-	_mav_put_uint32_t(buf, 8, time_boot_ms);
+	_mav_put_UInt64(buf, 0, time_unix_usec);
+	_mav_put_UInt32(buf, 8, time_boot_ms);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 12);
 #else
@@ -107,12 +107,12 @@ static inline uint16_t mavlink_msg_system_time_encode(uint8_t system_id, uint8_t
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_system_time_send(mavlink_channel_t chan, uint64_t time_unix_usec, uint32_t time_boot_ms)
+static inline void mavlink_msg_system_time_send(mavlink_channel_t chan, UInt64 time_unix_usec, UInt32 time_boot_ms)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[12];
-	_mav_put_uint64_t(buf, 0, time_unix_usec);
-	_mav_put_uint32_t(buf, 8, time_boot_ms);
+	_mav_put_UInt64(buf, 0, time_unix_usec);
+	_mav_put_UInt32(buf, 8, time_boot_ms);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_TIME, buf, 12, 137);
 #else
@@ -134,9 +134,9 @@ static inline void mavlink_msg_system_time_send(mavlink_channel_t chan, uint64_t
  *
  * @return Timestamp of the master clock in microseconds since UNIX epoch.
  */
-static inline uint64_t mavlink_msg_system_time_get_time_unix_usec(const mavlink_message_t* msg)
+static inline UInt64 mavlink_msg_system_time_get_time_unix_usec(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint64_t(msg,  0);
+	return _MAV_RETURN_UInt64(msg,  0);
 }
 
 /**
@@ -144,9 +144,9 @@ static inline uint64_t mavlink_msg_system_time_get_time_unix_usec(const mavlink_
  *
  * @return Timestamp of the component clock since boot time in milliseconds.
  */
-static inline uint32_t mavlink_msg_system_time_get_time_boot_ms(const mavlink_message_t* msg)
+static inline UInt32 mavlink_msg_system_time_get_time_boot_ms(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint32_t(msg,  8);
+	return _MAV_RETURN_UInt32(msg,  8);
 }
 
 /**

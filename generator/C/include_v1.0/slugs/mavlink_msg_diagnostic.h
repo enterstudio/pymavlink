@@ -4,12 +4,12 @@
 
 typedef struct __mavlink_diagnostic_t
 {
- float diagFl1; ///< Diagnostic float 1
- float diagFl2; ///< Diagnostic float 2
- float diagFl3; ///< Diagnostic float 3
- int16_t diagSh1; ///< Diagnostic short 1
- int16_t diagSh2; ///< Diagnostic short 2
- int16_t diagSh3; ///< Diagnostic short 3
+ Single diagFl1; ///< Diagnostic float 1
+ Single diagFl2; ///< Diagnostic float 2
+ Single diagFl3; ///< Diagnostic float 3
+ Int16 diagSh1; ///< Diagnostic short 1
+ Int16 diagSh2; ///< Diagnostic short 2
+ Int16 diagSh3; ///< Diagnostic short 3
 } mavlink_diagnostic_t;
 
 #define MAVLINK_MSG_ID_DIAGNOSTIC_LEN 18
@@ -45,16 +45,16 @@ typedef struct __mavlink_diagnostic_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_diagnostic_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       float diagFl1, float diagFl2, float diagFl3, int16_t diagSh1, int16_t diagSh2, int16_t diagSh3)
+						       Single diagFl1, Single diagFl2, Single diagFl3, Int16 diagSh1, Int16 diagSh2, Int16 diagSh3)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[18];
-	_mav_put_float(buf, 0, diagFl1);
-	_mav_put_float(buf, 4, diagFl2);
-	_mav_put_float(buf, 8, diagFl3);
-	_mav_put_int16_t(buf, 12, diagSh1);
-	_mav_put_int16_t(buf, 14, diagSh2);
-	_mav_put_int16_t(buf, 16, diagSh3);
+	_mav_put_Single(buf, 0, diagFl1);
+	_mav_put_Single(buf, 4, diagFl2);
+	_mav_put_Single(buf, 8, diagFl3);
+	_mav_put_Int16(buf, 12, diagSh1);
+	_mav_put_Int16(buf, 14, diagSh2);
+	_mav_put_Int16(buf, 16, diagSh3);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 18);
 #else
@@ -89,16 +89,16 @@ static inline uint16_t mavlink_msg_diagnostic_pack(uint8_t system_id, uint8_t co
  */
 static inline uint16_t mavlink_msg_diagnostic_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           float diagFl1,float diagFl2,float diagFl3,int16_t diagSh1,int16_t diagSh2,int16_t diagSh3)
+						           Single diagFl1,Single diagFl2,Single diagFl3,Int16 diagSh1,Int16 diagSh2,Int16 diagSh3)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[18];
-	_mav_put_float(buf, 0, diagFl1);
-	_mav_put_float(buf, 4, diagFl2);
-	_mav_put_float(buf, 8, diagFl3);
-	_mav_put_int16_t(buf, 12, diagSh1);
-	_mav_put_int16_t(buf, 14, diagSh2);
-	_mav_put_int16_t(buf, 16, diagSh3);
+	_mav_put_Single(buf, 0, diagFl1);
+	_mav_put_Single(buf, 4, diagFl2);
+	_mav_put_Single(buf, 8, diagFl3);
+	_mav_put_Int16(buf, 12, diagSh1);
+	_mav_put_Int16(buf, 14, diagSh2);
+	_mav_put_Int16(buf, 16, diagSh3);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 18);
 #else
@@ -143,16 +143,16 @@ static inline uint16_t mavlink_msg_diagnostic_encode(uint8_t system_id, uint8_t 
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_diagnostic_send(mavlink_channel_t chan, float diagFl1, float diagFl2, float diagFl3, int16_t diagSh1, int16_t diagSh2, int16_t diagSh3)
+static inline void mavlink_msg_diagnostic_send(mavlink_channel_t chan, Single diagFl1, Single diagFl2, Single diagFl3, Int16 diagSh1, Int16 diagSh2, Int16 diagSh3)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[18];
-	_mav_put_float(buf, 0, diagFl1);
-	_mav_put_float(buf, 4, diagFl2);
-	_mav_put_float(buf, 8, diagFl3);
-	_mav_put_int16_t(buf, 12, diagSh1);
-	_mav_put_int16_t(buf, 14, diagSh2);
-	_mav_put_int16_t(buf, 16, diagSh3);
+	_mav_put_Single(buf, 0, diagFl1);
+	_mav_put_Single(buf, 4, diagFl2);
+	_mav_put_Single(buf, 8, diagFl3);
+	_mav_put_Int16(buf, 12, diagSh1);
+	_mav_put_Int16(buf, 14, diagSh2);
+	_mav_put_Int16(buf, 16, diagSh3);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DIAGNOSTIC, buf, 18, 2);
 #else
@@ -178,9 +178,9 @@ static inline void mavlink_msg_diagnostic_send(mavlink_channel_t chan, float dia
  *
  * @return Diagnostic float 1
  */
-static inline float mavlink_msg_diagnostic_get_diagFl1(const mavlink_message_t* msg)
+static inline Single mavlink_msg_diagnostic_get_diagFl1(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  0);
+	return _MAV_RETURN_Single(msg,  0);
 }
 
 /**
@@ -188,9 +188,9 @@ static inline float mavlink_msg_diagnostic_get_diagFl1(const mavlink_message_t* 
  *
  * @return Diagnostic float 2
  */
-static inline float mavlink_msg_diagnostic_get_diagFl2(const mavlink_message_t* msg)
+static inline Single mavlink_msg_diagnostic_get_diagFl2(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  4);
+	return _MAV_RETURN_Single(msg,  4);
 }
 
 /**
@@ -198,9 +198,9 @@ static inline float mavlink_msg_diagnostic_get_diagFl2(const mavlink_message_t* 
  *
  * @return Diagnostic float 3
  */
-static inline float mavlink_msg_diagnostic_get_diagFl3(const mavlink_message_t* msg)
+static inline Single mavlink_msg_diagnostic_get_diagFl3(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  8);
+	return _MAV_RETURN_Single(msg,  8);
 }
 
 /**
@@ -208,9 +208,9 @@ static inline float mavlink_msg_diagnostic_get_diagFl3(const mavlink_message_t* 
  *
  * @return Diagnostic short 1
  */
-static inline int16_t mavlink_msg_diagnostic_get_diagSh1(const mavlink_message_t* msg)
+static inline Int16 mavlink_msg_diagnostic_get_diagSh1(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  12);
+	return _MAV_RETURN_Int16(msg,  12);
 }
 
 /**
@@ -218,9 +218,9 @@ static inline int16_t mavlink_msg_diagnostic_get_diagSh1(const mavlink_message_t
  *
  * @return Diagnostic short 2
  */
-static inline int16_t mavlink_msg_diagnostic_get_diagSh2(const mavlink_message_t* msg)
+static inline Int16 mavlink_msg_diagnostic_get_diagSh2(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  14);
+	return _MAV_RETURN_Int16(msg,  14);
 }
 
 /**
@@ -228,9 +228,9 @@ static inline int16_t mavlink_msg_diagnostic_get_diagSh2(const mavlink_message_t
  *
  * @return Diagnostic short 3
  */
-static inline int16_t mavlink_msg_diagnostic_get_diagSh3(const mavlink_message_t* msg)
+static inline Int16 mavlink_msg_diagnostic_get_diagSh3(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  16);
+	return _MAV_RETURN_Int16(msg,  16);
 }
 
 /**

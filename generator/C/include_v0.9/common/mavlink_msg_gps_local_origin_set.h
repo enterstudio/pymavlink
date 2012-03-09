@@ -4,9 +4,9 @@
 
 typedef struct __mavlink_gps_local_origin_set_t
 {
- int32_t latitude; ///< Latitude (WGS84), expressed as * 1E7
- int32_t longitude; ///< Longitude (WGS84), expressed as * 1E7
- int32_t altitude; ///< Altitude(WGS84), expressed as * 1000
+ Int32 latitude; ///< Latitude (WGS84), expressed as * 1E7
+ Int32 longitude; ///< Longitude (WGS84), expressed as * 1E7
+ Int32 altitude; ///< Altitude(WGS84), expressed as * 1000
 } mavlink_gps_local_origin_set_t;
 
 #define MAVLINK_MSG_ID_GPS_LOCAL_ORIGIN_SET_LEN 12
@@ -36,13 +36,13 @@ typedef struct __mavlink_gps_local_origin_set_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_gps_local_origin_set_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       int32_t latitude, int32_t longitude, int32_t altitude)
+						       Int32 latitude, Int32 longitude, Int32 altitude)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[12];
-	_mav_put_int32_t(buf, 0, latitude);
-	_mav_put_int32_t(buf, 4, longitude);
-	_mav_put_int32_t(buf, 8, altitude);
+	_mav_put_Int32(buf, 0, latitude);
+	_mav_put_Int32(buf, 4, longitude);
+	_mav_put_Int32(buf, 8, altitude);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 12);
 #else
@@ -71,13 +71,13 @@ static inline uint16_t mavlink_msg_gps_local_origin_set_pack(uint8_t system_id, 
  */
 static inline uint16_t mavlink_msg_gps_local_origin_set_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           int32_t latitude,int32_t longitude,int32_t altitude)
+						           Int32 latitude,Int32 longitude,Int32 altitude)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[12];
-	_mav_put_int32_t(buf, 0, latitude);
-	_mav_put_int32_t(buf, 4, longitude);
-	_mav_put_int32_t(buf, 8, altitude);
+	_mav_put_Int32(buf, 0, latitude);
+	_mav_put_Int32(buf, 4, longitude);
+	_mav_put_Int32(buf, 8, altitude);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 12);
 #else
@@ -116,13 +116,13 @@ static inline uint16_t mavlink_msg_gps_local_origin_set_encode(uint8_t system_id
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_gps_local_origin_set_send(mavlink_channel_t chan, int32_t latitude, int32_t longitude, int32_t altitude)
+static inline void mavlink_msg_gps_local_origin_set_send(mavlink_channel_t chan, Int32 latitude, Int32 longitude, Int32 altitude)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[12];
-	_mav_put_int32_t(buf, 0, latitude);
-	_mav_put_int32_t(buf, 4, longitude);
-	_mav_put_int32_t(buf, 8, altitude);
+	_mav_put_Int32(buf, 0, latitude);
+	_mav_put_Int32(buf, 4, longitude);
+	_mav_put_Int32(buf, 8, altitude);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_LOCAL_ORIGIN_SET, buf, 12);
 #else
@@ -145,9 +145,9 @@ static inline void mavlink_msg_gps_local_origin_set_send(mavlink_channel_t chan,
  *
  * @return Latitude (WGS84), expressed as * 1E7
  */
-static inline int32_t mavlink_msg_gps_local_origin_set_get_latitude(const mavlink_message_t* msg)
+static inline Int32 mavlink_msg_gps_local_origin_set_get_latitude(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  0);
+	return _MAV_RETURN_Int32(msg,  0);
 }
 
 /**
@@ -155,9 +155,9 @@ static inline int32_t mavlink_msg_gps_local_origin_set_get_latitude(const mavlin
  *
  * @return Longitude (WGS84), expressed as * 1E7
  */
-static inline int32_t mavlink_msg_gps_local_origin_set_get_longitude(const mavlink_message_t* msg)
+static inline Int32 mavlink_msg_gps_local_origin_set_get_longitude(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  4);
+	return _MAV_RETURN_Int32(msg,  4);
 }
 
 /**
@@ -165,9 +165,9 @@ static inline int32_t mavlink_msg_gps_local_origin_set_get_longitude(const mavli
  *
  * @return Altitude(WGS84), expressed as * 1000
  */
-static inline int32_t mavlink_msg_gps_local_origin_set_get_altitude(const mavlink_message_t* msg)
+static inline Int32 mavlink_msg_gps_local_origin_set_get_altitude(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  8);
+	return _MAV_RETURN_Int32(msg,  8);
 }
 
 /**

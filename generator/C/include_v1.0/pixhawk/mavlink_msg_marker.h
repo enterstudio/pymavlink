@@ -4,13 +4,13 @@
 
 typedef struct __mavlink_marker_t
 {
- float x; ///< x position
- float y; ///< y position
- float z; ///< z position
- float roll; ///< roll orientation
- float pitch; ///< pitch orientation
- float yaw; ///< yaw orientation
- uint16_t id; ///< ID
+ Single x; ///< x position
+ Single y; ///< y position
+ Single z; ///< z position
+ Single roll; ///< roll orientation
+ Single pitch; ///< pitch orientation
+ Single yaw; ///< yaw orientation
+ UInt16 id; ///< ID
 } mavlink_marker_t;
 
 #define MAVLINK_MSG_ID_MARKER_LEN 26
@@ -48,17 +48,17 @@ typedef struct __mavlink_marker_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_marker_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint16_t id, float x, float y, float z, float roll, float pitch, float yaw)
+						       UInt16 id, Single x, Single y, Single z, Single roll, Single pitch, Single yaw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[26];
-	_mav_put_float(buf, 0, x);
-	_mav_put_float(buf, 4, y);
-	_mav_put_float(buf, 8, z);
-	_mav_put_float(buf, 12, roll);
-	_mav_put_float(buf, 16, pitch);
-	_mav_put_float(buf, 20, yaw);
-	_mav_put_uint16_t(buf, 24, id);
+	_mav_put_Single(buf, 0, x);
+	_mav_put_Single(buf, 4, y);
+	_mav_put_Single(buf, 8, z);
+	_mav_put_Single(buf, 12, roll);
+	_mav_put_Single(buf, 16, pitch);
+	_mav_put_Single(buf, 20, yaw);
+	_mav_put_UInt16(buf, 24, id);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 26);
 #else
@@ -95,17 +95,17 @@ static inline uint16_t mavlink_msg_marker_pack(uint8_t system_id, uint8_t compon
  */
 static inline uint16_t mavlink_msg_marker_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint16_t id,float x,float y,float z,float roll,float pitch,float yaw)
+						           UInt16 id,Single x,Single y,Single z,Single roll,Single pitch,Single yaw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[26];
-	_mav_put_float(buf, 0, x);
-	_mav_put_float(buf, 4, y);
-	_mav_put_float(buf, 8, z);
-	_mav_put_float(buf, 12, roll);
-	_mav_put_float(buf, 16, pitch);
-	_mav_put_float(buf, 20, yaw);
-	_mav_put_uint16_t(buf, 24, id);
+	_mav_put_Single(buf, 0, x);
+	_mav_put_Single(buf, 4, y);
+	_mav_put_Single(buf, 8, z);
+	_mav_put_Single(buf, 12, roll);
+	_mav_put_Single(buf, 16, pitch);
+	_mav_put_Single(buf, 20, yaw);
+	_mav_put_UInt16(buf, 24, id);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 26);
 #else
@@ -152,17 +152,17 @@ static inline uint16_t mavlink_msg_marker_encode(uint8_t system_id, uint8_t comp
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_marker_send(mavlink_channel_t chan, uint16_t id, float x, float y, float z, float roll, float pitch, float yaw)
+static inline void mavlink_msg_marker_send(mavlink_channel_t chan, UInt16 id, Single x, Single y, Single z, Single roll, Single pitch, Single yaw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[26];
-	_mav_put_float(buf, 0, x);
-	_mav_put_float(buf, 4, y);
-	_mav_put_float(buf, 8, z);
-	_mav_put_float(buf, 12, roll);
-	_mav_put_float(buf, 16, pitch);
-	_mav_put_float(buf, 20, yaw);
-	_mav_put_uint16_t(buf, 24, id);
+	_mav_put_Single(buf, 0, x);
+	_mav_put_Single(buf, 4, y);
+	_mav_put_Single(buf, 8, z);
+	_mav_put_Single(buf, 12, roll);
+	_mav_put_Single(buf, 16, pitch);
+	_mav_put_Single(buf, 20, yaw);
+	_mav_put_UInt16(buf, 24, id);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MARKER, buf, 26, 249);
 #else
@@ -189,9 +189,9 @@ static inline void mavlink_msg_marker_send(mavlink_channel_t chan, uint16_t id, 
  *
  * @return ID
  */
-static inline uint16_t mavlink_msg_marker_get_id(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_marker_get_id(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  24);
+	return _MAV_RETURN_UInt16(msg,  24);
 }
 
 /**
@@ -199,9 +199,9 @@ static inline uint16_t mavlink_msg_marker_get_id(const mavlink_message_t* msg)
  *
  * @return x position
  */
-static inline float mavlink_msg_marker_get_x(const mavlink_message_t* msg)
+static inline Single mavlink_msg_marker_get_x(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  0);
+	return _MAV_RETURN_Single(msg,  0);
 }
 
 /**
@@ -209,9 +209,9 @@ static inline float mavlink_msg_marker_get_x(const mavlink_message_t* msg)
  *
  * @return y position
  */
-static inline float mavlink_msg_marker_get_y(const mavlink_message_t* msg)
+static inline Single mavlink_msg_marker_get_y(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  4);
+	return _MAV_RETURN_Single(msg,  4);
 }
 
 /**
@@ -219,9 +219,9 @@ static inline float mavlink_msg_marker_get_y(const mavlink_message_t* msg)
  *
  * @return z position
  */
-static inline float mavlink_msg_marker_get_z(const mavlink_message_t* msg)
+static inline Single mavlink_msg_marker_get_z(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  8);
+	return _MAV_RETURN_Single(msg,  8);
 }
 
 /**
@@ -229,9 +229,9 @@ static inline float mavlink_msg_marker_get_z(const mavlink_message_t* msg)
  *
  * @return roll orientation
  */
-static inline float mavlink_msg_marker_get_roll(const mavlink_message_t* msg)
+static inline Single mavlink_msg_marker_get_roll(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  12);
+	return _MAV_RETURN_Single(msg,  12);
 }
 
 /**
@@ -239,9 +239,9 @@ static inline float mavlink_msg_marker_get_roll(const mavlink_message_t* msg)
  *
  * @return pitch orientation
  */
-static inline float mavlink_msg_marker_get_pitch(const mavlink_message_t* msg)
+static inline Single mavlink_msg_marker_get_pitch(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  16);
+	return _MAV_RETURN_Single(msg,  16);
 }
 
 /**
@@ -249,9 +249,9 @@ static inline float mavlink_msg_marker_get_pitch(const mavlink_message_t* msg)
  *
  * @return yaw orientation
  */
-static inline float mavlink_msg_marker_get_yaw(const mavlink_message_t* msg)
+static inline Single mavlink_msg_marker_get_yaw(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  20);
+	return _MAV_RETURN_Single(msg,  20);
 }
 
 /**

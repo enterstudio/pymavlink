@@ -4,7 +4,7 @@
 
 typedef struct __mavlink_mission_item_reached_t
 {
- uint16_t seq; ///< Sequence
+ UInt16 seq; ///< Sequence
 } mavlink_mission_item_reached_t;
 
 #define MAVLINK_MSG_ID_MISSION_ITEM_REACHED_LEN 2
@@ -30,11 +30,11 @@ typedef struct __mavlink_mission_item_reached_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_mission_item_reached_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint16_t seq)
+						       UInt16 seq)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[2];
-	_mav_put_uint16_t(buf, 0, seq);
+	_mav_put_UInt16(buf, 0, seq);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 2);
 #else
@@ -59,11 +59,11 @@ static inline uint16_t mavlink_msg_mission_item_reached_pack(uint8_t system_id, 
  */
 static inline uint16_t mavlink_msg_mission_item_reached_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint16_t seq)
+						           UInt16 seq)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[2];
-	_mav_put_uint16_t(buf, 0, seq);
+	_mav_put_UInt16(buf, 0, seq);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 2);
 #else
@@ -98,11 +98,11 @@ static inline uint16_t mavlink_msg_mission_item_reached_encode(uint8_t system_id
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_mission_item_reached_send(mavlink_channel_t chan, uint16_t seq)
+static inline void mavlink_msg_mission_item_reached_send(mavlink_channel_t chan, UInt16 seq)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[2];
-	_mav_put_uint16_t(buf, 0, seq);
+	_mav_put_UInt16(buf, 0, seq);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MISSION_ITEM_REACHED, buf, 2, 11);
 #else
@@ -123,9 +123,9 @@ static inline void mavlink_msg_mission_item_reached_send(mavlink_channel_t chan,
  *
  * @return Sequence
  */
-static inline uint16_t mavlink_msg_mission_item_reached_get_seq(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_mission_item_reached_get_seq(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  0);
+	return _MAV_RETURN_UInt16(msg,  0);
 }
 
 /**

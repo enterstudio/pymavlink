@@ -4,8 +4,8 @@
 
 typedef struct __mavlink_debug_t
 {
- uint8_t ind; ///< index of debug variable
- float value; ///< DEBUG value
+ byte ind; ///< index of debug variable
+ Single value; ///< DEBUG value
 } mavlink_debug_t;
 
 #define MAVLINK_MSG_ID_DEBUG_LEN 5
@@ -33,12 +33,12 @@ typedef struct __mavlink_debug_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_debug_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t ind, float value)
+						       byte ind, Single value)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[5];
-	_mav_put_uint8_t(buf, 0, ind);
-	_mav_put_float(buf, 1, value);
+	_mav_put_byte(buf, 0, ind);
+	_mav_put_Single(buf, 1, value);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 5);
 #else
@@ -65,12 +65,12 @@ static inline uint16_t mavlink_msg_debug_pack(uint8_t system_id, uint8_t compone
  */
 static inline uint16_t mavlink_msg_debug_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint8_t ind,float value)
+						           byte ind,Single value)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[5];
-	_mav_put_uint8_t(buf, 0, ind);
-	_mav_put_float(buf, 1, value);
+	_mav_put_byte(buf, 0, ind);
+	_mav_put_Single(buf, 1, value);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 5);
 #else
@@ -107,12 +107,12 @@ static inline uint16_t mavlink_msg_debug_encode(uint8_t system_id, uint8_t compo
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_debug_send(mavlink_channel_t chan, uint8_t ind, float value)
+static inline void mavlink_msg_debug_send(mavlink_channel_t chan, byte ind, Single value)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[5];
-	_mav_put_uint8_t(buf, 0, ind);
-	_mav_put_float(buf, 1, value);
+	_mav_put_byte(buf, 0, ind);
+	_mav_put_Single(buf, 1, value);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DEBUG, buf, 5);
 #else
@@ -134,9 +134,9 @@ static inline void mavlink_msg_debug_send(mavlink_channel_t chan, uint8_t ind, f
  *
  * @return index of debug variable
  */
-static inline uint8_t mavlink_msg_debug_get_ind(const mavlink_message_t* msg)
+static inline byte mavlink_msg_debug_get_ind(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  0);
+	return _MAV_RETURN_byte(msg,  0);
 }
 
 /**
@@ -144,9 +144,9 @@ static inline uint8_t mavlink_msg_debug_get_ind(const mavlink_message_t* msg)
  *
  * @return DEBUG value
  */
-static inline float mavlink_msg_debug_get_value(const mavlink_message_t* msg)
+static inline Single mavlink_msg_debug_get_value(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  1);
+	return _MAV_RETURN_Single(msg,  1);
 }
 
 /**

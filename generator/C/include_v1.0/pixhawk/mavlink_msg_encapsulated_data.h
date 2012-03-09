@@ -4,8 +4,8 @@
 
 typedef struct __mavlink_encapsulated_data_t
 {
- uint16_t seqnr; ///< sequence number (starting with 0 on every transmission)
- uint8_t data[253]; ///< image data bytes
+ UInt16 seqnr; ///< sequence number (starting with 0 on every transmission)
+ byte[] data[253]; ///< image data bytes
 } mavlink_encapsulated_data_t;
 
 #define MAVLINK_MSG_ID_ENCAPSULATED_DATA_LEN 255
@@ -33,17 +33,17 @@ typedef struct __mavlink_encapsulated_data_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_encapsulated_data_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint16_t seqnr, const uint8_t *data)
+						       UInt16 seqnr, const byte[] *data)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[255];
-	_mav_put_uint16_t(buf, 0, seqnr);
-	_mav_put_uint8_t_array(buf, 2, data, 253);
+	_mav_put_UInt16(buf, 0, seqnr);
+	_mav_put_byte[]_array(buf, 2, data, 253);
         memcpy(_MAV_PAYLOAD(msg), buf, 255);
 #else
 	mavlink_encapsulated_data_t packet;
 	packet.seqnr = seqnr;
-	memcpy(packet.data, data, sizeof(uint8_t)*253);
+	mav_array_memcpy(packet.data, data, sizeof(byte[])*253);
         memcpy(_MAV_PAYLOAD(msg), &packet, 255);
 #endif
 
@@ -63,17 +63,17 @@ static inline uint16_t mavlink_msg_encapsulated_data_pack(uint8_t system_id, uin
  */
 static inline uint16_t mavlink_msg_encapsulated_data_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint16_t seqnr,const uint8_t *data)
+						           UInt16 seqnr,const byte[] *data)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[255];
-	_mav_put_uint16_t(buf, 0, seqnr);
-	_mav_put_uint8_t_array(buf, 2, data, 253);
+	_mav_put_UInt16(buf, 0, seqnr);
+	_mav_put_byte[]_array(buf, 2, data, 253);
         memcpy(_MAV_PAYLOAD(msg), buf, 255);
 #else
 	mavlink_encapsulated_data_t packet;
 	packet.seqnr = seqnr;
-	memcpy(packet.data, data, sizeof(uint8_t)*253);
+	mav_array_memcpy(packet.data, data, sizeof(byte[])*253);
         memcpy(_MAV_PAYLOAD(msg), &packet, 255);
 #endif
 
@@ -103,17 +103,17 @@ static inline uint16_t mavlink_msg_encapsulated_data_encode(uint8_t system_id, u
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_encapsulated_data_send(mavlink_channel_t chan, uint16_t seqnr, const uint8_t *data)
+static inline void mavlink_msg_encapsulated_data_send(mavlink_channel_t chan, UInt16 seqnr, const byte[] *data)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[255];
-	_mav_put_uint16_t(buf, 0, seqnr);
-	_mav_put_uint8_t_array(buf, 2, data, 253);
+	_mav_put_UInt16(buf, 0, seqnr);
+	_mav_put_byte[]_array(buf, 2, data, 253);
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ENCAPSULATED_DATA, buf, 255, 223);
 #else
 	mavlink_encapsulated_data_t packet;
 	packet.seqnr = seqnr;
-	memcpy(packet.data, data, sizeof(uint8_t)*253);
+	mav_array_memcpy(packet.data, data, sizeof(byte[])*253);
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ENCAPSULATED_DATA, (const char *)&packet, 255, 223);
 #endif
 }
@@ -128,9 +128,9 @@ static inline void mavlink_msg_encapsulated_data_send(mavlink_channel_t chan, ui
  *
  * @return sequence number (starting with 0 on every transmission)
  */
-static inline uint16_t mavlink_msg_encapsulated_data_get_seqnr(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_encapsulated_data_get_seqnr(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  0);
+	return _MAV_RETURN_UInt16(msg,  0);
 }
 
 /**
@@ -138,9 +138,9 @@ static inline uint16_t mavlink_msg_encapsulated_data_get_seqnr(const mavlink_mes
  *
  * @return image data bytes
  */
-static inline uint16_t mavlink_msg_encapsulated_data_get_data(const mavlink_message_t* msg, uint8_t *data)
+static inline uint16_t mavlink_msg_encapsulated_data_get_data(const mavlink_message_t* msg, byte[] *data)
 {
-	return _MAV_RETURN_uint8_t_array(msg, data, 253,  2);
+	return _MAV_RETURN_byte[]_array(msg, data, 253,  2);
 }
 
 /**

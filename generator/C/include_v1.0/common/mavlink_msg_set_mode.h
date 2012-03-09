@@ -4,9 +4,9 @@
 
 typedef struct __mavlink_set_mode_t
 {
- uint32_t custom_mode; ///< The new autopilot-specific mode. This field can be ignored by an autopilot.
- uint8_t target_system; ///< The system setting the mode
- uint8_t base_mode; ///< The new base mode
+ UInt32 custom_mode; ///< The new autopilot-specific mode. This field can be ignored by an autopilot.
+ byte target_system; ///< The system setting the mode
+ byte base_mode; ///< The new base mode
 } mavlink_set_mode_t;
 
 #define MAVLINK_MSG_ID_SET_MODE_LEN 6
@@ -36,13 +36,13 @@ typedef struct __mavlink_set_mode_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_set_mode_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t target_system, uint8_t base_mode, uint32_t custom_mode)
+						       byte target_system, byte base_mode, UInt32 custom_mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[6];
-	_mav_put_uint32_t(buf, 0, custom_mode);
-	_mav_put_uint8_t(buf, 4, target_system);
-	_mav_put_uint8_t(buf, 5, base_mode);
+	_mav_put_UInt32(buf, 0, custom_mode);
+	_mav_put_byte(buf, 4, target_system);
+	_mav_put_byte(buf, 5, base_mode);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 6);
 #else
@@ -71,13 +71,13 @@ static inline uint16_t mavlink_msg_set_mode_pack(uint8_t system_id, uint8_t comp
  */
 static inline uint16_t mavlink_msg_set_mode_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint8_t target_system,uint8_t base_mode,uint32_t custom_mode)
+						           byte target_system,byte base_mode,UInt32 custom_mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[6];
-	_mav_put_uint32_t(buf, 0, custom_mode);
-	_mav_put_uint8_t(buf, 4, target_system);
-	_mav_put_uint8_t(buf, 5, base_mode);
+	_mav_put_UInt32(buf, 0, custom_mode);
+	_mav_put_byte(buf, 4, target_system);
+	_mav_put_byte(buf, 5, base_mode);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 6);
 #else
@@ -116,13 +116,13 @@ static inline uint16_t mavlink_msg_set_mode_encode(uint8_t system_id, uint8_t co
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_set_mode_send(mavlink_channel_t chan, uint8_t target_system, uint8_t base_mode, uint32_t custom_mode)
+static inline void mavlink_msg_set_mode_send(mavlink_channel_t chan, byte target_system, byte base_mode, UInt32 custom_mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[6];
-	_mav_put_uint32_t(buf, 0, custom_mode);
-	_mav_put_uint8_t(buf, 4, target_system);
-	_mav_put_uint8_t(buf, 5, base_mode);
+	_mav_put_UInt32(buf, 0, custom_mode);
+	_mav_put_byte(buf, 4, target_system);
+	_mav_put_byte(buf, 5, base_mode);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_MODE, buf, 6, 89);
 #else
@@ -145,9 +145,9 @@ static inline void mavlink_msg_set_mode_send(mavlink_channel_t chan, uint8_t tar
  *
  * @return The system setting the mode
  */
-static inline uint8_t mavlink_msg_set_mode_get_target_system(const mavlink_message_t* msg)
+static inline byte mavlink_msg_set_mode_get_target_system(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  4);
+	return _MAV_RETURN_byte(msg,  4);
 }
 
 /**
@@ -155,9 +155,9 @@ static inline uint8_t mavlink_msg_set_mode_get_target_system(const mavlink_messa
  *
  * @return The new base mode
  */
-static inline uint8_t mavlink_msg_set_mode_get_base_mode(const mavlink_message_t* msg)
+static inline byte mavlink_msg_set_mode_get_base_mode(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  5);
+	return _MAV_RETURN_byte(msg,  5);
 }
 
 /**
@@ -165,9 +165,9 @@ static inline uint8_t mavlink_msg_set_mode_get_base_mode(const mavlink_message_t
  *
  * @return The new autopilot-specific mode. This field can be ignored by an autopilot.
  */
-static inline uint32_t mavlink_msg_set_mode_get_custom_mode(const mavlink_message_t* msg)
+static inline UInt32 mavlink_msg_set_mode_get_custom_mode(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint32_t(msg,  0);
+	return _MAV_RETURN_UInt32(msg,  0);
 }
 
 /**

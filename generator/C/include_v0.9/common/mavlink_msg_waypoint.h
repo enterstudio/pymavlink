@@ -4,20 +4,20 @@
 
 typedef struct __mavlink_waypoint_t
 {
- uint8_t target_system; ///< System ID
- uint8_t target_component; ///< Component ID
- uint16_t seq; ///< Sequence
- uint8_t frame; ///< The coordinate system of the waypoint. see MAV_FRAME in mavlink_types.h
- uint8_t command; ///< The scheduled action for the waypoint. see MAV_COMMAND in common.xml MAVLink specs
- uint8_t current; ///< false:0, true:1
- uint8_t autocontinue; ///< autocontinue to next wp
- float param1; ///< PARAM1 / For NAV command waypoints: Radius in which the waypoint is accepted as reached, in meters
- float param2; ///< PARAM2 / For NAV command waypoints: Time that the MAV should stay inside the PARAM1 radius before advancing, in milliseconds
- float param3; ///< PARAM3 / For LOITER command waypoints: Orbit to circle around the waypoint, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
- float param4; ///< PARAM4 / For NAV and LOITER command waypoints: Yaw orientation in degrees, [0..360] 0 = NORTH
- float x; ///< PARAM5 / local: x position, global: latitude
- float y; ///< PARAM6 / y position: global: longitude
- float z; ///< PARAM7 / z position: global: altitude
+ byte target_system; ///< System ID
+ byte target_component; ///< Component ID
+ UInt16 seq; ///< Sequence
+ byte frame; ///< The coordinate system of the waypoint. see MAV_FRAME in mavlink_types.h
+ byte command; ///< The scheduled action for the waypoint. see MAV_COMMAND in common.xml MAVLink specs
+ byte current; ///< false:0, true:1
+ byte autocontinue; ///< autocontinue to next wp
+ Single param1; ///< PARAM1 / For NAV command waypoints: Radius in which the waypoint is accepted as reached, in meters
+ Single param2; ///< PARAM2 / For NAV command waypoints: Time that the MAV should stay inside the PARAM1 radius before advancing, in milliseconds
+ Single param3; ///< PARAM3 / For LOITER command waypoints: Orbit to circle around the waypoint, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
+ Single param4; ///< PARAM4 / For NAV and LOITER command waypoints: Yaw orientation in degrees, [0..360] 0 = NORTH
+ Single x; ///< PARAM5 / local: x position, global: latitude
+ Single y; ///< PARAM6 / y position: global: longitude
+ Single z; ///< PARAM7 / z position: global: altitude
 } mavlink_waypoint_t;
 
 #define MAVLINK_MSG_ID_WAYPOINT_LEN 36
@@ -69,24 +69,24 @@ typedef struct __mavlink_waypoint_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_waypoint_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t target_system, uint8_t target_component, uint16_t seq, uint8_t frame, uint8_t command, uint8_t current, uint8_t autocontinue, float param1, float param2, float param3, float param4, float x, float y, float z)
+						       byte target_system, byte target_component, UInt16 seq, byte frame, byte command, byte current, byte autocontinue, Single param1, Single param2, Single param3, Single param4, Single x, Single y, Single z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[36];
-	_mav_put_uint8_t(buf, 0, target_system);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint16_t(buf, 2, seq);
-	_mav_put_uint8_t(buf, 4, frame);
-	_mav_put_uint8_t(buf, 5, command);
-	_mav_put_uint8_t(buf, 6, current);
-	_mav_put_uint8_t(buf, 7, autocontinue);
-	_mav_put_float(buf, 8, param1);
-	_mav_put_float(buf, 12, param2);
-	_mav_put_float(buf, 16, param3);
-	_mav_put_float(buf, 20, param4);
-	_mav_put_float(buf, 24, x);
-	_mav_put_float(buf, 28, y);
-	_mav_put_float(buf, 32, z);
+	_mav_put_byte(buf, 0, target_system);
+	_mav_put_byte(buf, 1, target_component);
+	_mav_put_UInt16(buf, 2, seq);
+	_mav_put_byte(buf, 4, frame);
+	_mav_put_byte(buf, 5, command);
+	_mav_put_byte(buf, 6, current);
+	_mav_put_byte(buf, 7, autocontinue);
+	_mav_put_Single(buf, 8, param1);
+	_mav_put_Single(buf, 12, param2);
+	_mav_put_Single(buf, 16, param3);
+	_mav_put_Single(buf, 20, param4);
+	_mav_put_Single(buf, 24, x);
+	_mav_put_Single(buf, 28, y);
+	_mav_put_Single(buf, 32, z);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 36);
 #else
@@ -137,24 +137,24 @@ static inline uint16_t mavlink_msg_waypoint_pack(uint8_t system_id, uint8_t comp
  */
 static inline uint16_t mavlink_msg_waypoint_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint8_t target_system,uint8_t target_component,uint16_t seq,uint8_t frame,uint8_t command,uint8_t current,uint8_t autocontinue,float param1,float param2,float param3,float param4,float x,float y,float z)
+						           byte target_system,byte target_component,UInt16 seq,byte frame,byte command,byte current,byte autocontinue,Single param1,Single param2,Single param3,Single param4,Single x,Single y,Single z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[36];
-	_mav_put_uint8_t(buf, 0, target_system);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint16_t(buf, 2, seq);
-	_mav_put_uint8_t(buf, 4, frame);
-	_mav_put_uint8_t(buf, 5, command);
-	_mav_put_uint8_t(buf, 6, current);
-	_mav_put_uint8_t(buf, 7, autocontinue);
-	_mav_put_float(buf, 8, param1);
-	_mav_put_float(buf, 12, param2);
-	_mav_put_float(buf, 16, param3);
-	_mav_put_float(buf, 20, param4);
-	_mav_put_float(buf, 24, x);
-	_mav_put_float(buf, 28, y);
-	_mav_put_float(buf, 32, z);
+	_mav_put_byte(buf, 0, target_system);
+	_mav_put_byte(buf, 1, target_component);
+	_mav_put_UInt16(buf, 2, seq);
+	_mav_put_byte(buf, 4, frame);
+	_mav_put_byte(buf, 5, command);
+	_mav_put_byte(buf, 6, current);
+	_mav_put_byte(buf, 7, autocontinue);
+	_mav_put_Single(buf, 8, param1);
+	_mav_put_Single(buf, 12, param2);
+	_mav_put_Single(buf, 16, param3);
+	_mav_put_Single(buf, 20, param4);
+	_mav_put_Single(buf, 24, x);
+	_mav_put_Single(buf, 28, y);
+	_mav_put_Single(buf, 32, z);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 36);
 #else
@@ -215,24 +215,24 @@ static inline uint16_t mavlink_msg_waypoint_encode(uint8_t system_id, uint8_t co
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_waypoint_send(mavlink_channel_t chan, uint8_t target_system, uint8_t target_component, uint16_t seq, uint8_t frame, uint8_t command, uint8_t current, uint8_t autocontinue, float param1, float param2, float param3, float param4, float x, float y, float z)
+static inline void mavlink_msg_waypoint_send(mavlink_channel_t chan, byte target_system, byte target_component, UInt16 seq, byte frame, byte command, byte current, byte autocontinue, Single param1, Single param2, Single param3, Single param4, Single x, Single y, Single z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[36];
-	_mav_put_uint8_t(buf, 0, target_system);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint16_t(buf, 2, seq);
-	_mav_put_uint8_t(buf, 4, frame);
-	_mav_put_uint8_t(buf, 5, command);
-	_mav_put_uint8_t(buf, 6, current);
-	_mav_put_uint8_t(buf, 7, autocontinue);
-	_mav_put_float(buf, 8, param1);
-	_mav_put_float(buf, 12, param2);
-	_mav_put_float(buf, 16, param3);
-	_mav_put_float(buf, 20, param4);
-	_mav_put_float(buf, 24, x);
-	_mav_put_float(buf, 28, y);
-	_mav_put_float(buf, 32, z);
+	_mav_put_byte(buf, 0, target_system);
+	_mav_put_byte(buf, 1, target_component);
+	_mav_put_UInt16(buf, 2, seq);
+	_mav_put_byte(buf, 4, frame);
+	_mav_put_byte(buf, 5, command);
+	_mav_put_byte(buf, 6, current);
+	_mav_put_byte(buf, 7, autocontinue);
+	_mav_put_Single(buf, 8, param1);
+	_mav_put_Single(buf, 12, param2);
+	_mav_put_Single(buf, 16, param3);
+	_mav_put_Single(buf, 20, param4);
+	_mav_put_Single(buf, 24, x);
+	_mav_put_Single(buf, 28, y);
+	_mav_put_Single(buf, 32, z);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WAYPOINT, buf, 36);
 #else
@@ -266,9 +266,9 @@ static inline void mavlink_msg_waypoint_send(mavlink_channel_t chan, uint8_t tar
  *
  * @return System ID
  */
-static inline uint8_t mavlink_msg_waypoint_get_target_system(const mavlink_message_t* msg)
+static inline byte mavlink_msg_waypoint_get_target_system(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  0);
+	return _MAV_RETURN_byte(msg,  0);
 }
 
 /**
@@ -276,9 +276,9 @@ static inline uint8_t mavlink_msg_waypoint_get_target_system(const mavlink_messa
  *
  * @return Component ID
  */
-static inline uint8_t mavlink_msg_waypoint_get_target_component(const mavlink_message_t* msg)
+static inline byte mavlink_msg_waypoint_get_target_component(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  1);
+	return _MAV_RETURN_byte(msg,  1);
 }
 
 /**
@@ -286,9 +286,9 @@ static inline uint8_t mavlink_msg_waypoint_get_target_component(const mavlink_me
  *
  * @return Sequence
  */
-static inline uint16_t mavlink_msg_waypoint_get_seq(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_waypoint_get_seq(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  2);
+	return _MAV_RETURN_UInt16(msg,  2);
 }
 
 /**
@@ -296,9 +296,9 @@ static inline uint16_t mavlink_msg_waypoint_get_seq(const mavlink_message_t* msg
  *
  * @return The coordinate system of the waypoint. see MAV_FRAME in mavlink_types.h
  */
-static inline uint8_t mavlink_msg_waypoint_get_frame(const mavlink_message_t* msg)
+static inline byte mavlink_msg_waypoint_get_frame(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  4);
+	return _MAV_RETURN_byte(msg,  4);
 }
 
 /**
@@ -306,9 +306,9 @@ static inline uint8_t mavlink_msg_waypoint_get_frame(const mavlink_message_t* ms
  *
  * @return The scheduled action for the waypoint. see MAV_COMMAND in common.xml MAVLink specs
  */
-static inline uint8_t mavlink_msg_waypoint_get_command(const mavlink_message_t* msg)
+static inline byte mavlink_msg_waypoint_get_command(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  5);
+	return _MAV_RETURN_byte(msg,  5);
 }
 
 /**
@@ -316,9 +316,9 @@ static inline uint8_t mavlink_msg_waypoint_get_command(const mavlink_message_t* 
  *
  * @return false:0, true:1
  */
-static inline uint8_t mavlink_msg_waypoint_get_current(const mavlink_message_t* msg)
+static inline byte mavlink_msg_waypoint_get_current(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  6);
+	return _MAV_RETURN_byte(msg,  6);
 }
 
 /**
@@ -326,9 +326,9 @@ static inline uint8_t mavlink_msg_waypoint_get_current(const mavlink_message_t* 
  *
  * @return autocontinue to next wp
  */
-static inline uint8_t mavlink_msg_waypoint_get_autocontinue(const mavlink_message_t* msg)
+static inline byte mavlink_msg_waypoint_get_autocontinue(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  7);
+	return _MAV_RETURN_byte(msg,  7);
 }
 
 /**
@@ -336,9 +336,9 @@ static inline uint8_t mavlink_msg_waypoint_get_autocontinue(const mavlink_messag
  *
  * @return PARAM1 / For NAV command waypoints: Radius in which the waypoint is accepted as reached, in meters
  */
-static inline float mavlink_msg_waypoint_get_param1(const mavlink_message_t* msg)
+static inline Single mavlink_msg_waypoint_get_param1(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  8);
+	return _MAV_RETURN_Single(msg,  8);
 }
 
 /**
@@ -346,9 +346,9 @@ static inline float mavlink_msg_waypoint_get_param1(const mavlink_message_t* msg
  *
  * @return PARAM2 / For NAV command waypoints: Time that the MAV should stay inside the PARAM1 radius before advancing, in milliseconds
  */
-static inline float mavlink_msg_waypoint_get_param2(const mavlink_message_t* msg)
+static inline Single mavlink_msg_waypoint_get_param2(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  12);
+	return _MAV_RETURN_Single(msg,  12);
 }
 
 /**
@@ -356,9 +356,9 @@ static inline float mavlink_msg_waypoint_get_param2(const mavlink_message_t* msg
  *
  * @return PARAM3 / For LOITER command waypoints: Orbit to circle around the waypoint, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
  */
-static inline float mavlink_msg_waypoint_get_param3(const mavlink_message_t* msg)
+static inline Single mavlink_msg_waypoint_get_param3(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  16);
+	return _MAV_RETURN_Single(msg,  16);
 }
 
 /**
@@ -366,9 +366,9 @@ static inline float mavlink_msg_waypoint_get_param3(const mavlink_message_t* msg
  *
  * @return PARAM4 / For NAV and LOITER command waypoints: Yaw orientation in degrees, [0..360] 0 = NORTH
  */
-static inline float mavlink_msg_waypoint_get_param4(const mavlink_message_t* msg)
+static inline Single mavlink_msg_waypoint_get_param4(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  20);
+	return _MAV_RETURN_Single(msg,  20);
 }
 
 /**
@@ -376,9 +376,9 @@ static inline float mavlink_msg_waypoint_get_param4(const mavlink_message_t* msg
  *
  * @return PARAM5 / local: x position, global: latitude
  */
-static inline float mavlink_msg_waypoint_get_x(const mavlink_message_t* msg)
+static inline Single mavlink_msg_waypoint_get_x(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  24);
+	return _MAV_RETURN_Single(msg,  24);
 }
 
 /**
@@ -386,9 +386,9 @@ static inline float mavlink_msg_waypoint_get_x(const mavlink_message_t* msg)
  *
  * @return PARAM6 / y position: global: longitude
  */
-static inline float mavlink_msg_waypoint_get_y(const mavlink_message_t* msg)
+static inline Single mavlink_msg_waypoint_get_y(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  28);
+	return _MAV_RETURN_Single(msg,  28);
 }
 
 /**
@@ -396,9 +396,9 @@ static inline float mavlink_msg_waypoint_get_y(const mavlink_message_t* msg)
  *
  * @return PARAM7 / z position: global: altitude
  */
-static inline float mavlink_msg_waypoint_get_z(const mavlink_message_t* msg)
+static inline Single mavlink_msg_waypoint_get_z(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  32);
+	return _MAV_RETURN_Single(msg,  32);
 }
 
 /**

@@ -4,13 +4,13 @@
 
 typedef struct __mavlink_safety_allowed_area_t
 {
- uint8_t frame; ///< Coordinate frame, as defined by MAV_FRAME enum in mavlink_types.h. Can be either global, GPS, right-handed with Z axis up or local, right handed, Z axis down.
- float p1x; ///< x position 1 / Latitude 1
- float p1y; ///< y position 1 / Longitude 1
- float p1z; ///< z position 1 / Altitude 1
- float p2x; ///< x position 2 / Latitude 2
- float p2y; ///< y position 2 / Longitude 2
- float p2z; ///< z position 2 / Altitude 2
+ byte frame; ///< Coordinate frame, as defined by MAV_FRAME enum in mavlink_types.h. Can be either global, GPS, right-handed with Z axis up or local, right handed, Z axis down.
+ Single p1x; ///< x position 1 / Latitude 1
+ Single p1y; ///< y position 1 / Longitude 1
+ Single p1z; ///< z position 1 / Altitude 1
+ Single p2x; ///< x position 2 / Latitude 2
+ Single p2y; ///< y position 2 / Longitude 2
+ Single p2z; ///< z position 2 / Altitude 2
 } mavlink_safety_allowed_area_t;
 
 #define MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA_LEN 25
@@ -48,17 +48,17 @@ typedef struct __mavlink_safety_allowed_area_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_safety_allowed_area_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t frame, float p1x, float p1y, float p1z, float p2x, float p2y, float p2z)
+						       byte frame, Single p1x, Single p1y, Single p1z, Single p2x, Single p2y, Single p2z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[25];
-	_mav_put_uint8_t(buf, 0, frame);
-	_mav_put_float(buf, 1, p1x);
-	_mav_put_float(buf, 5, p1y);
-	_mav_put_float(buf, 9, p1z);
-	_mav_put_float(buf, 13, p2x);
-	_mav_put_float(buf, 17, p2y);
-	_mav_put_float(buf, 21, p2z);
+	_mav_put_byte(buf, 0, frame);
+	_mav_put_Single(buf, 1, p1x);
+	_mav_put_Single(buf, 5, p1y);
+	_mav_put_Single(buf, 9, p1z);
+	_mav_put_Single(buf, 13, p2x);
+	_mav_put_Single(buf, 17, p2y);
+	_mav_put_Single(buf, 21, p2z);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 25);
 #else
@@ -95,17 +95,17 @@ static inline uint16_t mavlink_msg_safety_allowed_area_pack(uint8_t system_id, u
  */
 static inline uint16_t mavlink_msg_safety_allowed_area_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint8_t frame,float p1x,float p1y,float p1z,float p2x,float p2y,float p2z)
+						           byte frame,Single p1x,Single p1y,Single p1z,Single p2x,Single p2y,Single p2z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[25];
-	_mav_put_uint8_t(buf, 0, frame);
-	_mav_put_float(buf, 1, p1x);
-	_mav_put_float(buf, 5, p1y);
-	_mav_put_float(buf, 9, p1z);
-	_mav_put_float(buf, 13, p2x);
-	_mav_put_float(buf, 17, p2y);
-	_mav_put_float(buf, 21, p2z);
+	_mav_put_byte(buf, 0, frame);
+	_mav_put_Single(buf, 1, p1x);
+	_mav_put_Single(buf, 5, p1y);
+	_mav_put_Single(buf, 9, p1z);
+	_mav_put_Single(buf, 13, p2x);
+	_mav_put_Single(buf, 17, p2y);
+	_mav_put_Single(buf, 21, p2z);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 25);
 #else
@@ -152,17 +152,17 @@ static inline uint16_t mavlink_msg_safety_allowed_area_encode(uint8_t system_id,
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_safety_allowed_area_send(mavlink_channel_t chan, uint8_t frame, float p1x, float p1y, float p1z, float p2x, float p2y, float p2z)
+static inline void mavlink_msg_safety_allowed_area_send(mavlink_channel_t chan, byte frame, Single p1x, Single p1y, Single p1z, Single p2x, Single p2y, Single p2z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[25];
-	_mav_put_uint8_t(buf, 0, frame);
-	_mav_put_float(buf, 1, p1x);
-	_mav_put_float(buf, 5, p1y);
-	_mav_put_float(buf, 9, p1z);
-	_mav_put_float(buf, 13, p2x);
-	_mav_put_float(buf, 17, p2y);
-	_mav_put_float(buf, 21, p2z);
+	_mav_put_byte(buf, 0, frame);
+	_mav_put_Single(buf, 1, p1x);
+	_mav_put_Single(buf, 5, p1y);
+	_mav_put_Single(buf, 9, p1z);
+	_mav_put_Single(buf, 13, p2x);
+	_mav_put_Single(buf, 17, p2y);
+	_mav_put_Single(buf, 21, p2z);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA, buf, 25);
 #else
@@ -189,9 +189,9 @@ static inline void mavlink_msg_safety_allowed_area_send(mavlink_channel_t chan, 
  *
  * @return Coordinate frame, as defined by MAV_FRAME enum in mavlink_types.h. Can be either global, GPS, right-handed with Z axis up or local, right handed, Z axis down.
  */
-static inline uint8_t mavlink_msg_safety_allowed_area_get_frame(const mavlink_message_t* msg)
+static inline byte mavlink_msg_safety_allowed_area_get_frame(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  0);
+	return _MAV_RETURN_byte(msg,  0);
 }
 
 /**
@@ -199,9 +199,9 @@ static inline uint8_t mavlink_msg_safety_allowed_area_get_frame(const mavlink_me
  *
  * @return x position 1 / Latitude 1
  */
-static inline float mavlink_msg_safety_allowed_area_get_p1x(const mavlink_message_t* msg)
+static inline Single mavlink_msg_safety_allowed_area_get_p1x(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  1);
+	return _MAV_RETURN_Single(msg,  1);
 }
 
 /**
@@ -209,9 +209,9 @@ static inline float mavlink_msg_safety_allowed_area_get_p1x(const mavlink_messag
  *
  * @return y position 1 / Longitude 1
  */
-static inline float mavlink_msg_safety_allowed_area_get_p1y(const mavlink_message_t* msg)
+static inline Single mavlink_msg_safety_allowed_area_get_p1y(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  5);
+	return _MAV_RETURN_Single(msg,  5);
 }
 
 /**
@@ -219,9 +219,9 @@ static inline float mavlink_msg_safety_allowed_area_get_p1y(const mavlink_messag
  *
  * @return z position 1 / Altitude 1
  */
-static inline float mavlink_msg_safety_allowed_area_get_p1z(const mavlink_message_t* msg)
+static inline Single mavlink_msg_safety_allowed_area_get_p1z(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  9);
+	return _MAV_RETURN_Single(msg,  9);
 }
 
 /**
@@ -229,9 +229,9 @@ static inline float mavlink_msg_safety_allowed_area_get_p1z(const mavlink_messag
  *
  * @return x position 2 / Latitude 2
  */
-static inline float mavlink_msg_safety_allowed_area_get_p2x(const mavlink_message_t* msg)
+static inline Single mavlink_msg_safety_allowed_area_get_p2x(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  13);
+	return _MAV_RETURN_Single(msg,  13);
 }
 
 /**
@@ -239,9 +239,9 @@ static inline float mavlink_msg_safety_allowed_area_get_p2x(const mavlink_messag
  *
  * @return y position 2 / Longitude 2
  */
-static inline float mavlink_msg_safety_allowed_area_get_p2y(const mavlink_message_t* msg)
+static inline Single mavlink_msg_safety_allowed_area_get_p2y(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  17);
+	return _MAV_RETURN_Single(msg,  17);
 }
 
 /**
@@ -249,9 +249,9 @@ static inline float mavlink_msg_safety_allowed_area_get_p2y(const mavlink_messag
  *
  * @return z position 2 / Altitude 2
  */
-static inline float mavlink_msg_safety_allowed_area_get_p2z(const mavlink_message_t* msg)
+static inline Single mavlink_msg_safety_allowed_area_get_p2z(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  21);
+	return _MAV_RETURN_Single(msg,  21);
 }
 
 /**

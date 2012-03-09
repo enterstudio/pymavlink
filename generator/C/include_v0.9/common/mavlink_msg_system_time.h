@@ -4,7 +4,7 @@
 
 typedef struct __mavlink_system_time_t
 {
- uint64_t time_usec; ///< Timestamp of the master clock in microseconds since UNIX epoch.
+ UInt64 time_usec; ///< Timestamp of the master clock in microseconds since UNIX epoch.
 } mavlink_system_time_t;
 
 #define MAVLINK_MSG_ID_SYSTEM_TIME_LEN 8
@@ -30,11 +30,11 @@ typedef struct __mavlink_system_time_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_system_time_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint64_t time_usec)
+						       UInt64 time_usec)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[8];
-	_mav_put_uint64_t(buf, 0, time_usec);
+	_mav_put_UInt64(buf, 0, time_usec);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 8);
 #else
@@ -59,11 +59,11 @@ static inline uint16_t mavlink_msg_system_time_pack(uint8_t system_id, uint8_t c
  */
 static inline uint16_t mavlink_msg_system_time_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint64_t time_usec)
+						           UInt64 time_usec)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[8];
-	_mav_put_uint64_t(buf, 0, time_usec);
+	_mav_put_UInt64(buf, 0, time_usec);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 8);
 #else
@@ -98,11 +98,11 @@ static inline uint16_t mavlink_msg_system_time_encode(uint8_t system_id, uint8_t
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_system_time_send(mavlink_channel_t chan, uint64_t time_usec)
+static inline void mavlink_msg_system_time_send(mavlink_channel_t chan, UInt64 time_usec)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[8];
-	_mav_put_uint64_t(buf, 0, time_usec);
+	_mav_put_UInt64(buf, 0, time_usec);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_TIME, buf, 8);
 #else
@@ -123,9 +123,9 @@ static inline void mavlink_msg_system_time_send(mavlink_channel_t chan, uint64_t
  *
  * @return Timestamp of the master clock in microseconds since UNIX epoch.
  */
-static inline uint64_t mavlink_msg_system_time_get_time_usec(const mavlink_message_t* msg)
+static inline UInt64 mavlink_msg_system_time_get_time_usec(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint64_t(msg,  0);
+	return _MAV_RETURN_UInt64(msg,  0);
 }
 
 /**

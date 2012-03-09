@@ -44,6 +44,8 @@ extern "C" {
 
 
 /** @brief Available autopilot modes for ualberta uav */
+#ifndef HAVE_ENUM_UALBERTA_AUTOPILOT_MODE
+#define HAVE_ENUM_UALBERTA_AUTOPILOT_MODE
 enum UALBERTA_AUTOPILOT_MODE
 {
 	MODE_MANUAL_DIRECT=1, /*  | */
@@ -51,27 +53,34 @@ enum UALBERTA_AUTOPILOT_MODE
 	MODE_AUTO_PID_ATT=3, /*  | */
 	MODE_AUTO_PID_VEL=4, /*  | */
 	MODE_AUTO_PID_POS=5, /*  | */
-	UALBERTA_AUTOPILOT_MODE_ENUM_END=6, /*  | */
+	ENUM_END=6, /*  | */
 };
+#endif
 
 /** @brief Navigation filter mode */
+#ifndef HAVE_ENUM_UALBERTA_NAV_MODE
+#define HAVE_ENUM_UALBERTA_NAV_MODE
 enum UALBERTA_NAV_MODE
 {
 	NAV_AHRS_INIT=1, /*  | */
 	NAV_AHRS=2, /*  | */
 	NAV_INS_GPS_INIT=3, /*  | */
 	NAV_INS_GPS=4, /*  | */
-	UALBERTA_NAV_MODE_ENUM_END=5, /*  | */
+	ENUM_END=5, /*  | */
 };
+#endif
 
 /** @brief Mode currently commanded by pilot */
+#ifndef HAVE_ENUM_UALBERTA_PILOT_MODE
+#define HAVE_ENUM_UALBERTA_PILOT_MODE
 enum UALBERTA_PILOT_MODE
 {
 	PILOT_MANUAL=1, /*  | */
 	PILOT_AUTO=2, /*  | */
 	PILOT_ROTO=3, /*  | */
-	UALBERTA_PILOT_MODE_ENUM_END=4, /*  | */
+	ENUM_END=4, /*  | */
 };
+#endif
 
 // MESSAGE DEFINITIONS
 #include "./mavlink_msg_nav_filter_bias.h"

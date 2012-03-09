@@ -4,9 +4,9 @@
 
 typedef struct __mavlink_extended_message_t
 {
- uint8_t target_system; ///< System which should execute the command
- uint8_t target_component; ///< Component which should execute the command, 0 for all components
- uint8_t protocol_flags; ///< Retransmission / ACK flags
+ byte target_system; ///< System which should execute the command
+ byte target_component; ///< Component which should execute the command, 0 for all components
+ byte protocol_flags; ///< Retransmission / ACK flags
 } mavlink_extended_message_t;
 
 #define MAVLINK_MSG_ID_EXTENDED_MESSAGE_LEN 3
@@ -36,13 +36,13 @@ typedef struct __mavlink_extended_message_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_extended_message_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t target_system, uint8_t target_component, uint8_t protocol_flags)
+						       byte target_system, byte target_component, byte protocol_flags)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[3];
-	_mav_put_uint8_t(buf, 0, target_system);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint8_t(buf, 2, protocol_flags);
+	_mav_put_byte(buf, 0, target_system);
+	_mav_put_byte(buf, 1, target_component);
+	_mav_put_byte(buf, 2, protocol_flags);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 3);
 #else
@@ -71,13 +71,13 @@ static inline uint16_t mavlink_msg_extended_message_pack(uint8_t system_id, uint
  */
 static inline uint16_t mavlink_msg_extended_message_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint8_t target_system,uint8_t target_component,uint8_t protocol_flags)
+						           byte target_system,byte target_component,byte protocol_flags)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[3];
-	_mav_put_uint8_t(buf, 0, target_system);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint8_t(buf, 2, protocol_flags);
+	_mav_put_byte(buf, 0, target_system);
+	_mav_put_byte(buf, 1, target_component);
+	_mav_put_byte(buf, 2, protocol_flags);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 3);
 #else
@@ -116,13 +116,13 @@ static inline uint16_t mavlink_msg_extended_message_encode(uint8_t system_id, ui
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_extended_message_send(mavlink_channel_t chan, uint8_t target_system, uint8_t target_component, uint8_t protocol_flags)
+static inline void mavlink_msg_extended_message_send(mavlink_channel_t chan, byte target_system, byte target_component, byte protocol_flags)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[3];
-	_mav_put_uint8_t(buf, 0, target_system);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint8_t(buf, 2, protocol_flags);
+	_mav_put_byte(buf, 0, target_system);
+	_mav_put_byte(buf, 1, target_component);
+	_mav_put_byte(buf, 2, protocol_flags);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_EXTENDED_MESSAGE, buf, 3, 247);
 #else
@@ -145,9 +145,9 @@ static inline void mavlink_msg_extended_message_send(mavlink_channel_t chan, uin
  *
  * @return System which should execute the command
  */
-static inline uint8_t mavlink_msg_extended_message_get_target_system(const mavlink_message_t* msg)
+static inline byte mavlink_msg_extended_message_get_target_system(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  0);
+	return _MAV_RETURN_byte(msg,  0);
 }
 
 /**
@@ -155,9 +155,9 @@ static inline uint8_t mavlink_msg_extended_message_get_target_system(const mavli
  *
  * @return Component which should execute the command, 0 for all components
  */
-static inline uint8_t mavlink_msg_extended_message_get_target_component(const mavlink_message_t* msg)
+static inline byte mavlink_msg_extended_message_get_target_component(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  1);
+	return _MAV_RETURN_byte(msg,  1);
 }
 
 /**
@@ -165,9 +165,9 @@ static inline uint8_t mavlink_msg_extended_message_get_target_component(const ma
  *
  * @return Retransmission / ACK flags
  */
-static inline uint8_t mavlink_msg_extended_message_get_protocol_flags(const mavlink_message_t* msg)
+static inline byte mavlink_msg_extended_message_get_protocol_flags(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  2);
+	return _MAV_RETURN_byte(msg,  2);
 }
 
 /**

@@ -4,12 +4,12 @@
 
 typedef struct __mavlink_gps_status_t
 {
- uint8_t satellites_visible; ///< Number of satellites visible
- uint8_t satellite_prn[20]; ///< Global satellite ID
- uint8_t satellite_used[20]; ///< 0: Satellite not used, 1: used for localization
- uint8_t satellite_elevation[20]; ///< Elevation (0: right on top of receiver, 90: on the horizon) of satellite
- uint8_t satellite_azimuth[20]; ///< Direction of satellite, 0: 0 deg, 255: 360 deg.
- uint8_t satellite_snr[20]; ///< Signal to noise ratio of satellite
+ byte satellites_visible; ///< Number of satellites visible
+ byte[] satellite_prn[20]; ///< Global satellite ID
+ byte[] satellite_used[20]; ///< 0: Satellite not used, 1: used for localization
+ byte[] satellite_elevation[20]; ///< Elevation (0: right on top of receiver, 90: on the horizon) of satellite
+ byte[] satellite_azimuth[20]; ///< Direction of satellite, 0: 0 deg, 255: 360 deg.
+ byte[] satellite_snr[20]; ///< Signal to noise ratio of satellite
 } mavlink_gps_status_t;
 
 #define MAVLINK_MSG_ID_GPS_STATUS_LEN 101
@@ -49,25 +49,25 @@ typedef struct __mavlink_gps_status_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_gps_status_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t satellites_visible, const uint8_t *satellite_prn, const uint8_t *satellite_used, const uint8_t *satellite_elevation, const uint8_t *satellite_azimuth, const uint8_t *satellite_snr)
+						       byte satellites_visible, const byte[] *satellite_prn, const byte[] *satellite_used, const byte[] *satellite_elevation, const byte[] *satellite_azimuth, const byte[] *satellite_snr)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[101];
-	_mav_put_uint8_t(buf, 0, satellites_visible);
-	_mav_put_uint8_t_array(buf, 1, satellite_prn, 20);
-	_mav_put_uint8_t_array(buf, 21, satellite_used, 20);
-	_mav_put_uint8_t_array(buf, 41, satellite_elevation, 20);
-	_mav_put_uint8_t_array(buf, 61, satellite_azimuth, 20);
-	_mav_put_uint8_t_array(buf, 81, satellite_snr, 20);
+	_mav_put_byte(buf, 0, satellites_visible);
+	_mav_put_byte[]_array(buf, 1, satellite_prn, 20);
+	_mav_put_byte[]_array(buf, 21, satellite_used, 20);
+	_mav_put_byte[]_array(buf, 41, satellite_elevation, 20);
+	_mav_put_byte[]_array(buf, 61, satellite_azimuth, 20);
+	_mav_put_byte[]_array(buf, 81, satellite_snr, 20);
         memcpy(_MAV_PAYLOAD(msg), buf, 101);
 #else
 	mavlink_gps_status_t packet;
 	packet.satellites_visible = satellites_visible;
-	memcpy(packet.satellite_prn, satellite_prn, sizeof(uint8_t)*20);
-	memcpy(packet.satellite_used, satellite_used, sizeof(uint8_t)*20);
-	memcpy(packet.satellite_elevation, satellite_elevation, sizeof(uint8_t)*20);
-	memcpy(packet.satellite_azimuth, satellite_azimuth, sizeof(uint8_t)*20);
-	memcpy(packet.satellite_snr, satellite_snr, sizeof(uint8_t)*20);
+	mav_array_memcpy(packet.satellite_prn, satellite_prn, sizeof(byte[])*20);
+	mav_array_memcpy(packet.satellite_used, satellite_used, sizeof(byte[])*20);
+	mav_array_memcpy(packet.satellite_elevation, satellite_elevation, sizeof(byte[])*20);
+	mav_array_memcpy(packet.satellite_azimuth, satellite_azimuth, sizeof(byte[])*20);
+	mav_array_memcpy(packet.satellite_snr, satellite_snr, sizeof(byte[])*20);
         memcpy(_MAV_PAYLOAD(msg), &packet, 101);
 #endif
 
@@ -91,25 +91,25 @@ static inline uint16_t mavlink_msg_gps_status_pack(uint8_t system_id, uint8_t co
  */
 static inline uint16_t mavlink_msg_gps_status_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint8_t satellites_visible,const uint8_t *satellite_prn,const uint8_t *satellite_used,const uint8_t *satellite_elevation,const uint8_t *satellite_azimuth,const uint8_t *satellite_snr)
+						           byte satellites_visible,const byte[] *satellite_prn,const byte[] *satellite_used,const byte[] *satellite_elevation,const byte[] *satellite_azimuth,const byte[] *satellite_snr)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[101];
-	_mav_put_uint8_t(buf, 0, satellites_visible);
-	_mav_put_uint8_t_array(buf, 1, satellite_prn, 20);
-	_mav_put_uint8_t_array(buf, 21, satellite_used, 20);
-	_mav_put_uint8_t_array(buf, 41, satellite_elevation, 20);
-	_mav_put_uint8_t_array(buf, 61, satellite_azimuth, 20);
-	_mav_put_uint8_t_array(buf, 81, satellite_snr, 20);
+	_mav_put_byte(buf, 0, satellites_visible);
+	_mav_put_byte[]_array(buf, 1, satellite_prn, 20);
+	_mav_put_byte[]_array(buf, 21, satellite_used, 20);
+	_mav_put_byte[]_array(buf, 41, satellite_elevation, 20);
+	_mav_put_byte[]_array(buf, 61, satellite_azimuth, 20);
+	_mav_put_byte[]_array(buf, 81, satellite_snr, 20);
         memcpy(_MAV_PAYLOAD(msg), buf, 101);
 #else
 	mavlink_gps_status_t packet;
 	packet.satellites_visible = satellites_visible;
-	memcpy(packet.satellite_prn, satellite_prn, sizeof(uint8_t)*20);
-	memcpy(packet.satellite_used, satellite_used, sizeof(uint8_t)*20);
-	memcpy(packet.satellite_elevation, satellite_elevation, sizeof(uint8_t)*20);
-	memcpy(packet.satellite_azimuth, satellite_azimuth, sizeof(uint8_t)*20);
-	memcpy(packet.satellite_snr, satellite_snr, sizeof(uint8_t)*20);
+	mav_array_memcpy(packet.satellite_prn, satellite_prn, sizeof(byte[])*20);
+	mav_array_memcpy(packet.satellite_used, satellite_used, sizeof(byte[])*20);
+	mav_array_memcpy(packet.satellite_elevation, satellite_elevation, sizeof(byte[])*20);
+	mav_array_memcpy(packet.satellite_azimuth, satellite_azimuth, sizeof(byte[])*20);
+	mav_array_memcpy(packet.satellite_snr, satellite_snr, sizeof(byte[])*20);
         memcpy(_MAV_PAYLOAD(msg), &packet, 101);
 #endif
 
@@ -143,25 +143,25 @@ static inline uint16_t mavlink_msg_gps_status_encode(uint8_t system_id, uint8_t 
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_gps_status_send(mavlink_channel_t chan, uint8_t satellites_visible, const uint8_t *satellite_prn, const uint8_t *satellite_used, const uint8_t *satellite_elevation, const uint8_t *satellite_azimuth, const uint8_t *satellite_snr)
+static inline void mavlink_msg_gps_status_send(mavlink_channel_t chan, byte satellites_visible, const byte[] *satellite_prn, const byte[] *satellite_used, const byte[] *satellite_elevation, const byte[] *satellite_azimuth, const byte[] *satellite_snr)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[101];
-	_mav_put_uint8_t(buf, 0, satellites_visible);
-	_mav_put_uint8_t_array(buf, 1, satellite_prn, 20);
-	_mav_put_uint8_t_array(buf, 21, satellite_used, 20);
-	_mav_put_uint8_t_array(buf, 41, satellite_elevation, 20);
-	_mav_put_uint8_t_array(buf, 61, satellite_azimuth, 20);
-	_mav_put_uint8_t_array(buf, 81, satellite_snr, 20);
+	_mav_put_byte(buf, 0, satellites_visible);
+	_mav_put_byte[]_array(buf, 1, satellite_prn, 20);
+	_mav_put_byte[]_array(buf, 21, satellite_used, 20);
+	_mav_put_byte[]_array(buf, 41, satellite_elevation, 20);
+	_mav_put_byte[]_array(buf, 61, satellite_azimuth, 20);
+	_mav_put_byte[]_array(buf, 81, satellite_snr, 20);
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_STATUS, buf, 101, 23);
 #else
 	mavlink_gps_status_t packet;
 	packet.satellites_visible = satellites_visible;
-	memcpy(packet.satellite_prn, satellite_prn, sizeof(uint8_t)*20);
-	memcpy(packet.satellite_used, satellite_used, sizeof(uint8_t)*20);
-	memcpy(packet.satellite_elevation, satellite_elevation, sizeof(uint8_t)*20);
-	memcpy(packet.satellite_azimuth, satellite_azimuth, sizeof(uint8_t)*20);
-	memcpy(packet.satellite_snr, satellite_snr, sizeof(uint8_t)*20);
+	mav_array_memcpy(packet.satellite_prn, satellite_prn, sizeof(byte[])*20);
+	mav_array_memcpy(packet.satellite_used, satellite_used, sizeof(byte[])*20);
+	mav_array_memcpy(packet.satellite_elevation, satellite_elevation, sizeof(byte[])*20);
+	mav_array_memcpy(packet.satellite_azimuth, satellite_azimuth, sizeof(byte[])*20);
+	mav_array_memcpy(packet.satellite_snr, satellite_snr, sizeof(byte[])*20);
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_STATUS, (const char *)&packet, 101, 23);
 #endif
 }
@@ -176,9 +176,9 @@ static inline void mavlink_msg_gps_status_send(mavlink_channel_t chan, uint8_t s
  *
  * @return Number of satellites visible
  */
-static inline uint8_t mavlink_msg_gps_status_get_satellites_visible(const mavlink_message_t* msg)
+static inline byte mavlink_msg_gps_status_get_satellites_visible(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  0);
+	return _MAV_RETURN_byte(msg,  0);
 }
 
 /**
@@ -186,9 +186,9 @@ static inline uint8_t mavlink_msg_gps_status_get_satellites_visible(const mavlin
  *
  * @return Global satellite ID
  */
-static inline uint16_t mavlink_msg_gps_status_get_satellite_prn(const mavlink_message_t* msg, uint8_t *satellite_prn)
+static inline uint16_t mavlink_msg_gps_status_get_satellite_prn(const mavlink_message_t* msg, byte[] *satellite_prn)
 {
-	return _MAV_RETURN_uint8_t_array(msg, satellite_prn, 20,  1);
+	return _MAV_RETURN_byte[]_array(msg, satellite_prn, 20,  1);
 }
 
 /**
@@ -196,9 +196,9 @@ static inline uint16_t mavlink_msg_gps_status_get_satellite_prn(const mavlink_me
  *
  * @return 0: Satellite not used, 1: used for localization
  */
-static inline uint16_t mavlink_msg_gps_status_get_satellite_used(const mavlink_message_t* msg, uint8_t *satellite_used)
+static inline uint16_t mavlink_msg_gps_status_get_satellite_used(const mavlink_message_t* msg, byte[] *satellite_used)
 {
-	return _MAV_RETURN_uint8_t_array(msg, satellite_used, 20,  21);
+	return _MAV_RETURN_byte[]_array(msg, satellite_used, 20,  21);
 }
 
 /**
@@ -206,9 +206,9 @@ static inline uint16_t mavlink_msg_gps_status_get_satellite_used(const mavlink_m
  *
  * @return Elevation (0: right on top of receiver, 90: on the horizon) of satellite
  */
-static inline uint16_t mavlink_msg_gps_status_get_satellite_elevation(const mavlink_message_t* msg, uint8_t *satellite_elevation)
+static inline uint16_t mavlink_msg_gps_status_get_satellite_elevation(const mavlink_message_t* msg, byte[] *satellite_elevation)
 {
-	return _MAV_RETURN_uint8_t_array(msg, satellite_elevation, 20,  41);
+	return _MAV_RETURN_byte[]_array(msg, satellite_elevation, 20,  41);
 }
 
 /**
@@ -216,9 +216,9 @@ static inline uint16_t mavlink_msg_gps_status_get_satellite_elevation(const mavl
  *
  * @return Direction of satellite, 0: 0 deg, 255: 360 deg.
  */
-static inline uint16_t mavlink_msg_gps_status_get_satellite_azimuth(const mavlink_message_t* msg, uint8_t *satellite_azimuth)
+static inline uint16_t mavlink_msg_gps_status_get_satellite_azimuth(const mavlink_message_t* msg, byte[] *satellite_azimuth)
 {
-	return _MAV_RETURN_uint8_t_array(msg, satellite_azimuth, 20,  61);
+	return _MAV_RETURN_byte[]_array(msg, satellite_azimuth, 20,  61);
 }
 
 /**
@@ -226,9 +226,9 @@ static inline uint16_t mavlink_msg_gps_status_get_satellite_azimuth(const mavlin
  *
  * @return Signal to noise ratio of satellite
  */
-static inline uint16_t mavlink_msg_gps_status_get_satellite_snr(const mavlink_message_t* msg, uint8_t *satellite_snr)
+static inline uint16_t mavlink_msg_gps_status_get_satellite_snr(const mavlink_message_t* msg, byte[] *satellite_snr)
 {
-	return _MAV_RETURN_uint8_t_array(msg, satellite_snr, 20,  81);
+	return _MAV_RETURN_byte[]_array(msg, satellite_snr, 20,  81);
 }
 
 /**

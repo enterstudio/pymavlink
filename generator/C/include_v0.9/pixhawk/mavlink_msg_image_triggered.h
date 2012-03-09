@@ -4,18 +4,18 @@
 
 typedef struct __mavlink_image_triggered_t
 {
- uint64_t timestamp; ///< Timestamp
- uint32_t seq; ///< IMU seq
- float roll; ///< Roll angle in rad
- float pitch; ///< Pitch angle in rad
- float yaw; ///< Yaw angle in rad
- float local_z; ///< Local frame Z coordinate (height over ground)
- float lat; ///< GPS X coordinate
- float lon; ///< GPS Y coordinate
- float alt; ///< Global frame altitude
- float ground_x; ///< Ground truth X
- float ground_y; ///< Ground truth Y
- float ground_z; ///< Ground truth Z
+ UInt64 timestamp; ///< Timestamp
+ UInt32 seq; ///< IMU seq
+ Single roll; ///< Roll angle in rad
+ Single pitch; ///< Pitch angle in rad
+ Single yaw; ///< Yaw angle in rad
+ Single local_z; ///< Local frame Z coordinate (height over ground)
+ Single lat; ///< GPS X coordinate
+ Single lon; ///< GPS Y coordinate
+ Single alt; ///< Global frame altitude
+ Single ground_x; ///< Ground truth X
+ Single ground_y; ///< Ground truth Y
+ Single ground_z; ///< Ground truth Z
 } mavlink_image_triggered_t;
 
 #define MAVLINK_MSG_ID_IMAGE_TRIGGERED_LEN 52
@@ -63,22 +63,22 @@ typedef struct __mavlink_image_triggered_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_image_triggered_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint64_t timestamp, uint32_t seq, float roll, float pitch, float yaw, float local_z, float lat, float lon, float alt, float ground_x, float ground_y, float ground_z)
+						       UInt64 timestamp, UInt32 seq, Single roll, Single pitch, Single yaw, Single local_z, Single lat, Single lon, Single alt, Single ground_x, Single ground_y, Single ground_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[52];
-	_mav_put_uint64_t(buf, 0, timestamp);
-	_mav_put_uint32_t(buf, 8, seq);
-	_mav_put_float(buf, 12, roll);
-	_mav_put_float(buf, 16, pitch);
-	_mav_put_float(buf, 20, yaw);
-	_mav_put_float(buf, 24, local_z);
-	_mav_put_float(buf, 28, lat);
-	_mav_put_float(buf, 32, lon);
-	_mav_put_float(buf, 36, alt);
-	_mav_put_float(buf, 40, ground_x);
-	_mav_put_float(buf, 44, ground_y);
-	_mav_put_float(buf, 48, ground_z);
+	_mav_put_UInt64(buf, 0, timestamp);
+	_mav_put_UInt32(buf, 8, seq);
+	_mav_put_Single(buf, 12, roll);
+	_mav_put_Single(buf, 16, pitch);
+	_mav_put_Single(buf, 20, yaw);
+	_mav_put_Single(buf, 24, local_z);
+	_mav_put_Single(buf, 28, lat);
+	_mav_put_Single(buf, 32, lon);
+	_mav_put_Single(buf, 36, alt);
+	_mav_put_Single(buf, 40, ground_x);
+	_mav_put_Single(buf, 44, ground_y);
+	_mav_put_Single(buf, 48, ground_z);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 52);
 #else
@@ -125,22 +125,22 @@ static inline uint16_t mavlink_msg_image_triggered_pack(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_image_triggered_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint64_t timestamp,uint32_t seq,float roll,float pitch,float yaw,float local_z,float lat,float lon,float alt,float ground_x,float ground_y,float ground_z)
+						           UInt64 timestamp,UInt32 seq,Single roll,Single pitch,Single yaw,Single local_z,Single lat,Single lon,Single alt,Single ground_x,Single ground_y,Single ground_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[52];
-	_mav_put_uint64_t(buf, 0, timestamp);
-	_mav_put_uint32_t(buf, 8, seq);
-	_mav_put_float(buf, 12, roll);
-	_mav_put_float(buf, 16, pitch);
-	_mav_put_float(buf, 20, yaw);
-	_mav_put_float(buf, 24, local_z);
-	_mav_put_float(buf, 28, lat);
-	_mav_put_float(buf, 32, lon);
-	_mav_put_float(buf, 36, alt);
-	_mav_put_float(buf, 40, ground_x);
-	_mav_put_float(buf, 44, ground_y);
-	_mav_put_float(buf, 48, ground_z);
+	_mav_put_UInt64(buf, 0, timestamp);
+	_mav_put_UInt32(buf, 8, seq);
+	_mav_put_Single(buf, 12, roll);
+	_mav_put_Single(buf, 16, pitch);
+	_mav_put_Single(buf, 20, yaw);
+	_mav_put_Single(buf, 24, local_z);
+	_mav_put_Single(buf, 28, lat);
+	_mav_put_Single(buf, 32, lon);
+	_mav_put_Single(buf, 36, alt);
+	_mav_put_Single(buf, 40, ground_x);
+	_mav_put_Single(buf, 44, ground_y);
+	_mav_put_Single(buf, 48, ground_z);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 52);
 #else
@@ -197,22 +197,22 @@ static inline uint16_t mavlink_msg_image_triggered_encode(uint8_t system_id, uin
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_image_triggered_send(mavlink_channel_t chan, uint64_t timestamp, uint32_t seq, float roll, float pitch, float yaw, float local_z, float lat, float lon, float alt, float ground_x, float ground_y, float ground_z)
+static inline void mavlink_msg_image_triggered_send(mavlink_channel_t chan, UInt64 timestamp, UInt32 seq, Single roll, Single pitch, Single yaw, Single local_z, Single lat, Single lon, Single alt, Single ground_x, Single ground_y, Single ground_z)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[52];
-	_mav_put_uint64_t(buf, 0, timestamp);
-	_mav_put_uint32_t(buf, 8, seq);
-	_mav_put_float(buf, 12, roll);
-	_mav_put_float(buf, 16, pitch);
-	_mav_put_float(buf, 20, yaw);
-	_mav_put_float(buf, 24, local_z);
-	_mav_put_float(buf, 28, lat);
-	_mav_put_float(buf, 32, lon);
-	_mav_put_float(buf, 36, alt);
-	_mav_put_float(buf, 40, ground_x);
-	_mav_put_float(buf, 44, ground_y);
-	_mav_put_float(buf, 48, ground_z);
+	_mav_put_UInt64(buf, 0, timestamp);
+	_mav_put_UInt32(buf, 8, seq);
+	_mav_put_Single(buf, 12, roll);
+	_mav_put_Single(buf, 16, pitch);
+	_mav_put_Single(buf, 20, yaw);
+	_mav_put_Single(buf, 24, local_z);
+	_mav_put_Single(buf, 28, lat);
+	_mav_put_Single(buf, 32, lon);
+	_mav_put_Single(buf, 36, alt);
+	_mav_put_Single(buf, 40, ground_x);
+	_mav_put_Single(buf, 44, ground_y);
+	_mav_put_Single(buf, 48, ground_z);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_IMAGE_TRIGGERED, buf, 52);
 #else
@@ -244,9 +244,9 @@ static inline void mavlink_msg_image_triggered_send(mavlink_channel_t chan, uint
  *
  * @return Timestamp
  */
-static inline uint64_t mavlink_msg_image_triggered_get_timestamp(const mavlink_message_t* msg)
+static inline UInt64 mavlink_msg_image_triggered_get_timestamp(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint64_t(msg,  0);
+	return _MAV_RETURN_UInt64(msg,  0);
 }
 
 /**
@@ -254,9 +254,9 @@ static inline uint64_t mavlink_msg_image_triggered_get_timestamp(const mavlink_m
  *
  * @return IMU seq
  */
-static inline uint32_t mavlink_msg_image_triggered_get_seq(const mavlink_message_t* msg)
+static inline UInt32 mavlink_msg_image_triggered_get_seq(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint32_t(msg,  8);
+	return _MAV_RETURN_UInt32(msg,  8);
 }
 
 /**
@@ -264,9 +264,9 @@ static inline uint32_t mavlink_msg_image_triggered_get_seq(const mavlink_message
  *
  * @return Roll angle in rad
  */
-static inline float mavlink_msg_image_triggered_get_roll(const mavlink_message_t* msg)
+static inline Single mavlink_msg_image_triggered_get_roll(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  12);
+	return _MAV_RETURN_Single(msg,  12);
 }
 
 /**
@@ -274,9 +274,9 @@ static inline float mavlink_msg_image_triggered_get_roll(const mavlink_message_t
  *
  * @return Pitch angle in rad
  */
-static inline float mavlink_msg_image_triggered_get_pitch(const mavlink_message_t* msg)
+static inline Single mavlink_msg_image_triggered_get_pitch(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  16);
+	return _MAV_RETURN_Single(msg,  16);
 }
 
 /**
@@ -284,9 +284,9 @@ static inline float mavlink_msg_image_triggered_get_pitch(const mavlink_message_
  *
  * @return Yaw angle in rad
  */
-static inline float mavlink_msg_image_triggered_get_yaw(const mavlink_message_t* msg)
+static inline Single mavlink_msg_image_triggered_get_yaw(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  20);
+	return _MAV_RETURN_Single(msg,  20);
 }
 
 /**
@@ -294,9 +294,9 @@ static inline float mavlink_msg_image_triggered_get_yaw(const mavlink_message_t*
  *
  * @return Local frame Z coordinate (height over ground)
  */
-static inline float mavlink_msg_image_triggered_get_local_z(const mavlink_message_t* msg)
+static inline Single mavlink_msg_image_triggered_get_local_z(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  24);
+	return _MAV_RETURN_Single(msg,  24);
 }
 
 /**
@@ -304,9 +304,9 @@ static inline float mavlink_msg_image_triggered_get_local_z(const mavlink_messag
  *
  * @return GPS X coordinate
  */
-static inline float mavlink_msg_image_triggered_get_lat(const mavlink_message_t* msg)
+static inline Single mavlink_msg_image_triggered_get_lat(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  28);
+	return _MAV_RETURN_Single(msg,  28);
 }
 
 /**
@@ -314,9 +314,9 @@ static inline float mavlink_msg_image_triggered_get_lat(const mavlink_message_t*
  *
  * @return GPS Y coordinate
  */
-static inline float mavlink_msg_image_triggered_get_lon(const mavlink_message_t* msg)
+static inline Single mavlink_msg_image_triggered_get_lon(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  32);
+	return _MAV_RETURN_Single(msg,  32);
 }
 
 /**
@@ -324,9 +324,9 @@ static inline float mavlink_msg_image_triggered_get_lon(const mavlink_message_t*
  *
  * @return Global frame altitude
  */
-static inline float mavlink_msg_image_triggered_get_alt(const mavlink_message_t* msg)
+static inline Single mavlink_msg_image_triggered_get_alt(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  36);
+	return _MAV_RETURN_Single(msg,  36);
 }
 
 /**
@@ -334,9 +334,9 @@ static inline float mavlink_msg_image_triggered_get_alt(const mavlink_message_t*
  *
  * @return Ground truth X
  */
-static inline float mavlink_msg_image_triggered_get_ground_x(const mavlink_message_t* msg)
+static inline Single mavlink_msg_image_triggered_get_ground_x(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  40);
+	return _MAV_RETURN_Single(msg,  40);
 }
 
 /**
@@ -344,9 +344,9 @@ static inline float mavlink_msg_image_triggered_get_ground_x(const mavlink_messa
  *
  * @return Ground truth Y
  */
-static inline float mavlink_msg_image_triggered_get_ground_y(const mavlink_message_t* msg)
+static inline Single mavlink_msg_image_triggered_get_ground_y(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  44);
+	return _MAV_RETURN_Single(msg,  44);
 }
 
 /**
@@ -354,9 +354,9 @@ static inline float mavlink_msg_image_triggered_get_ground_y(const mavlink_messa
  *
  * @return Ground truth Z
  */
-static inline float mavlink_msg_image_triggered_get_ground_z(const mavlink_message_t* msg)
+static inline Single mavlink_msg_image_triggered_get_ground_z(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  48);
+	return _MAV_RETURN_Single(msg,  48);
 }
 
 /**

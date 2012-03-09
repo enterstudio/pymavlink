@@ -4,8 +4,8 @@
 
 typedef struct __mavlink_named_value_int_t
 {
- char name[10]; ///< Name of the debug variable
- int32_t value; ///< Signed integer value
+ string name[10]; ///< Name of the debug variable
+ Int32 value; ///< Signed integer value
 } mavlink_named_value_int_t;
 
 #define MAVLINK_MSG_ID_NAMED_VALUE_INT_LEN 14
@@ -33,17 +33,17 @@ typedef struct __mavlink_named_value_int_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_named_value_int_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       const char *name, int32_t value)
+						       const string *name, Int32 value)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[14];
-	_mav_put_int32_t(buf, 10, value);
-	_mav_put_char_array(buf, 0, name, 10);
+	_mav_put_Int32(buf, 10, value);
+	_mav_put_string_array(buf, 0, name, 10);
         memcpy(_MAV_PAYLOAD(msg), buf, 14);
 #else
 	mavlink_named_value_int_t packet;
 	packet.value = value;
-	memcpy(packet.name, name, sizeof(char)*10);
+	mav_array_memcpy(packet.name, name, sizeof(string)*10);
         memcpy(_MAV_PAYLOAD(msg), &packet, 14);
 #endif
 
@@ -63,17 +63,17 @@ static inline uint16_t mavlink_msg_named_value_int_pack(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_named_value_int_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           const char *name,int32_t value)
+						           const string *name,Int32 value)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[14];
-	_mav_put_int32_t(buf, 10, value);
-	_mav_put_char_array(buf, 0, name, 10);
+	_mav_put_Int32(buf, 10, value);
+	_mav_put_string_array(buf, 0, name, 10);
         memcpy(_MAV_PAYLOAD(msg), buf, 14);
 #else
 	mavlink_named_value_int_t packet;
 	packet.value = value;
-	memcpy(packet.name, name, sizeof(char)*10);
+	mav_array_memcpy(packet.name, name, sizeof(string)*10);
         memcpy(_MAV_PAYLOAD(msg), &packet, 14);
 #endif
 
@@ -103,17 +103,17 @@ static inline uint16_t mavlink_msg_named_value_int_encode(uint8_t system_id, uin
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_named_value_int_send(mavlink_channel_t chan, const char *name, int32_t value)
+static inline void mavlink_msg_named_value_int_send(mavlink_channel_t chan, const string *name, Int32 value)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[14];
-	_mav_put_int32_t(buf, 10, value);
-	_mav_put_char_array(buf, 0, name, 10);
+	_mav_put_Int32(buf, 10, value);
+	_mav_put_string_array(buf, 0, name, 10);
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_NAMED_VALUE_INT, buf, 14);
 #else
 	mavlink_named_value_int_t packet;
 	packet.value = value;
-	memcpy(packet.name, name, sizeof(char)*10);
+	mav_array_memcpy(packet.name, name, sizeof(string)*10);
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_NAMED_VALUE_INT, (const char *)&packet, 14);
 #endif
 }
@@ -128,9 +128,9 @@ static inline void mavlink_msg_named_value_int_send(mavlink_channel_t chan, cons
  *
  * @return Name of the debug variable
  */
-static inline uint16_t mavlink_msg_named_value_int_get_name(const mavlink_message_t* msg, char *name)
+static inline uint16_t mavlink_msg_named_value_int_get_name(const mavlink_message_t* msg, string *name)
 {
-	return _MAV_RETURN_char_array(msg, name, 10,  0);
+	return _MAV_RETURN_string_array(msg, name, 10,  0);
 }
 
 /**
@@ -138,9 +138,9 @@ static inline uint16_t mavlink_msg_named_value_int_get_name(const mavlink_messag
  *
  * @return Signed integer value
  */
-static inline int32_t mavlink_msg_named_value_int_get_value(const mavlink_message_t* msg)
+static inline Int32 mavlink_msg_named_value_int_get_value(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  10);
+	return _MAV_RETURN_Int32(msg,  10);
 }
 
 /**

@@ -4,8 +4,8 @@
 
 typedef struct __mavlink_command_ack_t
 {
- uint16_t command; ///< Command ID, as defined by MAV_CMD enum.
- uint8_t result; ///< See MAV_RESULT enum
+ UInt16 command; ///< Command ID, as defined by MAV_CMD enum.
+ byte result; ///< See MAV_RESULT enum
 } mavlink_command_ack_t;
 
 #define MAVLINK_MSG_ID_COMMAND_ACK_LEN 3
@@ -33,12 +33,12 @@ typedef struct __mavlink_command_ack_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_command_ack_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint16_t command, uint8_t result)
+						       UInt16 command, byte result)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[3];
-	_mav_put_uint16_t(buf, 0, command);
-	_mav_put_uint8_t(buf, 2, result);
+	_mav_put_UInt16(buf, 0, command);
+	_mav_put_byte(buf, 2, result);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 3);
 #else
@@ -65,12 +65,12 @@ static inline uint16_t mavlink_msg_command_ack_pack(uint8_t system_id, uint8_t c
  */
 static inline uint16_t mavlink_msg_command_ack_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint16_t command,uint8_t result)
+						           UInt16 command,byte result)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[3];
-	_mav_put_uint16_t(buf, 0, command);
-	_mav_put_uint8_t(buf, 2, result);
+	_mav_put_UInt16(buf, 0, command);
+	_mav_put_byte(buf, 2, result);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 3);
 #else
@@ -107,12 +107,12 @@ static inline uint16_t mavlink_msg_command_ack_encode(uint8_t system_id, uint8_t
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_command_ack_send(mavlink_channel_t chan, uint16_t command, uint8_t result)
+static inline void mavlink_msg_command_ack_send(mavlink_channel_t chan, UInt16 command, byte result)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[3];
-	_mav_put_uint16_t(buf, 0, command);
-	_mav_put_uint8_t(buf, 2, result);
+	_mav_put_UInt16(buf, 0, command);
+	_mav_put_byte(buf, 2, result);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_COMMAND_ACK, buf, 3, 143);
 #else
@@ -134,9 +134,9 @@ static inline void mavlink_msg_command_ack_send(mavlink_channel_t chan, uint16_t
  *
  * @return Command ID, as defined by MAV_CMD enum.
  */
-static inline uint16_t mavlink_msg_command_ack_get_command(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_command_ack_get_command(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  0);
+	return _MAV_RETURN_UInt16(msg,  0);
 }
 
 /**
@@ -144,9 +144,9 @@ static inline uint16_t mavlink_msg_command_ack_get_command(const mavlink_message
  *
  * @return See MAV_RESULT enum
  */
-static inline uint8_t mavlink_msg_command_ack_get_result(const mavlink_message_t* msg)
+static inline byte mavlink_msg_command_ack_get_result(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  2);
+	return _MAV_RETURN_byte(msg,  2);
 }
 
 /**

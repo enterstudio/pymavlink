@@ -4,13 +4,13 @@
 
 typedef struct __mavlink_nav_filter_bias_t
 {
- uint64_t usec; ///< Timestamp (microseconds)
- float accel_0; ///< b_f[0]
- float accel_1; ///< b_f[1]
- float accel_2; ///< b_f[2]
- float gyro_0; ///< b_f[0]
- float gyro_1; ///< b_f[1]
- float gyro_2; ///< b_f[2]
+ UInt64 usec; ///< Timestamp (microseconds)
+ Single accel_0; ///< b_f[0]
+ Single accel_1; ///< b_f[1]
+ Single accel_2; ///< b_f[2]
+ Single gyro_0; ///< b_f[0]
+ Single gyro_1; ///< b_f[1]
+ Single gyro_2; ///< b_f[2]
 } mavlink_nav_filter_bias_t;
 
 #define MAVLINK_MSG_ID_NAV_FILTER_BIAS_LEN 32
@@ -48,17 +48,17 @@ typedef struct __mavlink_nav_filter_bias_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_nav_filter_bias_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint64_t usec, float accel_0, float accel_1, float accel_2, float gyro_0, float gyro_1, float gyro_2)
+						       UInt64 usec, Single accel_0, Single accel_1, Single accel_2, Single gyro_0, Single gyro_1, Single gyro_2)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[32];
-	_mav_put_uint64_t(buf, 0, usec);
-	_mav_put_float(buf, 8, accel_0);
-	_mav_put_float(buf, 12, accel_1);
-	_mav_put_float(buf, 16, accel_2);
-	_mav_put_float(buf, 20, gyro_0);
-	_mav_put_float(buf, 24, gyro_1);
-	_mav_put_float(buf, 28, gyro_2);
+	_mav_put_UInt64(buf, 0, usec);
+	_mav_put_Single(buf, 8, accel_0);
+	_mav_put_Single(buf, 12, accel_1);
+	_mav_put_Single(buf, 16, accel_2);
+	_mav_put_Single(buf, 20, gyro_0);
+	_mav_put_Single(buf, 24, gyro_1);
+	_mav_put_Single(buf, 28, gyro_2);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 32);
 #else
@@ -95,17 +95,17 @@ static inline uint16_t mavlink_msg_nav_filter_bias_pack(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_nav_filter_bias_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint64_t usec,float accel_0,float accel_1,float accel_2,float gyro_0,float gyro_1,float gyro_2)
+						           UInt64 usec,Single accel_0,Single accel_1,Single accel_2,Single gyro_0,Single gyro_1,Single gyro_2)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[32];
-	_mav_put_uint64_t(buf, 0, usec);
-	_mav_put_float(buf, 8, accel_0);
-	_mav_put_float(buf, 12, accel_1);
-	_mav_put_float(buf, 16, accel_2);
-	_mav_put_float(buf, 20, gyro_0);
-	_mav_put_float(buf, 24, gyro_1);
-	_mav_put_float(buf, 28, gyro_2);
+	_mav_put_UInt64(buf, 0, usec);
+	_mav_put_Single(buf, 8, accel_0);
+	_mav_put_Single(buf, 12, accel_1);
+	_mav_put_Single(buf, 16, accel_2);
+	_mav_put_Single(buf, 20, gyro_0);
+	_mav_put_Single(buf, 24, gyro_1);
+	_mav_put_Single(buf, 28, gyro_2);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 32);
 #else
@@ -152,17 +152,17 @@ static inline uint16_t mavlink_msg_nav_filter_bias_encode(uint8_t system_id, uin
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_nav_filter_bias_send(mavlink_channel_t chan, uint64_t usec, float accel_0, float accel_1, float accel_2, float gyro_0, float gyro_1, float gyro_2)
+static inline void mavlink_msg_nav_filter_bias_send(mavlink_channel_t chan, UInt64 usec, Single accel_0, Single accel_1, Single accel_2, Single gyro_0, Single gyro_1, Single gyro_2)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[32];
-	_mav_put_uint64_t(buf, 0, usec);
-	_mav_put_float(buf, 8, accel_0);
-	_mav_put_float(buf, 12, accel_1);
-	_mav_put_float(buf, 16, accel_2);
-	_mav_put_float(buf, 20, gyro_0);
-	_mav_put_float(buf, 24, gyro_1);
-	_mav_put_float(buf, 28, gyro_2);
+	_mav_put_UInt64(buf, 0, usec);
+	_mav_put_Single(buf, 8, accel_0);
+	_mav_put_Single(buf, 12, accel_1);
+	_mav_put_Single(buf, 16, accel_2);
+	_mav_put_Single(buf, 20, gyro_0);
+	_mav_put_Single(buf, 24, gyro_1);
+	_mav_put_Single(buf, 28, gyro_2);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_NAV_FILTER_BIAS, buf, 32, 34);
 #else
@@ -189,9 +189,9 @@ static inline void mavlink_msg_nav_filter_bias_send(mavlink_channel_t chan, uint
  *
  * @return Timestamp (microseconds)
  */
-static inline uint64_t mavlink_msg_nav_filter_bias_get_usec(const mavlink_message_t* msg)
+static inline UInt64 mavlink_msg_nav_filter_bias_get_usec(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint64_t(msg,  0);
+	return _MAV_RETURN_UInt64(msg,  0);
 }
 
 /**
@@ -199,9 +199,9 @@ static inline uint64_t mavlink_msg_nav_filter_bias_get_usec(const mavlink_messag
  *
  * @return b_f[0]
  */
-static inline float mavlink_msg_nav_filter_bias_get_accel_0(const mavlink_message_t* msg)
+static inline Single mavlink_msg_nav_filter_bias_get_accel_0(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  8);
+	return _MAV_RETURN_Single(msg,  8);
 }
 
 /**
@@ -209,9 +209,9 @@ static inline float mavlink_msg_nav_filter_bias_get_accel_0(const mavlink_messag
  *
  * @return b_f[1]
  */
-static inline float mavlink_msg_nav_filter_bias_get_accel_1(const mavlink_message_t* msg)
+static inline Single mavlink_msg_nav_filter_bias_get_accel_1(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  12);
+	return _MAV_RETURN_Single(msg,  12);
 }
 
 /**
@@ -219,9 +219,9 @@ static inline float mavlink_msg_nav_filter_bias_get_accel_1(const mavlink_messag
  *
  * @return b_f[2]
  */
-static inline float mavlink_msg_nav_filter_bias_get_accel_2(const mavlink_message_t* msg)
+static inline Single mavlink_msg_nav_filter_bias_get_accel_2(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  16);
+	return _MAV_RETURN_Single(msg,  16);
 }
 
 /**
@@ -229,9 +229,9 @@ static inline float mavlink_msg_nav_filter_bias_get_accel_2(const mavlink_messag
  *
  * @return b_f[0]
  */
-static inline float mavlink_msg_nav_filter_bias_get_gyro_0(const mavlink_message_t* msg)
+static inline Single mavlink_msg_nav_filter_bias_get_gyro_0(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  20);
+	return _MAV_RETURN_Single(msg,  20);
 }
 
 /**
@@ -239,9 +239,9 @@ static inline float mavlink_msg_nav_filter_bias_get_gyro_0(const mavlink_message
  *
  * @return b_f[1]
  */
-static inline float mavlink_msg_nav_filter_bias_get_gyro_1(const mavlink_message_t* msg)
+static inline Single mavlink_msg_nav_filter_bias_get_gyro_1(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  24);
+	return _MAV_RETURN_Single(msg,  24);
 }
 
 /**
@@ -249,9 +249,9 @@ static inline float mavlink_msg_nav_filter_bias_get_gyro_1(const mavlink_message
  *
  * @return b_f[2]
  */
-static inline float mavlink_msg_nav_filter_bias_get_gyro_2(const mavlink_message_t* msg)
+static inline Single mavlink_msg_nav_filter_bias_get_gyro_2(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  28);
+	return _MAV_RETURN_Single(msg,  28);
 }
 
 /**

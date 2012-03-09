@@ -1,22 +1,22 @@
 // MESSAGE GLOBAL_POSITION_INT PACKING
 
-#define MAVLINK_MSG_ID_GLOBAL_POSITION_INT 34
+#define MAVLINK_MSG_ID_GLOBAL_POSITION_INT 33
 
 typedef struct __mavlink_global_position_int_t
 {
- uint32_t time_boot_ms; ///< Timestamp (milliseconds since system boot)
- int32_t lat; ///< Latitude, expressed as * 1E7
- int32_t lon; ///< Longitude, expressed as * 1E7
- int32_t alt; ///< Altitude in meters, expressed as * 1000 (millimeters), above MSL
- int32_t relative_alt; ///< Altitude above ground in meters, expressed as * 1000 (millimeters)
- int16_t vx; ///< Ground X Speed (Latitude), expressed as m/s * 100
- int16_t vy; ///< Ground Y Speed (Longitude), expressed as m/s * 100
- int16_t vz; ///< Ground Z Speed (Altitude), expressed as m/s * 100
- uint16_t hdg; ///< Compass heading in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
+ UInt32 time_boot_ms; ///< Timestamp (milliseconds since system boot)
+ Int32 lat; ///< Latitude, expressed as * 1E7
+ Int32 lon; ///< Longitude, expressed as * 1E7
+ Int32 alt; ///< Altitude in meters, expressed as * 1000 (millimeters), above MSL
+ Int32 relative_alt; ///< Altitude above ground in meters, expressed as * 1000 (millimeters)
+ Int16 vx; ///< Ground X Speed (Latitude), expressed as m/s * 100
+ Int16 vy; ///< Ground Y Speed (Longitude), expressed as m/s * 100
+ Int16 vz; ///< Ground Z Speed (Altitude), expressed as m/s * 100
+ UInt16 hdg; ///< Compass heading in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
 } mavlink_global_position_int_t;
 
 #define MAVLINK_MSG_ID_GLOBAL_POSITION_INT_LEN 28
-#define MAVLINK_MSG_ID_34_LEN 28
+#define MAVLINK_MSG_ID_33_LEN 28
 
 
 
@@ -54,19 +54,19 @@ typedef struct __mavlink_global_position_int_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_global_position_int_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint32_t time_boot_ms, int32_t lat, int32_t lon, int32_t alt, int32_t relative_alt, int16_t vx, int16_t vy, int16_t vz, uint16_t hdg)
+						       UInt32 time_boot_ms, Int32 lat, Int32 lon, Int32 alt, Int32 relative_alt, Int16 vx, Int16 vy, Int16 vz, UInt16 hdg)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[28];
-	_mav_put_uint32_t(buf, 0, time_boot_ms);
-	_mav_put_int32_t(buf, 4, lat);
-	_mav_put_int32_t(buf, 8, lon);
-	_mav_put_int32_t(buf, 12, alt);
-	_mav_put_int32_t(buf, 16, relative_alt);
-	_mav_put_int16_t(buf, 20, vx);
-	_mav_put_int16_t(buf, 22, vy);
-	_mav_put_int16_t(buf, 24, vz);
-	_mav_put_uint16_t(buf, 26, hdg);
+	_mav_put_UInt32(buf, 0, time_boot_ms);
+	_mav_put_Int32(buf, 4, lat);
+	_mav_put_Int32(buf, 8, lon);
+	_mav_put_Int32(buf, 12, alt);
+	_mav_put_Int32(buf, 16, relative_alt);
+	_mav_put_Int16(buf, 20, vx);
+	_mav_put_Int16(buf, 22, vy);
+	_mav_put_Int16(buf, 24, vz);
+	_mav_put_UInt16(buf, 26, hdg);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 28);
 #else
@@ -107,19 +107,19 @@ static inline uint16_t mavlink_msg_global_position_int_pack(uint8_t system_id, u
  */
 static inline uint16_t mavlink_msg_global_position_int_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint32_t time_boot_ms,int32_t lat,int32_t lon,int32_t alt,int32_t relative_alt,int16_t vx,int16_t vy,int16_t vz,uint16_t hdg)
+						           UInt32 time_boot_ms,Int32 lat,Int32 lon,Int32 alt,Int32 relative_alt,Int16 vx,Int16 vy,Int16 vz,UInt16 hdg)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[28];
-	_mav_put_uint32_t(buf, 0, time_boot_ms);
-	_mav_put_int32_t(buf, 4, lat);
-	_mav_put_int32_t(buf, 8, lon);
-	_mav_put_int32_t(buf, 12, alt);
-	_mav_put_int32_t(buf, 16, relative_alt);
-	_mav_put_int16_t(buf, 20, vx);
-	_mav_put_int16_t(buf, 22, vy);
-	_mav_put_int16_t(buf, 24, vz);
-	_mav_put_uint16_t(buf, 26, hdg);
+	_mav_put_UInt32(buf, 0, time_boot_ms);
+	_mav_put_Int32(buf, 4, lat);
+	_mav_put_Int32(buf, 8, lon);
+	_mav_put_Int32(buf, 12, alt);
+	_mav_put_Int32(buf, 16, relative_alt);
+	_mav_put_Int16(buf, 20, vx);
+	_mav_put_Int16(buf, 22, vy);
+	_mav_put_Int16(buf, 24, vz);
+	_mav_put_UInt16(buf, 26, hdg);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 28);
 #else
@@ -170,19 +170,19 @@ static inline uint16_t mavlink_msg_global_position_int_encode(uint8_t system_id,
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_global_position_int_send(mavlink_channel_t chan, uint32_t time_boot_ms, int32_t lat, int32_t lon, int32_t alt, int32_t relative_alt, int16_t vx, int16_t vy, int16_t vz, uint16_t hdg)
+static inline void mavlink_msg_global_position_int_send(mavlink_channel_t chan, UInt32 time_boot_ms, Int32 lat, Int32 lon, Int32 alt, Int32 relative_alt, Int16 vx, Int16 vy, Int16 vz, UInt16 hdg)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[28];
-	_mav_put_uint32_t(buf, 0, time_boot_ms);
-	_mav_put_int32_t(buf, 4, lat);
-	_mav_put_int32_t(buf, 8, lon);
-	_mav_put_int32_t(buf, 12, alt);
-	_mav_put_int32_t(buf, 16, relative_alt);
-	_mav_put_int16_t(buf, 20, vx);
-	_mav_put_int16_t(buf, 22, vy);
-	_mav_put_int16_t(buf, 24, vz);
-	_mav_put_uint16_t(buf, 26, hdg);
+	_mav_put_UInt32(buf, 0, time_boot_ms);
+	_mav_put_Int32(buf, 4, lat);
+	_mav_put_Int32(buf, 8, lon);
+	_mav_put_Int32(buf, 12, alt);
+	_mav_put_Int32(buf, 16, relative_alt);
+	_mav_put_Int16(buf, 20, vx);
+	_mav_put_Int16(buf, 22, vy);
+	_mav_put_Int16(buf, 24, vz);
+	_mav_put_UInt16(buf, 26, hdg);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GLOBAL_POSITION_INT, buf, 28, 104);
 #else
@@ -211,9 +211,9 @@ static inline void mavlink_msg_global_position_int_send(mavlink_channel_t chan, 
  *
  * @return Timestamp (milliseconds since system boot)
  */
-static inline uint32_t mavlink_msg_global_position_int_get_time_boot_ms(const mavlink_message_t* msg)
+static inline UInt32 mavlink_msg_global_position_int_get_time_boot_ms(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint32_t(msg,  0);
+	return _MAV_RETURN_UInt32(msg,  0);
 }
 
 /**
@@ -221,9 +221,9 @@ static inline uint32_t mavlink_msg_global_position_int_get_time_boot_ms(const ma
  *
  * @return Latitude, expressed as * 1E7
  */
-static inline int32_t mavlink_msg_global_position_int_get_lat(const mavlink_message_t* msg)
+static inline Int32 mavlink_msg_global_position_int_get_lat(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  4);
+	return _MAV_RETURN_Int32(msg,  4);
 }
 
 /**
@@ -231,9 +231,9 @@ static inline int32_t mavlink_msg_global_position_int_get_lat(const mavlink_mess
  *
  * @return Longitude, expressed as * 1E7
  */
-static inline int32_t mavlink_msg_global_position_int_get_lon(const mavlink_message_t* msg)
+static inline Int32 mavlink_msg_global_position_int_get_lon(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  8);
+	return _MAV_RETURN_Int32(msg,  8);
 }
 
 /**
@@ -241,9 +241,9 @@ static inline int32_t mavlink_msg_global_position_int_get_lon(const mavlink_mess
  *
  * @return Altitude in meters, expressed as * 1000 (millimeters), above MSL
  */
-static inline int32_t mavlink_msg_global_position_int_get_alt(const mavlink_message_t* msg)
+static inline Int32 mavlink_msg_global_position_int_get_alt(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  12);
+	return _MAV_RETURN_Int32(msg,  12);
 }
 
 /**
@@ -251,9 +251,9 @@ static inline int32_t mavlink_msg_global_position_int_get_alt(const mavlink_mess
  *
  * @return Altitude above ground in meters, expressed as * 1000 (millimeters)
  */
-static inline int32_t mavlink_msg_global_position_int_get_relative_alt(const mavlink_message_t* msg)
+static inline Int32 mavlink_msg_global_position_int_get_relative_alt(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  16);
+	return _MAV_RETURN_Int32(msg,  16);
 }
 
 /**
@@ -261,9 +261,9 @@ static inline int32_t mavlink_msg_global_position_int_get_relative_alt(const mav
  *
  * @return Ground X Speed (Latitude), expressed as m/s * 100
  */
-static inline int16_t mavlink_msg_global_position_int_get_vx(const mavlink_message_t* msg)
+static inline Int16 mavlink_msg_global_position_int_get_vx(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  20);
+	return _MAV_RETURN_Int16(msg,  20);
 }
 
 /**
@@ -271,9 +271,9 @@ static inline int16_t mavlink_msg_global_position_int_get_vx(const mavlink_messa
  *
  * @return Ground Y Speed (Longitude), expressed as m/s * 100
  */
-static inline int16_t mavlink_msg_global_position_int_get_vy(const mavlink_message_t* msg)
+static inline Int16 mavlink_msg_global_position_int_get_vy(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  22);
+	return _MAV_RETURN_Int16(msg,  22);
 }
 
 /**
@@ -281,9 +281,9 @@ static inline int16_t mavlink_msg_global_position_int_get_vy(const mavlink_messa
  *
  * @return Ground Z Speed (Altitude), expressed as m/s * 100
  */
-static inline int16_t mavlink_msg_global_position_int_get_vz(const mavlink_message_t* msg)
+static inline Int16 mavlink_msg_global_position_int_get_vz(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  24);
+	return _MAV_RETURN_Int16(msg,  24);
 }
 
 /**
@@ -291,9 +291,9 @@ static inline int16_t mavlink_msg_global_position_int_get_vz(const mavlink_messa
  *
  * @return Compass heading in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
  */
-static inline uint16_t mavlink_msg_global_position_int_get_hdg(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_global_position_int_get_hdg(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  26);
+	return _MAV_RETURN_UInt16(msg,  26);
 }
 
 /**

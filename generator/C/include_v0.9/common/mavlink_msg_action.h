@@ -4,9 +4,9 @@
 
 typedef struct __mavlink_action_t
 {
- uint8_t target; ///< The system executing the action
- uint8_t target_component; ///< The component executing the action
- uint8_t action; ///< The action id
+ byte target; ///< The system executing the action
+ byte target_component; ///< The component executing the action
+ byte action; ///< The action id
 } mavlink_action_t;
 
 #define MAVLINK_MSG_ID_ACTION_LEN 3
@@ -36,13 +36,13 @@ typedef struct __mavlink_action_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_action_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t target, uint8_t target_component, uint8_t action)
+						       byte target, byte target_component, byte action)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[3];
-	_mav_put_uint8_t(buf, 0, target);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint8_t(buf, 2, action);
+	_mav_put_byte(buf, 0, target);
+	_mav_put_byte(buf, 1, target_component);
+	_mav_put_byte(buf, 2, action);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 3);
 #else
@@ -71,13 +71,13 @@ static inline uint16_t mavlink_msg_action_pack(uint8_t system_id, uint8_t compon
  */
 static inline uint16_t mavlink_msg_action_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint8_t target,uint8_t target_component,uint8_t action)
+						           byte target,byte target_component,byte action)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[3];
-	_mav_put_uint8_t(buf, 0, target);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint8_t(buf, 2, action);
+	_mav_put_byte(buf, 0, target);
+	_mav_put_byte(buf, 1, target_component);
+	_mav_put_byte(buf, 2, action);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 3);
 #else
@@ -116,13 +116,13 @@ static inline uint16_t mavlink_msg_action_encode(uint8_t system_id, uint8_t comp
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_action_send(mavlink_channel_t chan, uint8_t target, uint8_t target_component, uint8_t action)
+static inline void mavlink_msg_action_send(mavlink_channel_t chan, byte target, byte target_component, byte action)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[3];
-	_mav_put_uint8_t(buf, 0, target);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint8_t(buf, 2, action);
+	_mav_put_byte(buf, 0, target);
+	_mav_put_byte(buf, 1, target_component);
+	_mav_put_byte(buf, 2, action);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ACTION, buf, 3);
 #else
@@ -145,9 +145,9 @@ static inline void mavlink_msg_action_send(mavlink_channel_t chan, uint8_t targe
  *
  * @return The system executing the action
  */
-static inline uint8_t mavlink_msg_action_get_target(const mavlink_message_t* msg)
+static inline byte mavlink_msg_action_get_target(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  0);
+	return _MAV_RETURN_byte(msg,  0);
 }
 
 /**
@@ -155,9 +155,9 @@ static inline uint8_t mavlink_msg_action_get_target(const mavlink_message_t* msg
  *
  * @return The component executing the action
  */
-static inline uint8_t mavlink_msg_action_get_target_component(const mavlink_message_t* msg)
+static inline byte mavlink_msg_action_get_target_component(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  1);
+	return _MAV_RETURN_byte(msg,  1);
 }
 
 /**
@@ -165,9 +165,9 @@ static inline uint8_t mavlink_msg_action_get_target_component(const mavlink_mess
  *
  * @return The action id
  */
-static inline uint8_t mavlink_msg_action_get_action(const mavlink_message_t* msg)
+static inline byte mavlink_msg_action_get_action(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  2);
+	return _MAV_RETURN_byte(msg,  2);
 }
 
 /**

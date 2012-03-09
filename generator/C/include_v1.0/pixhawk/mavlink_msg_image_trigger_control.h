@@ -4,7 +4,7 @@
 
 typedef struct __mavlink_image_trigger_control_t
 {
- uint8_t enable; ///< 0 to disable, 1 to enable
+ byte enable; ///< 0 to disable, 1 to enable
 } mavlink_image_trigger_control_t;
 
 #define MAVLINK_MSG_ID_IMAGE_TRIGGER_CONTROL_LEN 1
@@ -30,11 +30,11 @@ typedef struct __mavlink_image_trigger_control_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_image_trigger_control_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t enable)
+						       byte enable)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[1];
-	_mav_put_uint8_t(buf, 0, enable);
+	_mav_put_byte(buf, 0, enable);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 1);
 #else
@@ -59,11 +59,11 @@ static inline uint16_t mavlink_msg_image_trigger_control_pack(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_image_trigger_control_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint8_t enable)
+						           byte enable)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[1];
-	_mav_put_uint8_t(buf, 0, enable);
+	_mav_put_byte(buf, 0, enable);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 1);
 #else
@@ -98,11 +98,11 @@ static inline uint16_t mavlink_msg_image_trigger_control_encode(uint8_t system_i
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_image_trigger_control_send(mavlink_channel_t chan, uint8_t enable)
+static inline void mavlink_msg_image_trigger_control_send(mavlink_channel_t chan, byte enable)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[1];
-	_mav_put_uint8_t(buf, 0, enable);
+	_mav_put_byte(buf, 0, enable);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_IMAGE_TRIGGER_CONTROL, buf, 1, 95);
 #else
@@ -123,9 +123,9 @@ static inline void mavlink_msg_image_trigger_control_send(mavlink_channel_t chan
  *
  * @return 0 to disable, 1 to enable
  */
-static inline uint8_t mavlink_msg_image_trigger_control_get_enable(const mavlink_message_t* msg)
+static inline byte mavlink_msg_image_trigger_control_get_enable(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  0);
+	return _MAV_RETURN_byte(msg,  0);
 }
 
 /**

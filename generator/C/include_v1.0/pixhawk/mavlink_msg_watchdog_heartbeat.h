@@ -4,8 +4,8 @@
 
 typedef struct __mavlink_watchdog_heartbeat_t
 {
- uint16_t watchdog_id; ///< Watchdog ID
- uint16_t process_count; ///< Number of processes
+ UInt16 watchdog_id; ///< Watchdog ID
+ UInt16 process_count; ///< Number of processes
 } mavlink_watchdog_heartbeat_t;
 
 #define MAVLINK_MSG_ID_WATCHDOG_HEARTBEAT_LEN 4
@@ -33,12 +33,12 @@ typedef struct __mavlink_watchdog_heartbeat_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_watchdog_heartbeat_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint16_t watchdog_id, uint16_t process_count)
+						       UInt16 watchdog_id, UInt16 process_count)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[4];
-	_mav_put_uint16_t(buf, 0, watchdog_id);
-	_mav_put_uint16_t(buf, 2, process_count);
+	_mav_put_UInt16(buf, 0, watchdog_id);
+	_mav_put_UInt16(buf, 2, process_count);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 4);
 #else
@@ -65,12 +65,12 @@ static inline uint16_t mavlink_msg_watchdog_heartbeat_pack(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_watchdog_heartbeat_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint16_t watchdog_id,uint16_t process_count)
+						           UInt16 watchdog_id,UInt16 process_count)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[4];
-	_mav_put_uint16_t(buf, 0, watchdog_id);
-	_mav_put_uint16_t(buf, 2, process_count);
+	_mav_put_UInt16(buf, 0, watchdog_id);
+	_mav_put_UInt16(buf, 2, process_count);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 4);
 #else
@@ -107,12 +107,12 @@ static inline uint16_t mavlink_msg_watchdog_heartbeat_encode(uint8_t system_id, 
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_watchdog_heartbeat_send(mavlink_channel_t chan, uint16_t watchdog_id, uint16_t process_count)
+static inline void mavlink_msg_watchdog_heartbeat_send(mavlink_channel_t chan, UInt16 watchdog_id, UInt16 process_count)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[4];
-	_mav_put_uint16_t(buf, 0, watchdog_id);
-	_mav_put_uint16_t(buf, 2, process_count);
+	_mav_put_UInt16(buf, 0, watchdog_id);
+	_mav_put_UInt16(buf, 2, process_count);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WATCHDOG_HEARTBEAT, buf, 4, 153);
 #else
@@ -134,9 +134,9 @@ static inline void mavlink_msg_watchdog_heartbeat_send(mavlink_channel_t chan, u
  *
  * @return Watchdog ID
  */
-static inline uint16_t mavlink_msg_watchdog_heartbeat_get_watchdog_id(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_watchdog_heartbeat_get_watchdog_id(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  0);
+	return _MAV_RETURN_UInt16(msg,  0);
 }
 
 /**
@@ -144,9 +144,9 @@ static inline uint16_t mavlink_msg_watchdog_heartbeat_get_watchdog_id(const mavl
  *
  * @return Number of processes
  */
-static inline uint16_t mavlink_msg_watchdog_heartbeat_get_process_count(const mavlink_message_t* msg)
+static inline UInt16 mavlink_msg_watchdog_heartbeat_get_process_count(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  2);
+	return _MAV_RETURN_UInt16(msg,  2);
 }
 
 /**

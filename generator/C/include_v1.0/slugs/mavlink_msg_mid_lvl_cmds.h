@@ -4,10 +4,10 @@
 
 typedef struct __mavlink_mid_lvl_cmds_t
 {
- float hCommand; ///< Commanded Airspeed
- float uCommand; ///< Log value 2 
- float rCommand; ///< Log value 3 
- uint8_t target; ///< The system setting the commands
+ Single hCommand; ///< Commanded Airspeed
+ Single uCommand; ///< Log value 2 
+ Single rCommand; ///< Log value 3 
+ byte target; ///< The system setting the commands
 } mavlink_mid_lvl_cmds_t;
 
 #define MAVLINK_MSG_ID_MID_LVL_CMDS_LEN 13
@@ -39,14 +39,14 @@ typedef struct __mavlink_mid_lvl_cmds_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_mid_lvl_cmds_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t target, float hCommand, float uCommand, float rCommand)
+						       byte target, Single hCommand, Single uCommand, Single rCommand)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[13];
-	_mav_put_float(buf, 0, hCommand);
-	_mav_put_float(buf, 4, uCommand);
-	_mav_put_float(buf, 8, rCommand);
-	_mav_put_uint8_t(buf, 12, target);
+	_mav_put_Single(buf, 0, hCommand);
+	_mav_put_Single(buf, 4, uCommand);
+	_mav_put_Single(buf, 8, rCommand);
+	_mav_put_byte(buf, 12, target);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 13);
 #else
@@ -77,14 +77,14 @@ static inline uint16_t mavlink_msg_mid_lvl_cmds_pack(uint8_t system_id, uint8_t 
  */
 static inline uint16_t mavlink_msg_mid_lvl_cmds_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint8_t target,float hCommand,float uCommand,float rCommand)
+						           byte target,Single hCommand,Single uCommand,Single rCommand)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[13];
-	_mav_put_float(buf, 0, hCommand);
-	_mav_put_float(buf, 4, uCommand);
-	_mav_put_float(buf, 8, rCommand);
-	_mav_put_uint8_t(buf, 12, target);
+	_mav_put_Single(buf, 0, hCommand);
+	_mav_put_Single(buf, 4, uCommand);
+	_mav_put_Single(buf, 8, rCommand);
+	_mav_put_byte(buf, 12, target);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 13);
 #else
@@ -125,14 +125,14 @@ static inline uint16_t mavlink_msg_mid_lvl_cmds_encode(uint8_t system_id, uint8_
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_mid_lvl_cmds_send(mavlink_channel_t chan, uint8_t target, float hCommand, float uCommand, float rCommand)
+static inline void mavlink_msg_mid_lvl_cmds_send(mavlink_channel_t chan, byte target, Single hCommand, Single uCommand, Single rCommand)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[13];
-	_mav_put_float(buf, 0, hCommand);
-	_mav_put_float(buf, 4, uCommand);
-	_mav_put_float(buf, 8, rCommand);
-	_mav_put_uint8_t(buf, 12, target);
+	_mav_put_Single(buf, 0, hCommand);
+	_mav_put_Single(buf, 4, uCommand);
+	_mav_put_Single(buf, 8, rCommand);
+	_mav_put_byte(buf, 12, target);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MID_LVL_CMDS, buf, 13, 146);
 #else
@@ -156,9 +156,9 @@ static inline void mavlink_msg_mid_lvl_cmds_send(mavlink_channel_t chan, uint8_t
  *
  * @return The system setting the commands
  */
-static inline uint8_t mavlink_msg_mid_lvl_cmds_get_target(const mavlink_message_t* msg)
+static inline byte mavlink_msg_mid_lvl_cmds_get_target(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  12);
+	return _MAV_RETURN_byte(msg,  12);
 }
 
 /**
@@ -166,9 +166,9 @@ static inline uint8_t mavlink_msg_mid_lvl_cmds_get_target(const mavlink_message_
  *
  * @return Commanded Airspeed
  */
-static inline float mavlink_msg_mid_lvl_cmds_get_hCommand(const mavlink_message_t* msg)
+static inline Single mavlink_msg_mid_lvl_cmds_get_hCommand(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  0);
+	return _MAV_RETURN_Single(msg,  0);
 }
 
 /**
@@ -176,9 +176,9 @@ static inline float mavlink_msg_mid_lvl_cmds_get_hCommand(const mavlink_message_
  *
  * @return Log value 2 
  */
-static inline float mavlink_msg_mid_lvl_cmds_get_uCommand(const mavlink_message_t* msg)
+static inline Single mavlink_msg_mid_lvl_cmds_get_uCommand(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  4);
+	return _MAV_RETURN_Single(msg,  4);
 }
 
 /**
@@ -186,9 +186,9 @@ static inline float mavlink_msg_mid_lvl_cmds_get_uCommand(const mavlink_message_
  *
  * @return Log value 3 
  */
-static inline float mavlink_msg_mid_lvl_cmds_get_rCommand(const mavlink_message_t* msg)
+static inline Single mavlink_msg_mid_lvl_cmds_get_rCommand(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  8);
+	return _MAV_RETURN_Single(msg,  8);
 }
 
 /**

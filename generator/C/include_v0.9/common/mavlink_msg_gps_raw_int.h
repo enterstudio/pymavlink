@@ -4,15 +4,15 @@
 
 typedef struct __mavlink_gps_raw_int_t
 {
- uint64_t usec; ///< Timestamp (microseconds since UNIX epoch or microseconds since system boot)
- uint8_t fix_type; ///< 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
- int32_t lat; ///< Latitude in 1E7 degrees
- int32_t lon; ///< Longitude in 1E7 degrees
- int32_t alt; ///< Altitude in 1E3 meters (millimeters)
- float eph; ///< GPS HDOP
- float epv; ///< GPS VDOP
- float v; ///< GPS ground speed (m/s)
- float hdg; ///< Compass heading in degrees, 0..360 degrees
+ UInt64 usec; ///< Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ byte fix_type; ///< 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
+ Int32 lat; ///< Latitude in 1E7 degrees
+ Int32 lon; ///< Longitude in 1E7 degrees
+ Int32 alt; ///< Altitude in 1E3 meters (millimeters)
+ Single eph; ///< GPS HDOP
+ Single epv; ///< GPS VDOP
+ Single v; ///< GPS ground speed (m/s)
+ Single hdg; ///< Compass heading in degrees, 0..360 degrees
 } mavlink_gps_raw_int_t;
 
 #define MAVLINK_MSG_ID_GPS_RAW_INT_LEN 37
@@ -54,19 +54,19 @@ typedef struct __mavlink_gps_raw_int_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_gps_raw_int_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint64_t usec, uint8_t fix_type, int32_t lat, int32_t lon, int32_t alt, float eph, float epv, float v, float hdg)
+						       UInt64 usec, byte fix_type, Int32 lat, Int32 lon, Int32 alt, Single eph, Single epv, Single v, Single hdg)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[37];
-	_mav_put_uint64_t(buf, 0, usec);
-	_mav_put_uint8_t(buf, 8, fix_type);
-	_mav_put_int32_t(buf, 9, lat);
-	_mav_put_int32_t(buf, 13, lon);
-	_mav_put_int32_t(buf, 17, alt);
-	_mav_put_float(buf, 21, eph);
-	_mav_put_float(buf, 25, epv);
-	_mav_put_float(buf, 29, v);
-	_mav_put_float(buf, 33, hdg);
+	_mav_put_UInt64(buf, 0, usec);
+	_mav_put_byte(buf, 8, fix_type);
+	_mav_put_Int32(buf, 9, lat);
+	_mav_put_Int32(buf, 13, lon);
+	_mav_put_Int32(buf, 17, alt);
+	_mav_put_Single(buf, 21, eph);
+	_mav_put_Single(buf, 25, epv);
+	_mav_put_Single(buf, 29, v);
+	_mav_put_Single(buf, 33, hdg);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 37);
 #else
@@ -107,19 +107,19 @@ static inline uint16_t mavlink_msg_gps_raw_int_pack(uint8_t system_id, uint8_t c
  */
 static inline uint16_t mavlink_msg_gps_raw_int_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint64_t usec,uint8_t fix_type,int32_t lat,int32_t lon,int32_t alt,float eph,float epv,float v,float hdg)
+						           UInt64 usec,byte fix_type,Int32 lat,Int32 lon,Int32 alt,Single eph,Single epv,Single v,Single hdg)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[37];
-	_mav_put_uint64_t(buf, 0, usec);
-	_mav_put_uint8_t(buf, 8, fix_type);
-	_mav_put_int32_t(buf, 9, lat);
-	_mav_put_int32_t(buf, 13, lon);
-	_mav_put_int32_t(buf, 17, alt);
-	_mav_put_float(buf, 21, eph);
-	_mav_put_float(buf, 25, epv);
-	_mav_put_float(buf, 29, v);
-	_mav_put_float(buf, 33, hdg);
+	_mav_put_UInt64(buf, 0, usec);
+	_mav_put_byte(buf, 8, fix_type);
+	_mav_put_Int32(buf, 9, lat);
+	_mav_put_Int32(buf, 13, lon);
+	_mav_put_Int32(buf, 17, alt);
+	_mav_put_Single(buf, 21, eph);
+	_mav_put_Single(buf, 25, epv);
+	_mav_put_Single(buf, 29, v);
+	_mav_put_Single(buf, 33, hdg);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 37);
 #else
@@ -170,19 +170,19 @@ static inline uint16_t mavlink_msg_gps_raw_int_encode(uint8_t system_id, uint8_t
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_gps_raw_int_send(mavlink_channel_t chan, uint64_t usec, uint8_t fix_type, int32_t lat, int32_t lon, int32_t alt, float eph, float epv, float v, float hdg)
+static inline void mavlink_msg_gps_raw_int_send(mavlink_channel_t chan, UInt64 usec, byte fix_type, Int32 lat, Int32 lon, Int32 alt, Single eph, Single epv, Single v, Single hdg)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[37];
-	_mav_put_uint64_t(buf, 0, usec);
-	_mav_put_uint8_t(buf, 8, fix_type);
-	_mav_put_int32_t(buf, 9, lat);
-	_mav_put_int32_t(buf, 13, lon);
-	_mav_put_int32_t(buf, 17, alt);
-	_mav_put_float(buf, 21, eph);
-	_mav_put_float(buf, 25, epv);
-	_mav_put_float(buf, 29, v);
-	_mav_put_float(buf, 33, hdg);
+	_mav_put_UInt64(buf, 0, usec);
+	_mav_put_byte(buf, 8, fix_type);
+	_mav_put_Int32(buf, 9, lat);
+	_mav_put_Int32(buf, 13, lon);
+	_mav_put_Int32(buf, 17, alt);
+	_mav_put_Single(buf, 21, eph);
+	_mav_put_Single(buf, 25, epv);
+	_mav_put_Single(buf, 29, v);
+	_mav_put_Single(buf, 33, hdg);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_RAW_INT, buf, 37);
 #else
@@ -211,9 +211,9 @@ static inline void mavlink_msg_gps_raw_int_send(mavlink_channel_t chan, uint64_t
  *
  * @return Timestamp (microseconds since UNIX epoch or microseconds since system boot)
  */
-static inline uint64_t mavlink_msg_gps_raw_int_get_usec(const mavlink_message_t* msg)
+static inline UInt64 mavlink_msg_gps_raw_int_get_usec(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint64_t(msg,  0);
+	return _MAV_RETURN_UInt64(msg,  0);
 }
 
 /**
@@ -221,9 +221,9 @@ static inline uint64_t mavlink_msg_gps_raw_int_get_usec(const mavlink_message_t*
  *
  * @return 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
  */
-static inline uint8_t mavlink_msg_gps_raw_int_get_fix_type(const mavlink_message_t* msg)
+static inline byte mavlink_msg_gps_raw_int_get_fix_type(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  8);
+	return _MAV_RETURN_byte(msg,  8);
 }
 
 /**
@@ -231,9 +231,9 @@ static inline uint8_t mavlink_msg_gps_raw_int_get_fix_type(const mavlink_message
  *
  * @return Latitude in 1E7 degrees
  */
-static inline int32_t mavlink_msg_gps_raw_int_get_lat(const mavlink_message_t* msg)
+static inline Int32 mavlink_msg_gps_raw_int_get_lat(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  9);
+	return _MAV_RETURN_Int32(msg,  9);
 }
 
 /**
@@ -241,9 +241,9 @@ static inline int32_t mavlink_msg_gps_raw_int_get_lat(const mavlink_message_t* m
  *
  * @return Longitude in 1E7 degrees
  */
-static inline int32_t mavlink_msg_gps_raw_int_get_lon(const mavlink_message_t* msg)
+static inline Int32 mavlink_msg_gps_raw_int_get_lon(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  13);
+	return _MAV_RETURN_Int32(msg,  13);
 }
 
 /**
@@ -251,9 +251,9 @@ static inline int32_t mavlink_msg_gps_raw_int_get_lon(const mavlink_message_t* m
  *
  * @return Altitude in 1E3 meters (millimeters)
  */
-static inline int32_t mavlink_msg_gps_raw_int_get_alt(const mavlink_message_t* msg)
+static inline Int32 mavlink_msg_gps_raw_int_get_alt(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int32_t(msg,  17);
+	return _MAV_RETURN_Int32(msg,  17);
 }
 
 /**
@@ -261,9 +261,9 @@ static inline int32_t mavlink_msg_gps_raw_int_get_alt(const mavlink_message_t* m
  *
  * @return GPS HDOP
  */
-static inline float mavlink_msg_gps_raw_int_get_eph(const mavlink_message_t* msg)
+static inline Single mavlink_msg_gps_raw_int_get_eph(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  21);
+	return _MAV_RETURN_Single(msg,  21);
 }
 
 /**
@@ -271,9 +271,9 @@ static inline float mavlink_msg_gps_raw_int_get_eph(const mavlink_message_t* msg
  *
  * @return GPS VDOP
  */
-static inline float mavlink_msg_gps_raw_int_get_epv(const mavlink_message_t* msg)
+static inline Single mavlink_msg_gps_raw_int_get_epv(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  25);
+	return _MAV_RETURN_Single(msg,  25);
 }
 
 /**
@@ -281,9 +281,9 @@ static inline float mavlink_msg_gps_raw_int_get_epv(const mavlink_message_t* msg
  *
  * @return GPS ground speed (m/s)
  */
-static inline float mavlink_msg_gps_raw_int_get_v(const mavlink_message_t* msg)
+static inline Single mavlink_msg_gps_raw_int_get_v(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  29);
+	return _MAV_RETURN_Single(msg,  29);
 }
 
 /**
@@ -291,9 +291,9 @@ static inline float mavlink_msg_gps_raw_int_get_v(const mavlink_message_t* msg)
  *
  * @return Compass heading in degrees, 0..360 degrees
  */
-static inline float mavlink_msg_gps_raw_int_get_hdg(const mavlink_message_t* msg)
+static inline Single mavlink_msg_gps_raw_int_get_hdg(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  33);
+	return _MAV_RETURN_Single(msg,  33);
 }
 
 /**

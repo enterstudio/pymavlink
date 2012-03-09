@@ -4,10 +4,10 @@
 
 typedef struct __mavlink_local_position_setpoint_t
 {
- float x; ///< x position
- float y; ///< y position
- float z; ///< z position
- float yaw; ///< Desired yaw angle
+ Single x; ///< x position
+ Single y; ///< y position
+ Single z; ///< z position
+ Single yaw; ///< Desired yaw angle
 } mavlink_local_position_setpoint_t;
 
 #define MAVLINK_MSG_ID_LOCAL_POSITION_SETPOINT_LEN 16
@@ -39,14 +39,14 @@ typedef struct __mavlink_local_position_setpoint_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_local_position_setpoint_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       float x, float y, float z, float yaw)
+						       Single x, Single y, Single z, Single yaw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[16];
-	_mav_put_float(buf, 0, x);
-	_mav_put_float(buf, 4, y);
-	_mav_put_float(buf, 8, z);
-	_mav_put_float(buf, 12, yaw);
+	_mav_put_Single(buf, 0, x);
+	_mav_put_Single(buf, 4, y);
+	_mav_put_Single(buf, 8, z);
+	_mav_put_Single(buf, 12, yaw);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 16);
 #else
@@ -77,14 +77,14 @@ static inline uint16_t mavlink_msg_local_position_setpoint_pack(uint8_t system_i
  */
 static inline uint16_t mavlink_msg_local_position_setpoint_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           float x,float y,float z,float yaw)
+						           Single x,Single y,Single z,Single yaw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[16];
-	_mav_put_float(buf, 0, x);
-	_mav_put_float(buf, 4, y);
-	_mav_put_float(buf, 8, z);
-	_mav_put_float(buf, 12, yaw);
+	_mav_put_Single(buf, 0, x);
+	_mav_put_Single(buf, 4, y);
+	_mav_put_Single(buf, 8, z);
+	_mav_put_Single(buf, 12, yaw);
 
         memcpy(_MAV_PAYLOAD(msg), buf, 16);
 #else
@@ -125,14 +125,14 @@ static inline uint16_t mavlink_msg_local_position_setpoint_encode(uint8_t system
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_local_position_setpoint_send(mavlink_channel_t chan, float x, float y, float z, float yaw)
+static inline void mavlink_msg_local_position_setpoint_send(mavlink_channel_t chan, Single x, Single y, Single z, Single yaw)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[16];
-	_mav_put_float(buf, 0, x);
-	_mav_put_float(buf, 4, y);
-	_mav_put_float(buf, 8, z);
-	_mav_put_float(buf, 12, yaw);
+	_mav_put_Single(buf, 0, x);
+	_mav_put_Single(buf, 4, y);
+	_mav_put_Single(buf, 8, z);
+	_mav_put_Single(buf, 12, yaw);
 
 	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOCAL_POSITION_SETPOINT, buf, 16);
 #else
@@ -156,9 +156,9 @@ static inline void mavlink_msg_local_position_setpoint_send(mavlink_channel_t ch
  *
  * @return x position
  */
-static inline float mavlink_msg_local_position_setpoint_get_x(const mavlink_message_t* msg)
+static inline Single mavlink_msg_local_position_setpoint_get_x(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  0);
+	return _MAV_RETURN_Single(msg,  0);
 }
 
 /**
@@ -166,9 +166,9 @@ static inline float mavlink_msg_local_position_setpoint_get_x(const mavlink_mess
  *
  * @return y position
  */
-static inline float mavlink_msg_local_position_setpoint_get_y(const mavlink_message_t* msg)
+static inline Single mavlink_msg_local_position_setpoint_get_y(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  4);
+	return _MAV_RETURN_Single(msg,  4);
 }
 
 /**
@@ -176,9 +176,9 @@ static inline float mavlink_msg_local_position_setpoint_get_y(const mavlink_mess
  *
  * @return z position
  */
-static inline float mavlink_msg_local_position_setpoint_get_z(const mavlink_message_t* msg)
+static inline Single mavlink_msg_local_position_setpoint_get_z(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  8);
+	return _MAV_RETURN_Single(msg,  8);
 }
 
 /**
@@ -186,9 +186,9 @@ static inline float mavlink_msg_local_position_setpoint_get_z(const mavlink_mess
  *
  * @return Desired yaw angle
  */
-static inline float mavlink_msg_local_position_setpoint_get_yaw(const mavlink_message_t* msg)
+static inline Single mavlink_msg_local_position_setpoint_get_yaw(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  12);
+	return _MAV_RETURN_Single(msg,  12);
 }
 
 /**
