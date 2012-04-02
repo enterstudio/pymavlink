@@ -8,9 +8,9 @@ namespace ArdupilotMega
     #if !MAVLINK10
     partial class MAVLink
     {
-        public const string MAVLINK_BUILD_DATE = "Mon Apr  2 20:01:07 2012";
+        public const string MAVLINK_BUILD_DATE = "Mon Apr  2 20:01:08 2012";
         public const string MAVLINK_WIRE_PROTOCOL_VERSION = "1.0";
-        public const int MAVLINK_MAX_DIALECT_PAYLOAD_SIZE = 101;
+        public const int MAVLINK_MAX_DIALECT_PAYLOAD_SIZE = 255;
 
         public const int MAVLINK_LITTLE_ENDIAN = 1;
         public const int MAVLINK_BIG_ENDIAN = 0;
@@ -27,526 +27,451 @@ namespace ArdupilotMega
         
         public byte packetcount = 0;
         
-        public byte[] MAVLINK_MESSAGE_LENGTHS = new byte[] {9, 31, 12, 0, 14, 28, 3, 32, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 20, 2, 25, 23, 30, 101, 22, 26, 16, 14, 28, 32, 28, 28, 22, 22, 21, 6, 6, 37, 4, 4, 2, 2, 4, 2, 2, 3, 13, 12, 19, 17, 15, 15, 27, 25, 18, 18, 20, 20, 0, 0, 26, 0, 36, 0, 6, 4, 0, 21, 18, 0, 0, 0, 20, 0, 33, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56, 42, 33, 0, 0, 0, 0, 0, 0, 0, 18, 32, 32, 20, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 30, 18, 18, 51, 9, 3};
+        public byte[] MAVLINK_MESSAGE_LENGTHS = new byte[] {9, 31, 12, 0, 14, 28, 3, 32, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 20, 2, 25, 23, 30, 101, 22, 26, 16, 14, 28, 32, 28, 28, 22, 22, 21, 6, 6, 37, 4, 4, 2, 2, 4, 2, 2, 3, 13, 12, 19, 17, 15, 15, 27, 25, 18, 18, 20, 20, 0, 0, 26, 0, 36, 0, 6, 4, 0, 21, 18, 0, 0, 0, 20, 0, 33, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56, 42, 33, 0, 0, 0, 0, 0, 0, 0, 18, 32, 32, 20, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 52, 1, 92, 0, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 26, 16, 0, 0, 0, 0, 0, 0, 0, 4, 255, 12, 6, 0, 0, 0, 0, 0, 0, 106, 43, 55, 8, 255, 53, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 30, 18, 18, 51, 9, 3};
 
-        public byte[] MAVLINK_MESSAGE_CRCS = new byte[] {50, 124, 137, 0, 237, 217, 104, 119, 0, 0, 0, 89, 0, 0, 0, 0, 0, 0, 0, 0, 214, 159, 220, 168, 24, 23, 170, 144, 67, 115, 39, 246, 185, 104, 237, 244, 222, 212, 9, 254, 230, 28, 28, 132, 221, 232, 11, 153, 41, 39, 214, 223, 141, 33, 15, 3, 100, 24, 239, 238, 0, 0, 183, 0, 130, 0, 148, 21, 0, 52, 124, 0, 0, 0, 20, 0, 152, 143, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 183, 63, 54, 0, 0, 0, 0, 0, 0, 0, 19, 102, 158, 208, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 204, 49, 170, 44, 83, 46, 247};
+        public byte[] MAVLINK_MESSAGE_CRCS = new byte[] {50, 124, 137, 0, 237, 217, 104, 119, 0, 0, 0, 89, 0, 0, 0, 0, 0, 0, 0, 0, 214, 159, 220, 168, 24, 23, 170, 144, 67, 115, 39, 246, 185, 104, 237, 244, 222, 212, 9, 254, 230, 28, 28, 132, 221, 232, 11, 153, 41, 39, 214, 223, 141, 33, 15, 3, 100, 24, 239, 238, 0, 0, 183, 0, 130, 0, 148, 21, 0, 52, 124, 0, 0, 0, 20, 0, 152, 143, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 183, 63, 54, 0, 0, 0, 0, 0, 0, 0, 19, 102, 158, 208, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 108, 86, 95, 224, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 249, 182, 0, 0, 0, 0, 0, 0, 0, 153, 16, 29, 162, 0, 0, 0, 0, 0, 0, 90, 95, 36, 148, 223, 88, 0, 0, 0, 0, 254, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 204, 49, 170, 44, 83, 46, 247};
 
-        public Type[] MAVLINK_MESSAGE_INFO = new Type[] {typeof( mavlink_heartbeat_t ), typeof( mavlink_sys_status_t ), typeof( mavlink_system_time_t ), null, typeof( mavlink_ping_t ), typeof( mavlink_change_operator_control_t ), typeof( mavlink_change_operator_control_ack_t ), typeof( mavlink_auth_key_t ), null, null, null, typeof( mavlink_set_mode_t ), null, null, null, null, null, null, null, null, typeof( mavlink_param_request_read_t ), typeof( mavlink_param_request_list_t ), typeof( mavlink_param_value_t ), typeof( mavlink_param_set_t ), typeof( mavlink_gps_raw_int_t ), typeof( mavlink_gps_status_t ), typeof( mavlink_scaled_imu_t ), typeof( mavlink_raw_imu_t ), typeof( mavlink_raw_pressure_t ), typeof( mavlink_scaled_pressure_t ), typeof( mavlink_attitude_t ), typeof( mavlink_attitude_quaternion_t ), typeof( mavlink_local_position_ned_t ), typeof( mavlink_global_position_int_t ), typeof( mavlink_rc_channels_scaled_t ), typeof( mavlink_rc_channels_raw_t ), typeof( mavlink_servo_output_raw_t ), typeof( mavlink_mission_request_partial_list_t ), typeof( mavlink_mission_write_partial_list_t ), typeof( mavlink_mission_item_t ), typeof( mavlink_mission_request_t ), typeof( mavlink_mission_set_current_t ), typeof( mavlink_mission_current_t ), typeof( mavlink_mission_request_list_t ), typeof( mavlink_mission_count_t ), typeof( mavlink_mission_clear_all_t ), typeof( mavlink_mission_item_reached_t ), typeof( mavlink_mission_ack_t ), typeof( mavlink_set_gps_global_origin_t ), typeof( mavlink_gps_global_origin_t ), typeof( mavlink_set_local_position_setpoint_t ), typeof( mavlink_local_position_setpoint_t ), typeof( mavlink_global_position_setpoint_int_t ), typeof( mavlink_set_global_position_setpoint_int_t ), typeof( mavlink_safety_set_allowed_area_t ), typeof( mavlink_safety_allowed_area_t ), typeof( mavlink_set_roll_pitch_yaw_thrust_t ), typeof( mavlink_set_roll_pitch_yaw_speed_thrust_t ), typeof( mavlink_roll_pitch_yaw_thrust_setpoint_t ), typeof( mavlink_roll_pitch_yaw_speed_thrust_setpoint_t ), null, null, typeof( mavlink_nav_controller_output_t ), null, typeof( mavlink_state_correction_t ), null, typeof( mavlink_request_data_stream_t ), typeof( mavlink_data_stream_t ), null, typeof( mavlink_manual_control_t ), typeof( mavlink_rc_channels_override_t ), null, null, null, typeof( mavlink_vfr_hud_t ), null, typeof( mavlink_command_long_t ), typeof( mavlink_command_ack_t ), null, null, null, null, null, null, null, null, null, null, null, null, typeof( mavlink_hil_state_t ), typeof( mavlink_hil_controls_t ), typeof( mavlink_hil_rc_inputs_raw_t ), null, null, null, null, null, null, null, typeof( mavlink_optical_flow_t ), typeof( mavlink_global_vision_position_estimate_t ), typeof( mavlink_vision_position_estimate_t ), typeof( mavlink_vision_speed_estimate_t ), typeof( mavlink_vicon_position_estimate_t ), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, typeof( mavlink_memory_vect_t ), typeof( mavlink_debug_vect_t ), typeof( mavlink_named_value_float_t ), typeof( mavlink_named_value_int_t ), typeof( mavlink_statustext_t ), typeof( mavlink_debug_t ), typeof( mavlink_extended_message_t )};
+        public Type[] MAVLINK_MESSAGE_INFO = new Type[] {typeof( mavlink_heartbeat_t ), typeof( mavlink_sys_status_t ), typeof( mavlink_system_time_t ), null, typeof( mavlink_ping_t ), typeof( mavlink_change_operator_control_t ), typeof( mavlink_change_operator_control_ack_t ), typeof( mavlink_auth_key_t ), null, null, null, typeof( mavlink_set_mode_t ), null, null, null, null, null, null, null, null, typeof( mavlink_param_request_read_t ), typeof( mavlink_param_request_list_t ), typeof( mavlink_param_value_t ), typeof( mavlink_param_set_t ), typeof( mavlink_gps_raw_int_t ), typeof( mavlink_gps_status_t ), typeof( mavlink_scaled_imu_t ), typeof( mavlink_raw_imu_t ), typeof( mavlink_raw_pressure_t ), typeof( mavlink_scaled_pressure_t ), typeof( mavlink_attitude_t ), typeof( mavlink_attitude_quaternion_t ), typeof( mavlink_local_position_ned_t ), typeof( mavlink_global_position_int_t ), typeof( mavlink_rc_channels_scaled_t ), typeof( mavlink_rc_channels_raw_t ), typeof( mavlink_servo_output_raw_t ), typeof( mavlink_mission_request_partial_list_t ), typeof( mavlink_mission_write_partial_list_t ), typeof( mavlink_mission_item_t ), typeof( mavlink_mission_request_t ), typeof( mavlink_mission_set_current_t ), typeof( mavlink_mission_current_t ), typeof( mavlink_mission_request_list_t ), typeof( mavlink_mission_count_t ), typeof( mavlink_mission_clear_all_t ), typeof( mavlink_mission_item_reached_t ), typeof( mavlink_mission_ack_t ), typeof( mavlink_set_gps_global_origin_t ), typeof( mavlink_gps_global_origin_t ), typeof( mavlink_set_local_position_setpoint_t ), typeof( mavlink_local_position_setpoint_t ), typeof( mavlink_global_position_setpoint_int_t ), typeof( mavlink_set_global_position_setpoint_int_t ), typeof( mavlink_safety_set_allowed_area_t ), typeof( mavlink_safety_allowed_area_t ), typeof( mavlink_set_roll_pitch_yaw_thrust_t ), typeof( mavlink_set_roll_pitch_yaw_speed_thrust_t ), typeof( mavlink_roll_pitch_yaw_thrust_setpoint_t ), typeof( mavlink_roll_pitch_yaw_speed_thrust_setpoint_t ), null, null, typeof( mavlink_nav_controller_output_t ), null, typeof( mavlink_state_correction_t ), null, typeof( mavlink_request_data_stream_t ), typeof( mavlink_data_stream_t ), null, typeof( mavlink_manual_control_t ), typeof( mavlink_rc_channels_override_t ), null, null, null, typeof( mavlink_vfr_hud_t ), null, typeof( mavlink_command_long_t ), typeof( mavlink_command_ack_t ), null, null, null, null, null, null, null, null, null, null, null, null, typeof( mavlink_hil_state_t ), typeof( mavlink_hil_controls_t ), typeof( mavlink_hil_rc_inputs_raw_t ), null, null, null, null, null, null, null, typeof( mavlink_optical_flow_t ), typeof( mavlink_global_vision_position_estimate_t ), typeof( mavlink_vision_position_estimate_t ), typeof( mavlink_vision_speed_estimate_t ), typeof( mavlink_vicon_position_estimate_t ), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, typeof( mavlink_set_cam_shutter_t ), typeof( mavlink_image_triggered_t ), typeof( mavlink_image_trigger_control_t ), typeof( mavlink_image_available_t ), null, null, null, null, null, typeof( mavlink_set_position_control_offset_t ), null, null, null, null, null, null, null, null, null, typeof( mavlink_position_control_setpoint_t ), typeof( mavlink_marker_t ), typeof( mavlink_raw_aux_t ), null, null, null, null, null, null, null, typeof( mavlink_watchdog_heartbeat_t ), typeof( mavlink_watchdog_process_info_t ), typeof( mavlink_watchdog_process_status_t ), typeof( mavlink_watchdog_command_t ), null, null, null, null, null, null, typeof( mavlink_pattern_detected_t ), typeof( mavlink_point_of_interest_t ), typeof( mavlink_point_of_interest_connection_t ), typeof( mavlink_data_transmission_handshake_t ), typeof( mavlink_encapsulated_data_t ), typeof( mavlink_brief_feature_t ), null, null, null, null, typeof( mavlink_attitude_control_t ), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, typeof( mavlink_memory_vect_t ), typeof( mavlink_debug_vect_t ), typeof( mavlink_named_value_float_t ), typeof( mavlink_named_value_int_t ), typeof( mavlink_statustext_t ), typeof( mavlink_debug_t ), typeof( mavlink_extended_message_t )};
 
-        public const byte MAVLINK_VERSION = 3;
+        public const byte MAVLINK_VERSION = 2;
     
         
-        /** @brief Micro air vehicle / autopilot classes. This identifies the individual model. */
-        public enum MAV_AUTOPILOT
+        /** @brief Content Types for data transmission handshake */
+        public enum DATA_TYPES
         {
-    	///<summary> Generic autopilot, full support for everything | </summary>
-            GENERIC=0, 
-        	///<summary> PIXHAWK autopilot, http://pixhawk.ethz.ch | </summary>
-            PIXHAWK=1, 
-        	///<summary> SLUGS autopilot, http://slugsuav.soe.ucsc.edu | </summary>
-            SLUGS=2, 
-        	///<summary> ArduPilotMega / ArduCopter, http://diydrones.com | </summary>
-            ARDUPILOTMEGA=3, 
-        	///<summary> OpenPilot, http://openpilot.org | </summary>
-            OPENPILOT=4, 
-        	///<summary> Generic autopilot only supporting simple waypoints | </summary>
-            GENERIC_WAYPOINTS_ONLY=5, 
-        	///<summary> Generic autopilot supporting waypoints and other simple navigation commands | </summary>
-            GENERIC_WAYPOINTS_AND_SIMPLE_NAVIGATION_ONLY=6, 
-        	///<summary> Generic autopilot supporting the full mission command set | </summary>
-            GENERIC_MISSION_FULL=7, 
-        	///<summary> No valid autopilot, e.g. a GCS or other MAVLink component | </summary>
-            INVALID=8, 
-        	///<summary> PPZ UAV - http://nongnu.org/paparazzi | </summary>
-            PPZ=9, 
-        	///<summary> UAV Dev Board | </summary>
-            UDB=10, 
-        	///<summary> FlexiPilot | </summary>
-            FP=11, 
+    	///<summary>  | </summary>
+            DATA_TYPE_JPEG_IMAGE=1, 
         	///<summary>  | </summary>
-            ENUM_END=12, 
-        
-        };
-        
-        /** @brief These flags encode the MAV mode. */
-        public enum MAV_MODE_FLAG
-        {
-    	///<summary> 0b00000001 Reserved for future use. | </summary>
-            CUSTOM_MODE_ENABLED=1, 
-        	///<summary> 0b00000010 system has a test mode enabled. This flag is intended for temporary system tests and should not be used for stable implementations. | </summary>
-            TEST_ENABLED=2, 
-        	///<summary> 0b00000100 autonomous mode enabled, system finds its own goal positions. Guided flag can be set or not, depends on the actual implementation. | </summary>
-            AUTO_ENABLED=4, 
-        	///<summary> 0b00001000 guided mode enabled, system flies MISSIONs / mission items. | </summary>
-            GUIDED_ENABLED=8, 
-        	///<summary> 0b00010000 system stabilizes electronically its attitude (and optionally position). It needs however further control inputs to move around. | </summary>
-            STABILIZE_ENABLED=16, 
-        	///<summary> 0b00100000 hardware in the loop simulation. All motors / actuators are blocked, but internal software is full operational. | </summary>
-            HIL_ENABLED=32, 
-        	///<summary> 0b01000000 remote control input is enabled. | </summary>
-            MANUAL_INPUT_ENABLED=64, 
-        	///<summary> 0b10000000 MAV safety set to armed. Motors are enabled / running / can start. Ready to fly. | </summary>
-            SAFETY_ARMED=128, 
+            DATA_TYPE_RAW_IMAGE=2, 
         	///<summary>  | </summary>
-            ENUM_END=129, 
-        
-        };
-        
-        /** @brief These values encode the bit positions of the decode position. These values can be used to read the value of a flag bit by combining the base_mode variable with AND with the flag position value. The result will be either 0 or 1, depending on if the flag is set or not. */
-        public enum MAV_MODE_FLAG_DECODE_POSITION
-        {
-    	///<summary> Eighth bit: 00000001 | </summary>
-            CUSTOM_MODE=1, 
-        	///<summary> Seventh bit: 00000010 | </summary>
-            TEST=2, 
-        	///<summary> Sixt bit:   00000100 | </summary>
-            AUTO=4, 
-        	///<summary> Fifth bit:  00001000 | </summary>
-            GUIDED=8, 
-        	///<summary> Fourth bit: 00010000 | </summary>
-            STABILIZE=16, 
-        	///<summary> Third bit:  00100000 | </summary>
-            HIL=32, 
-        	///<summary> Second bit: 01000000 | </summary>
-            MANUAL=64, 
-        	///<summary> First bit:  10000000 | </summary>
-            SAFETY=128, 
-        	///<summary>  | </summary>
-            ENUM_END=129, 
-        
-        };
-        
-        /** @brief Override command, pauses current mission execution and moves immediately to a position */
-        public enum MAV_GOTO
-        {
-    	///<summary> Hold at the current position. | </summary>
-            DO_HOLD=0, 
-        	///<summary> Continue with the next item in mission execution. | </summary>
-            DO_CONTINUE=1, 
-        	///<summary> Hold at the current position of the system | </summary>
-            HOLD_AT_CURRENT_POSITION=2, 
-        	///<summary> Hold at the position specified in the parameters of the DO_HOLD action | </summary>
-            HOLD_AT_SPECIFIED_POSITION=3, 
+            DATA_TYPE_KINECT=3, 
         	///<summary>  | </summary>
             ENUM_END=4, 
         
         };
         
-        /** @brief These defines are predefined OR-combined mode flags. There is no need to use values from this enum, but it                simplifies the use of the mode flags. Note that manual input is enabled in all modes as a safety override. */
-        public enum MAV_MODE
-        {
-    	///<summary> System is not ready to fly, booting, calibrating, etc. No flag is set. | </summary>
-            PREFLIGHT=0, 
-        	///<summary> System is allowed to be active, under manual (RC) control, no stabilization | </summary>
-            MANUAL_DISARMED=64, 
-        	///<summary> UNDEFINED mode. This solely depends on the autopilot - use with caution, intended for developers only. | </summary>
-            TEST_DISARMED=66, 
-        	///<summary> System is allowed to be active, under assisted RC control. | </summary>
-            STABILIZE_DISARMED=80, 
-        	///<summary> System is allowed to be active, under autonomous control, manual setpoint | </summary>
-            GUIDED_DISARMED=88, 
-        	///<summary> System is allowed to be active, under autonomous control and navigation (the trajectory is decided onboard and not pre-programmed by MISSIONs) | </summary>
-            AUTO_DISARMED=92, 
-        	///<summary> System is allowed to be active, under manual (RC) control, no stabilization | </summary>
-            MANUAL_ARMED=192, 
-        	///<summary> UNDEFINED mode. This solely depends on the autopilot - use with caution, intended for developers only. | </summary>
-            TEST_ARMED=194, 
-        	///<summary> System is allowed to be active, under assisted RC control. | </summary>
-            STABILIZE_ARMED=208, 
-        	///<summary> System is allowed to be active, under autonomous control, manual setpoint | </summary>
-            GUIDED_ARMED=216, 
-        	///<summary> System is allowed to be active, under autonomous control and navigation (the trajectory is decided onboard and not pre-programmed by MISSIONs) | </summary>
-            AUTO_ARMED=220, 
-        	///<summary>  | </summary>
-            ENUM_END=221, 
-        
-        };
-        
-        /** @brief  */
-        public enum MAV_STATE
-        {
-    	///<summary> Uninitialized system, state is unknown. | </summary>
-            UNINIT=0, 
-        	///<summary> System is booting up. | </summary>
-            BOOT=1, 
-        	///<summary> System is calibrating and not flight-ready. | </summary>
-            CALIBRATING=2, 
-        	///<summary> System is grounded and on standby. It can be launched any time. | </summary>
-            STANDBY=3, 
-        	///<summary> System is active and might be already airborne. Motors are engaged. | </summary>
-            ACTIVE=4, 
-        	///<summary> System is in a non-normal flight mode. It can however still navigate. | </summary>
-            CRITICAL=5, 
-        	///<summary> System is in a non-normal flight mode. It lost control over parts or over the whole airframe. It is in mayday and going down. | </summary>
-            EMERGENCY=6, 
-        	///<summary> System just initialized its power-down sequence, will shut down now. | </summary>
-            POWEROFF=7, 
-        	///<summary>  | </summary>
-            ENUM_END=8, 
-        
-        };
-        
-        /** @brief  */
-        public enum MAV_TYPE
-        {
-    	///<summary> Generic micro air vehicle. | </summary>
-            GENERIC=0, 
-        	///<summary> Fixed wing aircraft. | </summary>
-            FIXED_WING=1, 
-        	///<summary> Quadrotor | </summary>
-            QUADROTOR=2, 
-        	///<summary> Coaxial helicopter | </summary>
-            COAXIAL=3, 
-        	///<summary> Normal helicopter with tail rotor. | </summary>
-            HELICOPTER=4, 
-        	///<summary> Ground installation | </summary>
-            ANTENNA_TRACKER=5, 
-        	///<summary> Operator control unit / ground control station | </summary>
-            GCS=6, 
-        	///<summary> Airship, controlled | </summary>
-            AIRSHIP=7, 
-        	///<summary> Free balloon, uncontrolled | </summary>
-            FREE_BALLOON=8, 
-        	///<summary> Rocket | </summary>
-            ROCKET=9, 
-        	///<summary> Ground rover | </summary>
-            GROUND_ROVER=10, 
-        	///<summary> Surface vessel, boat, ship | </summary>
-            SURFACE_BOAT=11, 
-        	///<summary> Submarine | </summary>
-            SUBMARINE=12, 
-        	///<summary> Hexarotor | </summary>
-            HEXAROTOR=13, 
-        	///<summary> Octorotor | </summary>
-            OCTOROTOR=14, 
-        	///<summary> Octorotor | </summary>
-            TRICOPTER=15, 
-        	///<summary> Flapping wing | </summary>
-            FLAPPING_WING=16, 
-        	///<summary>  | </summary>
-            ENUM_END=17, 
-        
-        };
-        
-        /** @brief  */
-        public enum MAV_COMPONENT
-        {
-    	///<summary>  | </summary>
-            MAV_COMP_ID_ALL=0, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_CAMERA=100, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO1=140, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO2=141, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO3=142, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO4=143, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO5=144, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO6=145, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO7=146, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO8=147, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO9=148, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO10=149, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO11=150, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO12=151, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO13=152, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SERVO14=153, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_MAPPER=180, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_MISSIONPLANNER=190, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_PATHPLANNER=195, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_IMU=200, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_IMU_2=201, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_IMU_3=202, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_GPS=220, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_UDP_BRIDGE=240, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_UART_BRIDGE=241, 
-        	///<summary>  | </summary>
-            MAV_COMP_ID_SYSTEM_CONTROL=250, 
-        	///<summary>  | </summary>
-            ENUM_END=251, 
-        
-        };
-        
-        /** @brief  */
-        public enum MAV_FRAME
-        {
-    	///<summary> Global coordinate frame, WGS84 coordinate system. First value / x: latitude, second value / y: longitude, third value / z: positive altitude over mean sea level (MSL) | </summary>
-            GLOBAL=0, 
-        	///<summary> Local coordinate frame, Z-up (x: north, y: east, z: down). | </summary>
-            LOCAL_NED=1, 
-        	///<summary> NOT a coordinate frame, indicates a mission command. | </summary>
-            MISSION=2, 
-        	///<summary> Global coordinate frame, WGS84 coordinate system, relative altitude over ground with respect to the home position. First value / x: latitude, second value / y: longitude, third value / z: positive altitude with 0 being at the altitude of the home location. | </summary>
-            GLOBAL_RELATIVE_ALT=3, 
-        	///<summary> Local coordinate frame, Z-down (x: east, y: north, z: up) | </summary>
-            LOCAL_ENU=4, 
-        	///<summary>  | </summary>
-            ENUM_END=5, 
-        
-        };
-        
-        /** @brief  */
-        public enum MAVLINK_DATA_STREAM_TYPE
-        {
-    	///<summary>  | </summary>
-            MAVLINK_DATA_STREAM_IMG_JPEG=1, 
-        	///<summary>  | </summary>
-            MAVLINK_DATA_STREAM_IMG_BMP=2, 
-        	///<summary>  | </summary>
-            MAVLINK_DATA_STREAM_IMG_RAW8U=3, 
-        	///<summary>  | </summary>
-            MAVLINK_DATA_STREAM_IMG_RAW32U=4, 
-        	///<summary>  | </summary>
-            MAVLINK_DATA_STREAM_IMG_PGM=5, 
-        	///<summary>  | </summary>
-            MAVLINK_DATA_STREAM_IMG_PNG=6, 
-        	///<summary>  | </summary>
-            ENUM_END=7, 
-        
-        };
-        
-        /** @brief Commands to be executed by the MAV. They can be executed on user request,       or as part of a mission script. If the action is used in a mission, the parameter mapping       to the waypoint/mission message is as follows:       Param 1, Param 2, Param 3, Param 4, X: Param 5, Y:Param 6, Z:Param 7. This command list is similar what       ARINC 424 is for commercial aircraft: A data format how to interpret waypoint/mission data. */
-        public enum MAV_CMD
-        {
-    	///<summary> Navigate to MISSION. |Hold time in decimal seconds. (ignored by fixed wing, time to stay at MISSION for rotary wing)| Acceptance radius in meters (if the sphere with this radius is hit, the MISSION counts as reached)| 0 to pass through the WP, if > 0 radius in meters to pass by WP. Positive value for clockwise orbit, negative value for counter-clockwise orbit. Allows trajectory control.| Desired yaw angle at MISSION (rotary wing)| Latitude| Longitude| Altitude|  </summary>
-            NAV_WAYPOINT=16, 
-        	///<summary> Loiter around this MISSION an unlimited amount of time |Empty| Empty| Radius around MISSION, in meters. If positive loiter clockwise, else counter-clockwise| Desired yaw angle.| Latitude| Longitude| Altitude|  </summary>
-            NAV_LOITER_UNLIM=17, 
-        	///<summary> Loiter around this MISSION for X turns |Turns| Empty| Radius around MISSION, in meters. If positive loiter clockwise, else counter-clockwise| Desired yaw angle.| Latitude| Longitude| Altitude|  </summary>
-            NAV_LOITER_TURNS=18, 
-        	///<summary> Loiter around this MISSION for X seconds |Seconds (decimal)| Empty| Radius around MISSION, in meters. If positive loiter clockwise, else counter-clockwise| Desired yaw angle.| Latitude| Longitude| Altitude|  </summary>
-            NAV_LOITER_TIME=19, 
-        	///<summary> Return to launch location |Empty| Empty| Empty| Empty| Empty| Empty| Empty|  </summary>
-            NAV_RETURN_TO_LAUNCH=20, 
-        	///<summary> Land at location |Empty| Empty| Empty| Desired yaw angle.| Latitude| Longitude| Altitude|  </summary>
-            NAV_LAND=21, 
-        	///<summary> Takeoff from ground / hand |Minimum pitch (if airspeed sensor present), desired pitch without sensor| Empty| Empty| Yaw angle (if magnetometer present), ignored without magnetometer| Latitude| Longitude| Altitude|  </summary>
-            NAV_TAKEOFF=22, 
-        	///<summary> Sets the region of interest (ROI) for a sensor set or the             vehicle itself. This can then be used by the vehicles control             system to control the vehicle attitude and the attitude of various             sensors such as cameras. |Region of intereset mode. (see MAV_ROI enum)| MISSION index/ target ID. (see MAV_ROI enum)| ROI index (allows a vehicle to manage multiple ROI's)| Empty| x the location of the fixed ROI (see MAV_FRAME)| y| z|  </summary>
-            NAV_ROI=80, 
-        	///<summary> Control autonomous path planning on the MAV. |0: Disable local obstacle avoidance / local path planning (without resetting map), 1: Enable local path planning, 2: Enable and reset local path planning| 0: Disable full path planning (without resetting map), 1: Enable, 2: Enable and reset map/occupancy grid, 3: Enable and reset planned route, but not occupancy grid| Empty| Yaw angle at goal, in compass degrees, [0..360]| Latitude/X of goal| Longitude/Y of goal| Altitude/Z of goal|  </summary>
-            NAV_PATHPLANNING=81, 
-        	///<summary> NOP - This command is only used to mark the upper limit of the NAV/ACTION commands in the enumeration |Empty| Empty| Empty| Empty| Empty| Empty| Empty|  </summary>
-            NAV_LAST=95, 
-        	///<summary> Delay mission state machine. |Delay in seconds (decimal)| Empty| Empty| Empty| Empty| Empty| Empty|  </summary>
-            CONDITION_DELAY=112, 
-        	///<summary> Ascend/descend at rate.  Delay mission state machine until desired altitude reached. |Descent / Ascend rate (m/s)| Empty| Empty| Empty| Empty| Empty| Finish Altitude|  </summary>
-            CONDITION_CHANGE_ALT=113, 
-        	///<summary> Delay mission state machine until within desired distance of next NAV point. |Distance (meters)| Empty| Empty| Empty| Empty| Empty| Empty|  </summary>
-            CONDITION_DISTANCE=114, 
-        	///<summary> Reach a certain target angle. |target angle: [0-360], 0 is north| speed during yaw change:[deg per second]| direction: negative: counter clockwise, positive: clockwise [-1,1]| relative offset or absolute angle: [ 1,0]| Empty| Empty| Empty|  </summary>
-            CONDITION_YAW=115, 
-        	///<summary> NOP - This command is only used to mark the upper limit of the CONDITION commands in the enumeration |Empty| Empty| Empty| Empty| Empty| Empty| Empty|  </summary>
-            CONDITION_LAST=159, 
-        	///<summary> Set system mode. |Mode, as defined by ENUM MAV_MODE| Empty| Empty| Empty| Empty| Empty| Empty|  </summary>
-            DO_SET_MODE=176, 
-        	///<summary> Jump to the desired command in the mission list.  Repeat this action only the specified number of times |Sequence number| Repeat count| Empty| Empty| Empty| Empty| Empty|  </summary>
-            DO_JUMP=177, 
-        	///<summary> Change speed and/or throttle set points. |Speed type (0=Airspeed, 1=Ground Speed)| Speed  (m/s, -1 indicates no change)| Throttle  ( Percent, -1 indicates no change)| Empty| Empty| Empty| Empty|  </summary>
-            DO_CHANGE_SPEED=178, 
-        	///<summary> Changes the home location either to the current location or a specified location. |Use current (1=use current location, 0=use specified location)| Empty| Empty| Empty| Latitude| Longitude| Altitude|  </summary>
-            DO_SET_HOME=179, 
-        	///<summary> Set a system parameter.  Caution!  Use of this command requires knowledge of the numeric enumeration value of the parameter. |Parameter number| Parameter value| Empty| Empty| Empty| Empty| Empty|  </summary>
-            DO_SET_PARAMETER=180, 
-        	///<summary> Set a relay to a condition. |Relay number| Setting (1=on, 0=off, others possible depending on system hardware)| Empty| Empty| Empty| Empty| Empty|  </summary>
-            DO_SET_RELAY=181, 
-        	///<summary> Cycle a relay on and off for a desired number of cyles with a desired period. |Relay number| Cycle count| Cycle time (seconds, decimal)| Empty| Empty| Empty| Empty|  </summary>
-            DO_REPEAT_RELAY=182, 
-        	///<summary> Set a servo to a desired PWM value. |Servo number| PWM (microseconds, 1000 to 2000 typical)| Empty| Empty| Empty| Empty| Empty|  </summary>
-            DO_SET_SERVO=183, 
-        	///<summary> Cycle a between its nominal setting and a desired PWM for a desired number of cycles with a desired period. |Servo number| PWM (microseconds, 1000 to 2000 typical)| Cycle count| Cycle time (seconds)| Empty| Empty| Empty|  </summary>
-            DO_REPEAT_SERVO=184, 
-        	///<summary> Control onboard camera system. |Camera ID (-1 for all)| Transmission: 0: disabled, 1: enabled compressed, 2: enabled raw| Transmission mode: 0: video stream, >0: single images every n seconds (decimal)| Recording: 0: disabled, 1: enabled compressed, 2: enabled raw| Empty| Empty| Empty|  </summary>
-            DO_CONTROL_VIDEO=200, 
-        	///<summary> NOP - This command is only used to mark the upper limit of the DO commands in the enumeration |Empty| Empty| Empty| Empty| Empty| Empty| Empty|  </summary>
-            DO_LAST=240, 
-        	///<summary> Trigger calibration. This command will be only accepted if in pre-flight mode. |Gyro calibration: 0: no, 1: yes| Magnetometer calibration: 0: no, 1: yes| Ground pressure: 0: no, 1: yes| Radio calibration: 0: no, 1: yes| Empty| Empty| Empty|  </summary>
-            PREFLIGHT_CALIBRATION=241, 
-        	///<summary> Set sensor offsets. This command will be only accepted if in pre-flight mode. |Sensor to adjust the offsets for: 0: gyros, 1: accelerometer, 2: magnetometer, 3: barometer, 4: optical flow| X axis offset (or generic dimension 1), in the sensor's raw units| Y axis offset (or generic dimension 2), in the sensor's raw units| Z axis offset (or generic dimension 3), in the sensor's raw units| Generic dimension 4, in the sensor's raw units| Generic dimension 5, in the sensor's raw units| Generic dimension 6, in the sensor's raw units|  </summary>
-            PREFLIGHT_SET_SENSOR_OFFSETS=242, 
-        	///<summary> Request storage of different parameter values and logs. This command will be only accepted if in pre-flight mode. |Parameter storage: 0: READ FROM FLASH/EEPROM, 1: WRITE CURRENT TO FLASH/EEPROM| Mission storage: 0: READ FROM FLASH/EEPROM, 1: WRITE CURRENT TO FLASH/EEPROM| Reserved| Reserved| Empty| Empty| Empty|  </summary>
-            PREFLIGHT_STORAGE=245, 
-        	///<summary> Request the reboot or shutdown of system components. |0: Do nothing for autopilot, 1: Reboot autopilot, 2: Shutdown autopilot.| 0: Do nothing for onboard computer, 1: Reboot onboard computer, 2: Shutdown onboard computer.| Reserved| Reserved| Empty| Empty| Empty|  </summary>
-            PREFLIGHT_REBOOT_SHUTDOWN=246, 
-        	///<summary> Hold / continue the current action |MAV_GOTO_DO_HOLD: hold MAV_GOTO_DO_CONTINUE: continue with next item in mission plan| MAV_GOTO_HOLD_AT_CURRENT_POSITION: Hold at current position MAV_GOTO_HOLD_AT_SPECIFIED_POSITION: hold at specified position| MAV_FRAME coordinate frame of hold point| Desired yaw angle in degrees| Latitude / X position| Longitude / Y position| Altitude / Z position|  </summary>
-            OVERRIDE_GOTO=252, 
-        	///<summary> start running a mission |first_item: the first mission item to run| last_item:  the last mission item to run (after this item is run, the mission ends)|  </summary>
-            MISSION_START=300, 
-        	///<summary>  | </summary>
-            ENUM_END=301, 
-        
-        };
-        
-        /** @brief Data stream IDs. A data stream is not a fixed set of messages, but rather a      recommendation to the autopilot software. Individual autopilots may or may not obey      the recommended messages.       */
-        public enum MAV_DATA_STREAM
-        {
-    	///<summary> Enable all data streams | </summary>
-            ALL=0, 
-        	///<summary> Enable IMU_RAW, GPS_RAW, GPS_STATUS packets. | </summary>
-            RAW_SENSORS=1, 
-        	///<summary> Enable GPS_STATUS, CONTROL_STATUS, AUX_STATUS | </summary>
-            EXTENDED_STATUS=2, 
-        	///<summary> Enable RC_CHANNELS_SCALED, RC_CHANNELS_RAW, SERVO_OUTPUT_RAW | </summary>
-            RC_CHANNELS=3, 
-        	///<summary> Enable ATTITUDE_CONTROLLER_OUTPUT, POSITION_CONTROLLER_OUTPUT, NAV_CONTROLLER_OUTPUT. | </summary>
-            RAW_CONTROLLER=4, 
-        	///<summary> Enable LOCAL_POSITION, GLOBAL_POSITION/GLOBAL_POSITION_INT messages. | </summary>
-            POSITION=6, 
-        	///<summary> Dependent on the autopilot | </summary>
-            EXTRA1=10, 
-        	///<summary> Dependent on the autopilot | </summary>
-            EXTRA2=11, 
-        	///<summary> Dependent on the autopilot | </summary>
-            EXTRA3=12, 
-        	///<summary>  | </summary>
-            ENUM_END=13, 
-        
-        };
-        
-        /** @brief  The ROI (region of interest) for the vehicle. This can be                 be used by the vehicle for camera/vehicle attitude alignment (see                 MAV_CMD_NAV_ROI).              */
-        public enum MAV_ROI
-        {
-    	///<summary> No region of interest. | </summary>
-            NONE=0, 
-        	///<summary> Point toward next MISSION. | </summary>
-            WPNEXT=1, 
-        	///<summary> Point toward given MISSION. | </summary>
-            WPINDEX=2, 
-        	///<summary> Point toward fixed location. | </summary>
-            LOCATION=3, 
-        	///<summary> Point toward of given id. | </summary>
-            TARGET=4, 
-        	///<summary>  | </summary>
-            ENUM_END=5, 
-        
-        };
-        
-        /** @brief ACK / NACK / ERROR values as a result of MAV_CMDs and for mission item transmission. */
-        public enum MAV_CMD_ACK
-        {
-    	///<summary> Command / mission item is ok. | </summary>
-            OK=1, 
-        	///<summary> Generic error message if none of the other reasons fails or if no detailed error reporting is implemented. | </summary>
-            ERR_FAIL=2, 
-        	///<summary> The system is refusing to accept this command from this source / communication partner. | </summary>
-            ERR_ACCESS_DENIED=3, 
-        	///<summary> Command or mission item is not supported, other commands would be accepted. | </summary>
-            ERR_NOT_SUPPORTED=4, 
-        	///<summary> The coordinate frame of this command / mission item is not supported. | </summary>
-            ERR_COORDINATE_FRAME_NOT_SUPPORTED=5, 
-        	///<summary> The coordinate frame of this command is ok, but he coordinate values exceed the safety limits of this system. This is a generic error, please use the more specific error messages below if possible. | </summary>
-            ERR_COORDINATES_OUT_OF_RANGE=6, 
-        	///<summary> The X or latitude value is out of range. | </summary>
-            ERR_X_LAT_OUT_OF_RANGE=7, 
-        	///<summary> The Y or longitude value is out of range. | </summary>
-            ERR_Y_LON_OUT_OF_RANGE=8, 
-        	///<summary> The Z or altitude value is out of range. | </summary>
-            ERR_Z_ALT_OUT_OF_RANGE=9, 
-        	///<summary>  | </summary>
-            ENUM_END=10, 
-        
-        };
-        
-        /** @brief type of a mavlink parameter */
-        public enum MAV_VAR
-        {
-    	///<summary> 32 bit float | </summary>
-            FLOAT=0, 
-        	///<summary> 8 bit unsigned integer | </summary>
-            UINT8=1, 
-        	///<summary> 8 bit signed integer | </summary>
-            INT8=2, 
-        	///<summary> 16 bit unsigned integer | </summary>
-            UINT16=3, 
-        	///<summary> 16 bit signed integer | </summary>
-            INT16=4, 
-        	///<summary> 32 bit unsigned integer | </summary>
-            UINT32=5, 
-        	///<summary> 32 bit signed integer | </summary>
-            INT32=6, 
-        	///<summary>  | </summary>
-            ENUM_END=7, 
-        
-        };
-        
-        /** @brief result from a mavlink command */
-        public enum MAV_RESULT
-        {
-    	///<summary> Command ACCEPTED and EXECUTED | </summary>
-            ACCEPTED=0, 
-        	///<summary> Command TEMPORARY REJECTED/DENIED | </summary>
-            TEMPORARILY_REJECTED=1, 
-        	///<summary> Command PERMANENTLY DENIED | </summary>
-            DENIED=2, 
-        	///<summary> Command UNKNOWN/UNSUPPORTED | </summary>
-            UNSUPPORTED=3, 
-        	///<summary> Command executed, but failed | </summary>
-            FAILED=4, 
-        	///<summary>  | </summary>
-            ENUM_END=5, 
-        
-        };
-        
-        /** @brief result in a mavlink mission ack */
-        public enum MAV_MISSION_RESULT
-        {
-    	///<summary> mission accepted OK | </summary>
-            MAV_MISSION_ACCEPTED=0, 
-        	///<summary> generic error / not accepting mission commands at all right now | </summary>
-            MAV_MISSION_ERROR=1, 
-        	///<summary> coordinate frame is not supported | </summary>
-            MAV_MISSION_UNSUPPORTED_FRAME=2, 
-        	///<summary> command is not supported | </summary>
-            MAV_MISSION_UNSUPPORTED=3, 
-        	///<summary> mission item exceeds storage space | </summary>
-            MAV_MISSION_NO_SPACE=4, 
-        	///<summary> one of the parameters has an invalid value | </summary>
-            MAV_MISSION_INVALID=5, 
-        	///<summary> param1 has an invalid value | </summary>
-            MAV_MISSION_INVALID_PARAM1=6, 
-        	///<summary> param2 has an invalid value | </summary>
-            MAV_MISSION_INVALID_PARAM2=7, 
-        	///<summary> param3 has an invalid value | </summary>
-            MAV_MISSION_INVALID_PARAM3=8, 
-        	///<summary> param4 has an invalid value | </summary>
-            MAV_MISSION_INVALID_PARAM4=9, 
-        	///<summary> x/param5 has an invalid value | </summary>
-            MAV_MISSION_INVALID_PARAM5_X=10, 
-        	///<summary> y/param6 has an invalid value | </summary>
-            MAV_MISSION_INVALID_PARAM6_Y=11, 
-        	///<summary> param7 has an invalid value | </summary>
-            MAV_MISSION_INVALID_PARAM7=12, 
-        	///<summary> received waypoint out of sequence | </summary>
-            MAV_MISSION_INVALID_SEQUENCE=13, 
-        	///<summary> not accepting any mission commands from this communication partner | </summary>
-            MAV_MISSION_DENIED=14, 
-        	///<summary>  | </summary>
-            ENUM_END=15, 
-        
-        };
-        
     
+
+    public const byte MAVLINK_MSG_ID_SET_CAM_SHUTTER = 151;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=11)]
+    public struct mavlink_set_cam_shutter_t
+    {
+        /// <summary> Camera gain </summary>
+        public  Single gain;
+            /// <summary> Shutter interval, in microseconds </summary>
+        public  UInt16 interval;
+            /// <summary> Exposure time, in microseconds </summary>
+        public  UInt16 exposure;
+            /// <summary> Camera id </summary>
+        public  byte cam_no;
+            /// <summary> Camera mode: 0 = auto, 1 = manual </summary>
+        public  byte cam_mode;
+            /// <summary> Trigger pin, 0-3 for PtGrey FireFly </summary>
+        public  byte trigger_pin;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_IMAGE_TRIGGERED = 152;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=52)]
+    public struct mavlink_image_triggered_t
+    {
+        /// <summary> Timestamp </summary>
+        public  UInt64 timestamp;
+            /// <summary> IMU seq </summary>
+        public  UInt32 seq;
+            /// <summary> Roll angle in rad </summary>
+        public  Single roll;
+            /// <summary> Pitch angle in rad </summary>
+        public  Single pitch;
+            /// <summary> Yaw angle in rad </summary>
+        public  Single yaw;
+            /// <summary> Local frame Z coordinate (height over ground) </summary>
+        public  Single local_z;
+            /// <summary> GPS X coordinate </summary>
+        public  Single lat;
+            /// <summary> GPS Y coordinate </summary>
+        public  Single lon;
+            /// <summary> Global frame altitude </summary>
+        public  Single alt;
+            /// <summary> Ground truth X </summary>
+        public  Single ground_x;
+            /// <summary> Ground truth Y </summary>
+        public  Single ground_y;
+            /// <summary> Ground truth Z </summary>
+        public  Single ground_z;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_IMAGE_TRIGGER_CONTROL = 153;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=1)]
+    public struct mavlink_image_trigger_control_t
+    {
+        /// <summary> 0 to disable, 1 to enable </summary>
+        public  byte enable;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_IMAGE_AVAILABLE = 154;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=92)]
+    public struct mavlink_image_available_t
+    {
+        /// <summary> Camera id </summary>
+        public  UInt64 cam_id;
+            /// <summary> Timestamp </summary>
+        public  UInt64 timestamp;
+            /// <summary> Until which timestamp this buffer will stay valid </summary>
+        public  UInt64 valid_until;
+            /// <summary> The image sequence number </summary>
+        public  UInt32 img_seq;
+            /// <summary> Position of the image in the buffer, starts with 0 </summary>
+        public  UInt32 img_buf_index;
+            /// <summary> Shared memory area key </summary>
+        public  UInt32 key;
+            /// <summary> Exposure time, in microseconds </summary>
+        public  UInt32 exposure;
+            /// <summary> Camera gain </summary>
+        public  Single gain;
+            /// <summary> Roll angle in rad </summary>
+        public  Single roll;
+            /// <summary> Pitch angle in rad </summary>
+        public  Single pitch;
+            /// <summary> Yaw angle in rad </summary>
+        public  Single yaw;
+            /// <summary> Local frame Z coordinate (height over ground) </summary>
+        public  Single local_z;
+            /// <summary> GPS X coordinate </summary>
+        public  Single lat;
+            /// <summary> GPS Y coordinate </summary>
+        public  Single lon;
+            /// <summary> Global frame altitude </summary>
+        public  Single alt;
+            /// <summary> Ground truth X </summary>
+        public  Single ground_x;
+            /// <summary> Ground truth Y </summary>
+        public  Single ground_y;
+            /// <summary> Ground truth Z </summary>
+        public  Single ground_z;
+            /// <summary> Image width </summary>
+        public  UInt16 width;
+            /// <summary> Image height </summary>
+        public  UInt16 height;
+            /// <summary> Image depth </summary>
+        public  UInt16 depth;
+            /// <summary> Camera # (starts with 0) </summary>
+        public  byte cam_no;
+            /// <summary> Image channels </summary>
+        public  byte channels;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_SET_POSITION_CONTROL_OFFSET = 160;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=18)]
+    public struct mavlink_set_position_control_offset_t
+    {
+        /// <summary> x position offset </summary>
+        public  Single x;
+            /// <summary> y position offset </summary>
+        public  Single y;
+            /// <summary> z position offset </summary>
+        public  Single z;
+            /// <summary> yaw orientation offset in radians, 0 = NORTH </summary>
+        public  Single yaw;
+            /// <summary> System ID </summary>
+        public  byte target_system;
+            /// <summary> Component ID </summary>
+        public  byte target_component;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_POSITION_CONTROL_SETPOINT = 170;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=18)]
+    public struct mavlink_position_control_setpoint_t
+    {
+        /// <summary> x position </summary>
+        public  Single x;
+            /// <summary> y position </summary>
+        public  Single y;
+            /// <summary> z position </summary>
+        public  Single z;
+            /// <summary> yaw orientation in radians, 0 = NORTH </summary>
+        public  Single yaw;
+            /// <summary> ID of waypoint, 0 for plain position </summary>
+        public  UInt16 id;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_MARKER = 171;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=26)]
+    public struct mavlink_marker_t
+    {
+        /// <summary> x position </summary>
+        public  Single x;
+            /// <summary> y position </summary>
+        public  Single y;
+            /// <summary> z position </summary>
+        public  Single z;
+            /// <summary> roll orientation </summary>
+        public  Single roll;
+            /// <summary> pitch orientation </summary>
+        public  Single pitch;
+            /// <summary> yaw orientation </summary>
+        public  Single yaw;
+            /// <summary> ID </summary>
+        public  UInt16 id;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_RAW_AUX = 172;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=16)]
+    public struct mavlink_raw_aux_t
+    {
+        /// <summary> Barometric pressure (hecto Pascal) </summary>
+        public  Int32 baro;
+            /// <summary> ADC1 (J405 ADC3, LPC2148 AD0.6) </summary>
+        public  UInt16 adc1;
+            /// <summary> ADC2 (J405 ADC5, LPC2148 AD0.2) </summary>
+        public  UInt16 adc2;
+            /// <summary> ADC3 (J405 ADC6, LPC2148 AD0.1) </summary>
+        public  UInt16 adc3;
+            /// <summary> ADC4 (J405 ADC7, LPC2148 AD1.3) </summary>
+        public  UInt16 adc4;
+            /// <summary> Battery voltage </summary>
+        public  UInt16 vbat;
+            /// <summary> Temperature (degrees celcius) </summary>
+        public  Int16 temp;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_WATCHDOG_HEARTBEAT = 180;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=4)]
+    public struct mavlink_watchdog_heartbeat_t
+    {
+        /// <summary> Watchdog ID </summary>
+        public  UInt16 watchdog_id;
+            /// <summary> Number of processes </summary>
+        public  UInt16 process_count;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_WATCHDOG_PROCESS_INFO = 181;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=255)]
+    public struct mavlink_watchdog_process_info_t
+    {
+        /// <summary> Timeout (seconds) </summary>
+        public  Int32 timeout;
+            /// <summary> Watchdog ID </summary>
+        public  UInt16 watchdog_id;
+            /// <summary> Process ID </summary>
+        public  UInt16 process_id;
+            /// <summary> Process name </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=100)]
+		public string name;
+            /// <summary> Process arguments </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=147)]
+		public string arguments;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_WATCHDOG_PROCESS_STATUS = 182;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=12)]
+    public struct mavlink_watchdog_process_status_t
+    {
+        /// <summary> PID </summary>
+        public  Int32 pid;
+            /// <summary> Watchdog ID </summary>
+        public  UInt16 watchdog_id;
+            /// <summary> Process ID </summary>
+        public  UInt16 process_id;
+            /// <summary> Number of crashes </summary>
+        public  UInt16 crashes;
+            /// <summary> Is running / finished / suspended / crashed </summary>
+        public  byte state;
+            /// <summary> Is muted </summary>
+        public  byte muted;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_WATCHDOG_COMMAND = 183;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=6)]
+    public struct mavlink_watchdog_command_t
+    {
+        /// <summary> Watchdog ID </summary>
+        public  UInt16 watchdog_id;
+            /// <summary> Process ID </summary>
+        public  UInt16 process_id;
+            /// <summary> Target system ID </summary>
+        public  byte target_system_id;
+            /// <summary> Command ID </summary>
+        public  byte command_id;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_PATTERN_DETECTED = 190;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=106)]
+    public struct mavlink_pattern_detected_t
+    {
+        /// <summary> Confidence of detection </summary>
+        public  Single confidence;
+            /// <summary> 0: Pattern, 1: Letter </summary>
+        public  byte type;
+            /// <summary> Pattern file name </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=100)]
+		public string file;
+            /// <summary> Accepted as true detection, 0 no, 1 yes </summary>
+        public  byte detected;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_POINT_OF_INTEREST = 191;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=43)]
+    public struct mavlink_point_of_interest_t
+    {
+        /// <summary> X Position </summary>
+        public  Single x;
+            /// <summary> Y Position </summary>
+        public  Single y;
+            /// <summary> Z Position </summary>
+        public  Single z;
+            /// <summary> 0: no timeout, >1: timeout in seconds </summary>
+        public  UInt16 timeout;
+            /// <summary> 0: Notice, 1: Warning, 2: Critical, 3: Emergency, 4: Debug </summary>
+        public  byte type;
+            /// <summary> 0: blue, 1: yellow, 2: red, 3: orange, 4: green, 5: magenta </summary>
+        public  byte color;
+            /// <summary> 0: global, 1:local </summary>
+        public  byte coordinate_system;
+            /// <summary> POI name </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=26)]
+		public string name;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_POINT_OF_INTEREST_CONNECTION = 192;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=55)]
+    public struct mavlink_point_of_interest_connection_t
+    {
+        /// <summary> X1 Position </summary>
+        public  Single xp1;
+            /// <summary> Y1 Position </summary>
+        public  Single yp1;
+            /// <summary> Z1 Position </summary>
+        public  Single zp1;
+            /// <summary> X2 Position </summary>
+        public  Single xp2;
+            /// <summary> Y2 Position </summary>
+        public  Single yp2;
+            /// <summary> Z2 Position </summary>
+        public  Single zp2;
+            /// <summary> 0: no timeout, >1: timeout in seconds </summary>
+        public  UInt16 timeout;
+            /// <summary> 0: Notice, 1: Warning, 2: Critical, 3: Emergency, 4: Debug </summary>
+        public  byte type;
+            /// <summary> 0: blue, 1: yellow, 2: red, 3: orange, 4: green, 5: magenta </summary>
+        public  byte color;
+            /// <summary> 0: global, 1:local </summary>
+        public  byte coordinate_system;
+            /// <summary> POI connection name </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=26)]
+		public string name;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE = 193;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=8)]
+    public struct mavlink_data_transmission_handshake_t
+    {
+        /// <summary> total data size in bytes (set on ACK only) </summary>
+        public  UInt32 size;
+            /// <summary> type of requested/acknowledged data (as defined in ENUM DATA_TYPES in mavlink/include/mavlink_types.h) </summary>
+        public  byte type;
+            /// <summary> number of packets beeing sent (set on ACK only) </summary>
+        public  byte packets;
+            /// <summary> payload size per packet (normally 253 byte, see DATA field size in message ENCAPSULATED_DATA) (set on ACK only) </summary>
+        public  byte payload;
+            /// <summary> JPEG quality out of [1,100] </summary>
+        public  byte jpg_quality;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_ENCAPSULATED_DATA = 194;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=255)]
+    public struct mavlink_encapsulated_data_t
+    {
+        /// <summary> sequence number (starting with 0 on every transmission) </summary>
+        public  UInt16 seqnr;
+            /// <summary> image data bytes </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=253)]
+		public byte[] data;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_BRIEF_FEATURE = 195;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=53)]
+    public struct mavlink_brief_feature_t
+    {
+        /// <summary> x position in m </summary>
+        public  Single x;
+            /// <summary> y position in m </summary>
+        public  Single y;
+            /// <summary> z position in m </summary>
+        public  Single z;
+            /// <summary> Harris operator response at this location </summary>
+        public  Single response;
+            /// <summary> Size in pixels </summary>
+        public  UInt16 size;
+            /// <summary> Orientation </summary>
+        public  UInt16 orientation;
+            /// <summary> Orientation assignment 0: false, 1:true </summary>
+        public  byte orientation_assignment;
+            /// <summary> Descriptor </summary>
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=32)]
+		public byte[] descriptor;
+    
+    };
+
+
+    public const byte MAVLINK_MSG_ID_ATTITUDE_CONTROL = 200;
+    [StructLayout(LayoutKind.Sequential,Pack=1,Size=21)]
+    public struct mavlink_attitude_control_t
+    {
+        /// <summary> roll </summary>
+        public  Single roll;
+            /// <summary> pitch </summary>
+        public  Single pitch;
+            /// <summary> yaw </summary>
+        public  Single yaw;
+            /// <summary> thrust </summary>
+        public  Single thrust;
+            /// <summary> The system to be controlled </summary>
+        public  byte target;
+            /// <summary> roll control enabled auto:0, manual:1 </summary>
+        public  byte roll_manual;
+            /// <summary> pitch auto:0, manual:1 </summary>
+        public  byte pitch_manual;
+            /// <summary> yaw auto:0, manual:1 </summary>
+        public  byte yaw_manual;
+            /// <summary> thrust auto:0, manual:1 </summary>
+        public  byte thrust_manual;
+    
+    };
+
 
     public const byte MAVLINK_MSG_ID_HEARTBEAT = 0;
     [StructLayout(LayoutKind.Sequential,Pack=1,Size=9)]
