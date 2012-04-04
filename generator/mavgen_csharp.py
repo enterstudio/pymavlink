@@ -372,7 +372,7 @@ using System.Runtime.InteropServices;
 
 namespace ArdupilotMega
 {
-    #if !MAVLINK10
+    ''' + text + '''
     partial class MAVLink
     {
         public const string MAVLINK_BUILD_DATE = "${parse_time}";
@@ -391,8 +391,6 @@ namespace ArdupilotMega
         public const byte MAVLINK_CRC_EXTRA = ${crc_extra_define};
         
         public const bool MAVLINK_NEED_BYTE_SWAP = (MAVLINK_ENDIAN == MAVLINK_LITTLE_ENDIAN);
-        
-        public byte packetcount = 0;
         
         public byte[] MAVLINK_MESSAGE_LENGTHS = new byte[] {${message_lengths_array}};
 
@@ -566,7 +564,13 @@ def generate_one(fh, basename, xml):
 def generate(basename, xml_list):
     '''generate complete MAVLink C implemenation'''
     
+    print "HERE ",basename, xml_list
+    
     directory = os.path.join(basename, xml_list[0].basename)
+    
+    if not os.path.exists(directory): 
+        os.makedirs(directory) 
+
 
     f = open(os.path.join(directory, "mavlink.cs"), mode='w')
     

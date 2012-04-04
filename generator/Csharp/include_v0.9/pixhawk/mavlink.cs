@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 
 namespace ArdupilotMega
 {
-    #if !MAVLINK10
+    #if MAVLINK10
     partial class MAVLink
     {
-        public const string MAVLINK_BUILD_DATE = "Mon Apr  2 20:01:04 2012";
+        public const string MAVLINK_BUILD_DATE = "Wed Apr  4 18:13:08 2012";
         public const string MAVLINK_WIRE_PROTOCOL_VERSION = "0.9";
         public const int MAVLINK_MAX_DIALECT_PAYLOAD_SIZE = 255;
 
@@ -24,8 +24,6 @@ namespace ArdupilotMega
         public const byte MAVLINK_CRC_EXTRA = 0;
         
         public const bool MAVLINK_NEED_BYTE_SWAP = (MAVLINK_ENDIAN == MAVLINK_LITTLE_ENDIAN);
-        
-        public byte packetcount = 0;
         
         public byte[] MAVLINK_MESSAGE_LENGTHS = new byte[] {3, 4, 8, 14, 8, 28, 3, 32, 0, 2, 3, 2, 2, 0, 0, 0, 0, 0, 0, 0, 19, 2, 23, 21, 0, 37, 26, 101, 26, 16, 32, 32, 37, 32, 11, 17, 17, 16, 18, 36, 4, 4, 2, 2, 4, 2, 2, 3, 14, 12, 18, 16, 8, 27, 25, 18, 18, 24, 24, 0, 0, 0, 26, 16, 36, 5, 6, 56, 26, 21, 18, 0, 0, 18, 20, 20, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 52, 1, 92, 0, 32, 32, 20, 20, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 26, 16, 0, 0, 0, 0, 0, 0, 0, 4, 255, 12, 6, 0, 0, 0, 0, 0, 0, 106, 43, 55, 8, 255, 53, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 14, 14, 51, 5};
 

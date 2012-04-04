@@ -2,7 +2,7 @@
 
 for protocol in 0.9 1.0;
 do
- for xml in message_definitions/v$protocol/*.xml; do
+ for xml in ../message_definitions/v$protocol/*.xml; do
      base=$(basename $xml .xml)
     ./mavgen.py --lang=C --wire-protocol=$protocol --output=C/include_v$protocol $xml || exit 1
 	./mavgen.py --lang=csharp --wire-protocol=$protocol --output=Csharp/include_v$protocol $xml || exit 1
