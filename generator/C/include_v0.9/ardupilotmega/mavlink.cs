@@ -8,7 +8,7 @@ namespace ArdupilotMega
     #if MAVLINK10
     partial class MAVLink
     {
-        public const string MAVLINK_BUILD_DATE = "Wed Apr  4 18:13:04 2012";
+        public const string MAVLINK_BUILD_DATE = "Fri Apr  6 21:10:54 2012";
         public const string MAVLINK_WIRE_PROTOCOL_VERSION = "0.9";
         public const int MAVLINK_MAX_DIALECT_PAYLOAD_SIZE = 42;
 
@@ -155,6 +155,51 @@ namespace ArdupilotMega
         };
         
     
+        
+        /** @brief Data stream IDs. A data stream is not a fixed set of messages, but rather a      recommendation to the autopilot software. Individual autopilots may or may not obey      the recommended messages.       */
+        public enum MAV_DATA_STREAM
+        {
+    	///<summary> Enable all data streams | </summary>
+            ALL=0, 
+        	///<summary> Enable IMU_RAW, GPS_RAW, GPS_STATUS packets. | </summary>
+            RAW_SENSORS=1, 
+        	///<summary> Enable GPS_STATUS, CONTROL_STATUS, AUX_STATUS | </summary>
+            EXTENDED_STATUS=2, 
+        	///<summary> Enable RC_CHANNELS_SCALED, RC_CHANNELS_RAW, SERVO_OUTPUT_RAW | </summary>
+            RC_CHANNELS=3, 
+        	///<summary> Enable ATTITUDE_CONTROLLER_OUTPUT, POSITION_CONTROLLER_OUTPUT, NAV_CONTROLLER_OUTPUT. | </summary>
+            RAW_CONTROLLER=4, 
+        	///<summary> Enable LOCAL_POSITION, GLOBAL_POSITION/GLOBAL_POSITION_INT messages. | </summary>
+            POSITION=6, 
+        	///<summary> Dependent on the autopilot | </summary>
+            EXTRA1=10, 
+        	///<summary> Dependent on the autopilot | </summary>
+            EXTRA2=11, 
+        	///<summary> Dependent on the autopilot | </summary>
+            EXTRA3=12, 
+        	///<summary>  | </summary>
+            ENUM_END=13, 
+        
+        };
+        
+        /** @brief  The ROI (region of interest) for the vehicle. This can be                 be used by the vehicle for camera/vehicle attitude alignment (see                 MAV_CMD_NAV_ROI).              */
+        public enum MAV_ROI
+        {
+    	///<summary> No region of interest. | </summary>
+            NONE=0, 
+        	///<summary> Point toward next waypoint. | </summary>
+            WPNEXT=1, 
+        	///<summary> Point toward given waypoint. | </summary>
+            WPINDEX=2, 
+        	///<summary> Point toward fixed location. | </summary>
+            LOCATION=3, 
+        	///<summary> Point toward of given id. | </summary>
+            TARGET=4, 
+        	///<summary>  | </summary>
+            ENUM_END=5, 
+        
+        };
+        
 
     public const byte MAVLINK_MSG_ID_SENSOR_OFFSETS = 150;
     [StructLayout(LayoutKind.Sequential,Pack=1,Size=42)]

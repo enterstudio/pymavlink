@@ -359,6 +359,7 @@ def generate_message_header(f, xml):
             fe.description = fe.description.replace("\n"," ")
             fe.description = fe.description.replace("\r"," ")
             fe.name = fe.name.replace(m.name + "_","")
+           
     
     if xml.version == "0.9":
         text = "#if !MAVLINK10";
@@ -411,6 +412,29 @@ namespace ArdupilotMega
         }}
     
 ''', xml)
+
+def generate_message_enums(f, xml):
+    # add some extra field attributes for convenience with arrays
+    for m in xml.enum:
+        m.description = m.description.replace("\n"," ")
+        m.description = m.description.replace("\r"," ")
+        for fe in m.entry:
+            fe.description = fe.description.replace("\n"," ")
+            fe.description = fe.description.replace("\r"," ")
+            fe.name = fe.name.replace(m.name + "_","")
+            
+    t.write(f, '''
+        ${{enum:
+        /** @brief ${description} */
+        public enum ${name}
+        {
+    ${{entry:	///<summary> ${description} |${{param:${description}| }} </summary>
+            ${name}=${value}, 
+        }}
+        };
+        }}
+''', xml)
+
 
 def generate_message_footer(f, xml):
     t.write(f, '''
@@ -564,7 +588,7 @@ def generate_one(fh, basename, xml):
 def generate(basename, xml_list):
     '''generate complete MAVLink C implemenation'''
     
-    print "HERE ",basename, xml_list
+    print "HERE ",basename, xml_list[0]
     
     directory = os.path.join(basename, xml_list[0].basename)
     
@@ -575,6 +599,9 @@ def generate(basename, xml_list):
     f = open(os.path.join(directory, "mavlink.cs"), mode='w')
     
     generate_message_header(f, xml_list[0])
+    
+    if len(xml_list) > 1:
+        generate_message_enums(f, xml_list[1]);
     
     for xml in xml_list:
         generate_one(f, basename, xml)
