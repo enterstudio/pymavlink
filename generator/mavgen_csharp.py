@@ -359,6 +359,7 @@ def generate_message_header(f, xml):
             fe.description = fe.description.replace("\n"," ")
             fe.description = fe.description.replace("\r"," ")
             fe.name = fe.name.replace(m.name + "_","")
+            fe.name = fe.name.replace("NAV_","")
            
     
     if xml.version == "0.9":
@@ -501,9 +502,9 @@ def generate_one(fh, basename, xml):
                 f.return_type = 'void'
                 f.return_value = 'void'
                 if f.type == 'char': 
-                    f.type = "string"
+                    f.type = "byte[]"
                     f.array_tag = 'System.Text.ASCIIEncoding.ASCII.GetString(msg,%u,%u); //' % (f.wire_offset, f.array_length)
-                    f.return_type = 'string'
+                    f.return_type = 'byte[]'
                     f.c_test_value = ".ToCharArray()";
                 elif f.type == 'uint8_t':
                     f.type = "byte[]";
@@ -513,6 +514,14 @@ def generate_one(fh, basename, xml):
                     f.type = "byte[]";
                     f.array_tag = 'getBytes'
                     f.return_type = 'byte[]'
+                elif f.type == 'int16_t':
+                    f.type = "Int16[]";
+                    f.array_tag = 'getBytes'
+                    f.return_type = 'Int16[]'
+                elif f.type == 'uint16_t':
+                    f.type = "UInt16[]";
+                    f.array_tag = 'getBytes'
+                    f.return_type = 'UInt16[]'
                 else:
                     test_strings = []
                     for v in f.test_value:
@@ -527,6 +536,8 @@ def generate_one(fh, basename, xml):
                     f.type = "byte";
                 elif f.type == 'int8_t':
                     f.type = "byte";
+                elif f.type == 'int16_t': 
+                    f.type = "Int16";
                 elif f.type == 'uint16_t': 
                     f.type = "UInt16";
                 elif f.type == 'uint32_t':
@@ -548,6 +559,8 @@ def generate_one(fh, basename, xml):
                 f.array_tag = 'BitConverter.To%s' % f.type
                 if f.type == 'byte':
                     f.array_tag = 'getByte'
+                if f.name == 'fixed':   # this is a keyword
+                    f.name = 'fixedp'
                 f.array_arg = ''
                 f.array_return_arg = ''
                 f.array_const = ''
