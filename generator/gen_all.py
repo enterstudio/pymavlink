@@ -21,7 +21,7 @@ class options:
         self.wire_protocol = wire_protocol
         self.output = output
 
-protocols = [ '0.9', '1.0' ]
+protocols = [ '1.0' ]
 
 for protocol in protocols :
     xml_directory = './message_definitions/v'+protocol
@@ -30,15 +30,17 @@ for protocol in protocols :
 
     for xml_file in xml_file_names:
         print "xml file is ", xml_file
-        opts = options(lang = "C", output = "C/include_v"+protocol, \
+        opts = options(lang = "csharp", output = "Csharp", \
                        wire_protocol=protocol)
+#        opts = options(lang = "C", output = "C/include_v"+protocol, \
+#                       wire_protocol=protocol)
         args = []
         args.append(xml_file)
         mavgen(opts, args)
         xml_file_base = os.path.basename(xml_file)
         xml_file_base = re.sub("\.xml","", xml_file_base)
         print "xml_file_base is", xml_file_base
-        opts = options(lang = "python", \
-                       output="python/mavlink_"+xml_file_base+"_v"+protocol+".py", \
-                       wire_protocol=protocol)
+#        opts = options(lang = "python", \
+#                       output="python/mavlink_"+xml_file_base+"_v"+protocol+".py", \
+#                       wire_protocol=protocol)
         mavgen(opts,args)

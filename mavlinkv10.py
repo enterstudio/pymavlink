@@ -155,6 +155,11 @@ MAV_CMD_OVERRIDE_GOTO = 252 # Hold / continue the current action
 MAV_CMD_MISSION_START = 300 # start running a mission
 MAV_CMD_ENUM_END = 301 # 
 
+# FENCE_ACTION
+FENCE_ACTION_NONE = 0 # Disable fenced mode
+FENCE_ACTION_GUIDED = 1 # Switched to guided mode to return point (fence point 0)
+FENCE_ACTION_ENUM_END = 2 # 
+
 # MAV_AUTOPILOT
 MAV_AUTOPILOT_GENERIC = 0 # Generic autopilot, full support for everything
 MAV_AUTOPILOT_PIXHAWK = 1 # PIXHAWK autopilot, http://pixhawk.ethz.ch
@@ -406,6 +411,8 @@ MAVLINK_MSG_ID_DIGICAM_CONTROL = 155
 MAVLINK_MSG_ID_MOUNT_CONFIGURE = 156
 MAVLINK_MSG_ID_MOUNT_CONTROL = 157
 MAVLINK_MSG_ID_MOUNT_STATUS = 158
+MAVLINK_MSG_ID_FENCE_POINT = 160
+MAVLINK_MSG_ID_FENCE_FETCH_POINT = 161
 MAVLINK_MSG_ID_HEARTBEAT = 0
 MAVLINK_MSG_ID_SYS_STATUS = 1
 MAVLINK_MSG_ID_SYSTEM_TIME = 2
@@ -642,6 +649,34 @@ class MAVLink_mount_status_message(MAVLink_message):
 
         def pack(self, mav):
                 return MAVLink_message.pack(self, mav, 134, struct.pack('<iiiBB', self.pointing_a, self.pointing_b, self.pointing_c, self.target_system, self.target_component))
+
+class MAVLink_fence_point_message(MAVLink_message):
+        '''
+        A fence point. Used to set a point when from               GCS
+        -> MAV. Also used to return a point from MAV -> GCS
+        '''
+        def __init__(self, idx, count, lat, lng):
+                MAVLink_message.__init__(self, MAVLINK_MSG_ID_FENCE_POINT, 'FENCE_POINT')
+                self._fieldnames = ['idx', 'count', 'lat', 'lng']
+                self.idx = idx
+                self.count = count
+                self.lat = lat
+                self.lng = lng
+
+        def pack(self, mav):
+                return MAVLink_message.pack(self, mav, 18, struct.pack('<ffBB', self.lat, self.lng, self.idx, self.count))
+
+class MAVLink_fence_fetch_point_message(MAVLink_message):
+        '''
+        Request a current fence point from MAV
+        '''
+        def __init__(self, idx):
+                MAVLink_message.__init__(self, MAVLINK_MSG_ID_FENCE_FETCH_POINT, 'FENCE_FETCH_POINT')
+                self._fieldnames = ['idx']
+                self.idx = idx
+
+        def pack(self, mav):
+                return MAVLink_message.pack(self, mav, 165, struct.pack('<B', self.idx))
 
 class MAVLink_heartbeat_message(MAVLink_message):
         '''
@@ -2022,6 +2057,8 @@ mavlink_map = {
         MAVLINK_MSG_ID_MOUNT_CONFIGURE : ( '<BBBBBB', MAVLink_mount_configure_message, [0, 1, 2, 3, 4, 5], 19 ),
         MAVLINK_MSG_ID_MOUNT_CONTROL : ( '<iiiBBB', MAVLink_mount_control_message, [3, 4, 0, 1, 2, 5], 21 ),
         MAVLINK_MSG_ID_MOUNT_STATUS : ( '<iiiBB', MAVLink_mount_status_message, [3, 4, 0, 1, 2], 134 ),
+        MAVLINK_MSG_ID_FENCE_POINT : ( '<ffBB', MAVLink_fence_point_message, [2, 3, 0, 1], 18 ),
+        MAVLINK_MSG_ID_FENCE_FETCH_POINT : ( '<B', MAVLink_fence_fetch_point_message, [0], 165 ),
         MAVLINK_MSG_ID_HEARTBEAT : ( '<IBBBBB', MAVLink_heartbeat_message, [1, 2, 3, 0, 4, 5], 50 ),
         MAVLINK_MSG_ID_SYS_STATUS : ( '<IIIHHhHHHHHHb', MAVLink_sys_status_message, [0, 1, 2, 3, 4, 5, 12, 6, 7, 8, 9, 10, 11], 124 ),
         MAVLINK_MSG_ID_SYSTEM_TIME : ( '<QI', MAVLink_system_time_message, [0, 1], 137 ),
@@ -2572,6 +2609,54 @@ class MAVLink(object):
 
                 '''
                 return self.send(self.mount_status_encode(target_system, target_component, pointing_a, pointing_b, pointing_c))
+            
+        def fence_point_encode(self, idx, count, lat, lng):
+                '''
+                A fence point. Used to set a point when from               GCS -> MAV.
+                Also used to return a point from MAV -> GCS
+
+                idx                       : point index (first point is 1, 0 is for return point) (uint8_t)
+                count                     : total number of points (for sanity checking) (uint8_t)
+                lat                       : Latitude of point (float)
+                lng                       : Longitude of point (float)
+
+                '''
+                msg = MAVLink_fence_point_message(idx, count, lat, lng)
+                msg.pack(self)
+                return msg
+            
+        def fence_point_send(self, idx, count, lat, lng):
+                '''
+                A fence point. Used to set a point when from               GCS -> MAV.
+                Also used to return a point from MAV -> GCS
+
+                idx                       : point index (first point is 1, 0 is for return point) (uint8_t)
+                count                     : total number of points (for sanity checking) (uint8_t)
+                lat                       : Latitude of point (float)
+                lng                       : Longitude of point (float)
+
+                '''
+                return self.send(self.fence_point_encode(idx, count, lat, lng))
+            
+        def fence_fetch_point_encode(self, idx):
+                '''
+                Request a current fence point from MAV
+
+                idx                       : point index (first point is 1, 0 is for return point) (uint8_t)
+
+                '''
+                msg = MAVLink_fence_fetch_point_message(idx)
+                msg.pack(self)
+                return msg
+            
+        def fence_fetch_point_send(self, idx):
+                '''
+                Request a current fence point from MAV
+
+                idx                       : point index (first point is 1, 0 is for return point) (uint8_t)
+
+                '''
+                return self.send(self.fence_fetch_point_encode(idx))
             
         def heartbeat_encode(self, type, autopilot, base_mode, custom_mode, system_status, mavlink_version=3):
                 '''
