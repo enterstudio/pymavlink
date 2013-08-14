@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 '''
-parse a MAVLink protocol XML file and generate a C implementation
+parse a MAVLink protocol XML file and generate a C# implementation
 
 Copyright Michael Oborne 2011
 Released under GNU GPL version 3 or later
@@ -374,7 +374,6 @@ using System.Runtime.InteropServices;
 
 namespace ArdupilotMega
 {
-    ''' + text + '''
     partial class MAVLink
     {
         public const string MAVLINK_BUILD_DATE = "${parse_time}";
@@ -440,7 +439,6 @@ def generate_message_enums(f, xml):
 def generate_message_footer(f, xml):
     t.write(f, '''
      }
-     #endif
 }
 ''', xml)
     f.close()
